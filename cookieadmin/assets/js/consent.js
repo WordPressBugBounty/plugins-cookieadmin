@@ -444,6 +444,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	//Save preference
 	document.querySelector(".cookieadmin_save_btn").addEventListener("click", function(){
 		
+		document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "none";
+		if(cookieadmin_show_reconsent){
+			document.getElementsByClassName("cookieadmin_re_consent")[0].style.display = "block";
+		}
+		
 		var prefer = {};
 
 		document.querySelectorAll(".cookieadmin_toggle").forEach(function(e){
@@ -463,12 +468,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 		
 		cookieadmin_toggle_overlay();
-		document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "none";
-		
-		if(cookieadmin_show_reconsent){
-			document.getElementsByClassName("cookieadmin_re_consent")[0].style.display = "block";
-		}
-		
+
 		cookieadmin_set_consent(prefer, days);
 		
 		if(!!cookieadmin_policy.reload_on_consent){
@@ -486,16 +486,17 @@ document.addEventListener("DOMContentLoaded", function() {
 		
 		e.addEventListener("click", function(){
 			// console.log(e);
+
+			document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "none";
+			document.getElementsByClassName("cookieadmin_law_container")[0].style.display = "none";
+			if(cookieadmin_show_reconsent){
+				document.getElementsByClassName("cookieadmin_re_consent")[0].style.display = "block";
+			}
 			
 			if(e.id.includes("modal")){
 				cookieadmin_toggle_overlay();
 			}
 			
-			document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "none";
-			if(cookieadmin_show_reconsent){
-				document.getElementsByClassName("cookieadmin_re_consent")[0].style.display = "block";
-			}
-			document.getElementsByClassName("cookieadmin_law_container")[0].style.display = "none";
 			var prefer2 = e.classList.contains("cookieadmin_reject_btn") ? {reject: "true"} : {accept: "true"};
 			
 			cookieadmin_set_consent(prefer2, days);
@@ -575,6 +576,10 @@ function cookieadmin_set_consent(prefrenc, days){
 }
 
 function cookieadmin_get_base_path() {
-  const parts = window.location.pathname.split('/');
-  return '/' + (parts[1] || '') + '/';
+	
+	if(window.location.pathname.trim() != '/'){
+		const parts = window.location.pathname.split('/');
+		return '/' + (parts[1] || '') + '/';
+	}
+	return '/';
 }

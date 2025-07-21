@@ -1,10 +1,10 @@
-=== CookieAdmin - Cookie Consent and Banner ===
+=== CookieAdmin - Cookie Consent Banner ===
 Contributors: softaculous
 Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
-Tested up to: 6.8
+Tested up to: 6.8.2
 Requires PHP: 7.0
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -12,7 +12,7 @@ CookieAdmin provides easy to configure cookie consent banner with GDPR and CCPA 
 
 == Description ==
 
-CookieAdmin is an easy to use Cookie consent banner plugin which allows you to display a banner on the frontend for your visitors to choose which cookies they would like to use. 
+CookieAdmin is a Lightweight, Bloat-free & easy to use Cookie consent banner plugin which allows you to display a personalized banner on your website for your visitors to choose which cookies they would like to use. 
 
 Admins can customize the UI of the consent banner for the frontend to match with their website / brand identity. 
 
@@ -41,6 +41,10 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.0.3 =
+* [Bug Fix] In some cases, the consent banner was displayed even after accepting the cookies. This is fixed. 
+* [Bug Fix] Minor UI fixes
 
 = 1.0.2 =
 * Initial Release

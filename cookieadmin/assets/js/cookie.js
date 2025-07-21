@@ -521,7 +521,7 @@ jQuery(document).ready(function($){
 				row += '<td>' + cookie_info.name + '</td>';
 				row += '<td>' + cookie_info.description + '</td>';
 				row += '<td>' + cookie_info.duration + '</td>';
-				row += '<td> <span class="dashicons dashicons-edit cookieadmin_edit_icon" id="edit_'+cookie_info.name+'"></span> <span class="dashicons dashicons-trash cookieadmin_delete_icon"></span> </td>';
+				row += '<td> <span class="dashicons dashicons-edit cookieadmin_edit_icon" id="edit_'+cookie_info.id+'"></span> <span class="dashicons dashicons-trash cookieadmin_delete_icon" id="edit_'+cookie_info.id+'"></span> </td>';
 				row += '</tr>';
 				
 				tbody = "#" + cookie_info.type.toLowerCase() + "_tbody";
