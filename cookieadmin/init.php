@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) exit;
 
 define('COOKIEADMIN_BASE', plugin_basename(COOKIEADMIN_FILE));
 define('COOKIEADMIN_DIR', plugin_dir_path(__FILE__));
-define('COOKIEADMIN_VERSION', '1.0.3');
+define('COOKIEADMIN_VERSION', '1.0.4');
 define('COOKIEADMIN_URL', plugins_url('', COOKIEADMIN_FILE));
 define('COOKIEADMIN_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('COOKIEADMIN_PRO_URL', 'https://cookieadmin.net/pricing?from=plugin');

@@ -652,6 +652,7 @@ input[type="color"] {
 
 .show_pref_cookies{
 	cursor: pointer;
+	font-size: 18px;
 }
 
 .pl0{
@@ -1100,3 +1101,16 @@ table.cookieadmin-table td{
 /* --- Override Dashicons End --- */
 
 
+/* CSS for phones only */
+@media (max-width: 767px) {
+
+	.cookieadmin_center{
+		top: 10%;
+		left: 5%;
+		max-width: 90vw;
+	}
+
+	.show_pref_cookies{
+		font-size: 14px;
+	}
+}

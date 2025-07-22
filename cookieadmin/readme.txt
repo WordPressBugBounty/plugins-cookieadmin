@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 6.8.2
 Requires PHP: 7.0
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -41,6 +41,9 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.0.4 =
+* [Bug Fix] The icons in Cookie Preferences modal were not visible on mobile devices. This has been fixed. 
 
 = 1.0.3 =
 * [Bug Fix] In some cases, the consent banner was displayed even after accepting the cookies. This is fixed. 

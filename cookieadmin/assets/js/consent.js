@@ -528,11 +528,11 @@ document.addEventListener("DOMContentLoaded", function() {
 			tgt = tgt.replace(/-container$/, "");
 			
 			if(el.target.classList.contains("dwn")){
-				el.target.innerHTML = "&#128898;";
+				el.target.innerHTML = "&#9658;";
 				el.target.classList.remove("dwn");
 				document.querySelector("."+tgt).style.display = "none";
 			}else{
-				el.target.innerHTML = "&#128899;";
+				el.target.innerHTML = "&#9660;";
 				el.target.classList.add("dwn");
 				document.querySelector("."+tgt).style.display = "block";
 			}
