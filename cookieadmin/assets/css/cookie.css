@@ -596,6 +596,10 @@ input[type="color"] {
 	justify-content: space-between;
 }
 
+.cookieadmin_header > span > label{
+	cursor:pointer;
+}
+
 .cookieadmin_remark{
 	display:none;
 	justify-self:right;

@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 6.8.2
 Requires PHP: 7.0
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -26,6 +26,7 @@ Free Features :
 * Scan cookies
 * Categorized cookies list for users
 * GDPR & US State Laws support
+* ADA, EAA & WCAG Compliant
 
 Pro Features :
 
@@ -41,6 +42,9 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.0.5 =
+* [Feature] CookieAdmin Consent Banner is now compliant with Americans with Disabilities Act (ADA), The European Accessibility Act (EAA) & Web Content Accessibility Guidelines (WCAG).
 
 = 1.0.4 =
 * [Bug Fix] The icons in Cookie Preferences modal were not visible on mobile devices. This has been fixed. 
