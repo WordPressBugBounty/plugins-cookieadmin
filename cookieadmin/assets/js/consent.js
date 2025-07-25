@@ -543,7 +543,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "none";
 		cookieadmin_toggle_overlay();
 		if(!cookieadmin_is_obj(cookieadmin_is_consent)){
-			document.getElementsByClassName(e.target.id)[0].style.display = "block";
+			document.getElementsByClassName("cookieadmin_law_container")[0].style.display = "block";
 		}else if(cookieadmin_show_reconsent){
 			document.getElementsByClassName("cookieadmin_re_consent")[0].style.display = "block";
 		}
@@ -572,6 +572,10 @@ function cookieadmin_set_consent(prefrenc, days){
 	cookieadmin_is_consent.action = prefrenc;
 	cookieadmin_populate_preference();
 	cookieadmin_set_cookie('cookieadmin_consent', cookieadmin_consent, days);
+	
+	if (typeof cookieadmin_update_gcm === "function") {
+		cookieadmin_update_gcm(1);
+	}
 	
 }
 

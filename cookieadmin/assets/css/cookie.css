@@ -439,7 +439,7 @@ input[type="color"] {
 
 .cookieadmin_law_container{
 	position: fixed;
-	width: 330px;
+	width: 25%;
 	box-sizing: border-box;
 	z-index: 99999;
 	display: none;
@@ -449,17 +449,22 @@ input[type="color"] {
 	align-content: center;
 	display: flex;
 	justify-content: space-evenly;
+	flex-wrap: wrap;
+	gap: 10px;
 }
 
 .cookieadmin_box{
 	/*position: fixed;*/
-	width: 330px;
+	width: 25%;
 	box-sizing: border-box;
 	display: none;
 }
 
 .cookieadmin_notice_group{
 	display: flex;
+	flex-direction: column;
+	gap: 10px; /* spacing between content and buttons */
+	align-items: flex-start;
 }
 
 .cookieadmin_popup{
@@ -675,6 +680,7 @@ input[type="color"] {
 	cursor: pointer;
 	border: 0px;
 	z-index: 99999;
+	padding: 5px;
 }
 
 .cookieadmin-manager-cookie-scan, .cookieadmin-manager-consent-logs, .cookieadmin-manager-cookie-categorize{
@@ -791,7 +797,7 @@ input[type="color"] {
 }
 
 /* Hide the checkbox input */
-.cookieadmin_toggle input {
+.cookieadmin_toggle input, .cookieadmin_toggle_disabled input {
 	display: none;
 }
 
@@ -803,6 +809,8 @@ input[type="color"] {
 	left: 0;
 	right: 0;
 	bottom: 0;
+	height: 21px;
+	width: 34px;
 	background-color: gray;
 	transition: .4s;
 	border-radius: 34px;
@@ -1116,5 +1124,61 @@ table.cookieadmin-table td{
 
 	.show_pref_cookies{
 		font-size: 14px;
+	}
+
+	.cookieadmin_law_container, .cookieadmin_box{
+		width: 90%;
+	}
+	
+	.cookieadmin_side{
+		width: 100%;
+	}
+}
+
+/* CSS for tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+
+	.cookieadmin_box{
+		width: 45%;
+	}
+}
+
+/* CSS for small laptop */
+@media (min-width: 992px) and (max-width: 1199px) {
+
+	.cookieadmin_box{
+		width: 35%;
+	}
+	
+}
+/* CSS for HD TV screens */
+@media (min-width: 1200px) and (max-width: 1360px) {
+
+	.cookieadmin_box{
+		width: 30%;
+	}
+}
+
+/* Desktop Layout */
+@media (min-width: 768px) {
+	.cookieadmin_notice_group {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.cookieadmin_notice_con {
+		flex: 1; /* take remaining space */
+	}
+
+	.cookieadmin_consent_btns {
+		flex-shrink: 0;
+	}
+}
+
+@media (max-width:480px){
+	.cookieadmin_btn {
+		width: 100%;
+		margin: 5px 0;
 	}
 }

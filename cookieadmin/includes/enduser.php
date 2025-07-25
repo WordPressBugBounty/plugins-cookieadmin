@@ -139,13 +139,86 @@ class Enduser{
 		// var_dump($policy[$view]);
 		echo $templates;
 	}
-
+	
 	static function cookieadmin_table_exists($table_name) {
 		global $wpdb;
 		
 		$query = $wpdb->prepare("SHOW TABLES LIKE %s", $table_name);
 		
 		return $wpdb->get_var($query) === $table_name;
+	}
+
+	static function wp_head() {
+		
+		$policy = cookieadmin_load_policy();
+		
+		$law = get_option('cookieadmin_law', 'cookieadmin_gdpr');
+		
+		$cookieadmin_default_allowed = (!empty($policy[$law]['preload']) ? $policy[$law]['preload'] : []);
+		$cookieadmin_default_categories = ['functional', 'analytics', 'marketing', 'accept', 'reject'];
+		
+		$cookieadmin_js_preferences = [];
+		foreach ($cookieadmin_default_categories as $category) {
+			$cookieadmin_js_preferences[$category] = (!empty($cookieadmin_default_allowed) && in_array($category, $cookieadmin_default_allowed) ? true : false);
+		}
+		
+		$cookieadmin_js_preferences_json = json_encode($cookieadmin_js_preferences);
+		$inline_js = <<<JS
+		
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		
+		function cookieadmin_update_gcm(update) {
+		
+			let cookieadmin_preferences = $cookieadmin_js_preferences_json;
+				
+			const cookieAdminMatch = document.cookie.match(/(?:^|; )cookieadmin_consent=([^;]*)/);
+			
+			if (cookieAdminMatch) {
+				try {
+					const cookieadmin_parsed = JSON.parse(decodeURIComponent(cookieAdminMatch[1]));
+					cookieadmin_preferences.functional = cookieadmin_parsed.functional === "true";
+					cookieadmin_preferences.analytics = cookieadmin_parsed.analytics === "true";
+					cookieadmin_preferences.marketing = cookieadmin_parsed.marketing === "true";
+					cookieadmin_preferences.accept = cookieadmin_parsed.accept === "true";
+					cookieadmin_preferences.reject = cookieadmin_parsed.reject === "true";
+				} catch (err) {
+					
+				}
+			}
+			
+			if (typeof gtag === 'function') {
+			
+				let cookieadmin_gtag_mode = update === 1 ? 'update' : 'default';
+				
+				try {
+					
+					gtag('consent', cookieadmin_gtag_mode, {
+						'ad_storage': cookieadmin_preferences.marketing || cookieadmin_preferences.accept ? 'granted' : 'denied',
+						'analytics_storage': cookieadmin_preferences.analytics || cookieadmin_preferences.accept  ? 'granted' : 'denied',
+						'ad_user_data': cookieadmin_preferences.marketing || cookieadmin_preferences.accept ? 'granted' : 'denied',
+						'ad_personalization': cookieadmin_preferences.marketing || cookieadmin_preferences.accept ? 'granted' : 'denied',
+						'personalization_storage': cookieadmin_preferences.marketing || cookieadmin_preferences.accept ? 'granted' : 'denied',
+						'security_storage': 'granted',
+						'functionality_storage': 'granted'
+					});
+					
+				} catch (e) {
+					
+				}
+			}
+		}
+		
+		cookieadmin_update_gcm(0);
+		
+		JS;
+
+		wp_register_script('cookieadmin-gcm', '', [], null, false);
+
+		wp_add_inline_script('cookieadmin-gcm', $inline_js);
+
+		wp_enqueue_script('cookieadmin-gcm');
+		
 	}
 
 }

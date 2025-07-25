@@ -149,7 +149,7 @@ class Admin{
 	
 	static function dashboard_page(){
 		
-		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg;
+		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg, $cookieadmin_settings;
 		
 		self::header_theme(__('Dashboard', 'cookieadmin'));
 		
@@ -162,11 +162,23 @@ class Admin{
 					<div class="cookieadmin-stats-name">'.esc_html__('Consent Banner', 'cookieadmin').'</div>
 					<div class="cookieadmin-stats-number cookieadmin-green">'.esc_html__('Enabled', 'cookieadmin').'</div>
 				</div>
+				
 				<div class="cookieadmin-stats-block cookieadmin-is-block-25">
 					<div class="cookieadmin-stats-name">'.esc_html__('Consent Type', 'cookieadmin').'&nbsp;
 						<div class="cookieadmin-block-link"><a href="'.esc_url(admin_url('admin.php?page=cookieadmin-consent')).'">['.esc_html__('Edit', 'cookieadmin').']</a></div>
 					</div>
 					<div class="cookieadmin-stats-number cookieadmin-uppercase">'.(!empty($view) && $view == 'cookieadmin_us' ? esc_html__('US State Laws', 'cookieadmin') : esc_html__('GDPR', 'cookieadmin')).'</div>
+				</div>
+				
+				<div class="cookieadmin-stats-block cookieadmin-is-block-25">
+					<div class="cookieadmin-stats-name">'.esc_html__('Google Consent Mode v2', 'cookieadmin').'&nbsp;
+						<div class="cookieadmin-block-link"><a href="'.esc_url(admin_url('admin.php?page=cookieadmin-settings')).'">['.esc_html__('Edit', 'cookieadmin').']</a></div>
+					</div>
+					'.(!empty($cookieadmin_settings['google_consent_mode_v2']) ? '<div class="cookieadmin-stats-number cookieadmin-green">'.esc_html__('Enabled', 'cookieadmin').'</div>' : '<div class="cookieadmin-stats-number">'.esc_html__('Disabled', 'cookieadmin').'</div>').'
+				</div>
+				
+				<div style="width:25%">
+					
 				</div>
 			</div>
 		</div>';
@@ -176,7 +188,7 @@ class Admin{
 
 	static function settings_page(){
 
-		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg;
+		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg, $cookieadmin_settings;
 		
 		self::header_theme(__('Settings', 'cookieadmin'));
 		
@@ -196,14 +208,18 @@ class Admin{
 						<div class="cookieadmin-setting setting-prior">
 							<label class="cookieadmin-title">'.esc_html__('Load Cookies prior to consent', 'cookieadmin').'</label>
 							<div class="cookieadmin-setting-contents">
+							
+								<input name="cookieadmin_preload[]" type="checkbox" id="necessary_preload" value="necessary" checked disabled>
+								<label class="cookieadmin-input" for="necessary_preload">'.esc_html__('Necessary', 'cookieadmin').'</label>
+								
 								<input name="cookieadmin_preload[]" type="checkbox" id="functional_preload" value="functional" '.(!empty($policy[$view]['preload']) && in_array("functional", $policy[$view]['preload']) ? 'checked' : '').'>
 								<label class="cookieadmin-input" for="functional_preload">'.esc_html__('Functional', 'cookieadmin').'</label>
-								<input name="cookieadmin_preload[]" type="checkbox" id="analytical_preload" value="analytical" '.(!empty($policy[$view]['preload']) && in_array("analytical", $policy[$view]['preload']) ? 'checked' : '').'>
-								<label class="cookieadmin-input" for="analytical_preload">'.esc_html__('Analytical', 'cookieadmin').'</label>
-								<input name="cookieadmin_preload[]" type="checkbox" id="performance_preload" value="performance" '.(!empty($policy[$view]['preload']) && in_array("performance", $policy[$view]['preload']) ? 'checked' : '').'>
-								<label class="cookieadmin-input" for="performance_preload">'.esc_html__('Performance', 'cookieadmin').'</label>
-								<input name="cookieadmin_preload[]" type="checkbox" id="advertisement_preload" value="advertisement" '.(!empty($policy[$view]['preload']) && in_array("advertisement", $policy[$view]['preload']) ? 'checked' : '').'>
-								<label for="advertisement_preload">'.esc_html__('Advertisement', 'cookieadmin').'</label>
+								
+								<input name="cookieadmin_preload[]" type="checkbox" id="analytics_preload" value="analytics" '.(!empty($policy[$view]['preload']) && in_array("analytics", $policy[$view]['preload']) ? 'checked' : '').'>
+								<label class="cookieadmin-input" for="analytics_preload">'.esc_html__('Analytical', 'cookieadmin').'</label>
+								
+								<input name="cookieadmin_preload[]" type="checkbox" id="marketing_preload" value="marketing" '.(!empty($policy[$view]['preload']) && in_array("marketing", $policy[$view]['preload']) ? 'checked' : '').'>
+								<label for="marketing_preload">'.esc_html__('Advertisement', 'cookieadmin').'</label>
 							</div>
 						</div>
 						
@@ -212,6 +228,16 @@ class Admin{
 							<div class="cookieadmin-setting-contents">
 								<label class="cookieadmin_toggle">
 									<input name="cookieadmin_reload_on_consent" type="checkbox" id="cookieadmin_reload_on_consent" '.(!empty($policy[$view]['reload_on_consent']) ? 'checked' : '').'>
+									<span class="cookieadmin_slider"></span>
+								</label>
+							</div>
+						</div>
+						
+						<div class="cookieadmin-setting">
+							<label class="cookieadmin-title">'.esc_html__('Google Consent Mode v2', 'cookieadmin').'</label>
+							<div class="cookieadmin-setting-contents">
+								<label class="cookieadmin_toggle">
+									<input name="cookieadmin_google_consent_mode_v2" type="checkbox" id="cookieadmin_google_consent_mode_v2" '.(!empty($cookieadmin_settings['google_consent_mode_v2']) ? 'checked' : '').'>
 									<span class="cookieadmin_slider"></span>
 								</label>
 							</div>
@@ -370,9 +396,9 @@ class Admin{
 									<tr><td colspan=4>'.esc_html__('Functional Cookies', 'cookieadmin').'</td></tr>
 									'.( !empty($categorized['Functional']) ? $categorized['Functional'] : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
 								</tbody>
-								<tbody id="analytical_tbody">
+								<tbody id="analytics_tbody">
 									<tr><td colspan=4>'.esc_html__('Analytical Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Analytical']) ? $categorized['Analytical'] : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
+									'.( !empty($categorized['Analytics']) ? $categorized['Analytics'] : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
 								</tbody>
 								<tbody id="marketing_tbody">
 									<tr><td colspan=4>'.esc_html__('Marketing Cookies', 'cookieadmin').'</td></tr>
@@ -413,7 +439,7 @@ class Admin{
 							<option value="Unknown">'.esc_html__('Unknown', 'cookieadmin').'</option>
 							<option value="Necessary">'.esc_html__('Necessary', 'cookieadmin').'</option>
 							<option value="Functional">'.esc_html__('Functional', 'cookieadmin').'</option>
-							<option value="Analytical">'.esc_html__('Analytical', 'cookieadmin').'</option>
+							<option value="Analytics">'.esc_html__('Analytical', 'cookieadmin').'</option>
 							<option value="Marketing">'.esc_html__('Marketing', 'cookieadmin').'</option>
 						</select>
 					</div>
@@ -696,7 +722,7 @@ class Admin{
 	
 	static function cookieadmin_save_settings(){
 		
-		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg;
+		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg, $cookieadmin_settings;
 	
 		// debug_print_backtrace();die;
 		
@@ -720,13 +746,19 @@ class Admin{
 				update_option('cookieadmin_law', $law);
 			}
 		}
+		
+		$cookieadmin_settings['google_consent_mode_v2'] = (isset( $_REQUEST['cookieadmin_google_consent_mode_v2'] ) ? 1 : 0);
+		
+		if(empty($cookieadmin_error)){
+			update_option('cookieadmin_settings', $cookieadmin_settings);
+		}
 
 		if(isset($_REQUEST['page']) && $_REQUEST['page'] === 'cookieadmin-settings'){
 			// get the concent type from option table, if not saved then return default as 'gdpr'
 			$law = get_option('cookieadmin_law', 'cookieadmin_gdpr');
 
 			//set preload and consent field for "cookieadmin-settings" page
-			$setting['preload'] = !empty($_REQUEST['cookieadmin_preload']) ? array_map('sanitize_text_field', wp_unslash($_REQUEST['cookieadmin_preload'])) : (!empty($policy[$law]['preload']) ? $policy[$law]['preload'] : []);
+			$setting['preload'] = !empty($_REQUEST['cookieadmin_preload']) ? array_map('sanitize_text_field', wp_unslash($_REQUEST['cookieadmin_preload'])) : [];
 			$setting['reload_on_consent'] = !empty($_REQUEST['cookieadmin_reload_on_consent']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_reload_on_consent'])) : '';
 		}else{
 			// set saved or default preload and consent field for for  "cookieadmin-consent" page

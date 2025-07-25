@@ -30,6 +30,8 @@ function cookieadmin_load_plugin(){
 	
 	global $cookieadmin, $cookieadmin_settings;
 	
+	$cookieadmin_settings = get_option('cookieadmin_settings', array());
+	
 	// Check if the installed version is outdated
 	cookieadmin_update_check();
 	
@@ -53,6 +55,10 @@ function cookieadmin_load_plugin(){
 	///////////////////////////
 	// Enduser loading
 	///////////////////////////
+	
+	if(!empty($cookieadmin_settings['google_consent_mode_v2'])){
+		add_action('wp_head', '\CookieAdmin\Enduser::wp_head', 5);
+	}
 	
 	add_action('wp_enqueue_scripts', '\CookieAdmin\Enduser::enqueue_scripts');
 	
