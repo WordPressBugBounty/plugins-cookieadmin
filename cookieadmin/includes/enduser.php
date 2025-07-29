@@ -32,6 +32,13 @@ class Enduser{
 			$policy[$view]['home_url'] = home_url();
 			$policy[$view]['plugin_url'] = COOKIEADMIN_URL;
 			$policy[$view]['is_pro'] = (defined('COOKIEADMIN_PREMIUM') ? COOKIEADMIN_PREMIUM : 0);
+			
+			$base_path = parse_url(home_url(), PHP_URL_PATH) ?: '/';
+			$base_path = ($base_path !== '/') ? rtrim($base_path, '/') . '/' : '/';
+			
+			// Used for setting cookie
+			$policy[$view]['base_path'] = $base_path;
+			
 			// cookieadmin_r_print($policy);die();
 			
 			$rows = $wpdb->get_results("SELECT cookie_name, category, expires, description, patterns FROM {$table_name}");
@@ -163,7 +170,7 @@ class Enduser{
 		}
 		
 		$cookieadmin_js_preferences_json = json_encode($cookieadmin_js_preferences);
-		$inline_js = <<<JS
+		$inline_js = "
 		
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
@@ -177,11 +184,11 @@ class Enduser{
 			if (cookieAdminMatch) {
 				try {
 					const cookieadmin_parsed = JSON.parse(decodeURIComponent(cookieAdminMatch[1]));
-					cookieadmin_preferences.functional = cookieadmin_parsed.functional === "true";
-					cookieadmin_preferences.analytics = cookieadmin_parsed.analytics === "true";
-					cookieadmin_preferences.marketing = cookieadmin_parsed.marketing === "true";
-					cookieadmin_preferences.accept = cookieadmin_parsed.accept === "true";
-					cookieadmin_preferences.reject = cookieadmin_parsed.reject === "true";
+					cookieadmin_preferences.functional = cookieadmin_parsed.functional === 'true';
+					cookieadmin_preferences.analytics = cookieadmin_parsed.analytics === 'true';
+					cookieadmin_preferences.marketing = cookieadmin_parsed.marketing === 'true';
+					cookieadmin_preferences.accept = cookieadmin_parsed.accept === 'true';
+					cookieadmin_preferences.reject = cookieadmin_parsed.reject === 'true';
 				} catch (err) {
 					
 				}
@@ -210,8 +217,7 @@ class Enduser{
 		}
 		
 		cookieadmin_update_gcm(0);
-		
-		JS;
+		";
 
 		wp_register_script('cookieadmin-gcm', '', [], null, false);
 

@@ -2,9 +2,9 @@
 Contributors: softaculous
 Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
-Tested up to: 6.8.2
+Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -43,6 +43,9 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.0.7 =
+* [Bug Fix] Consent saved by a visitor on a page other than home page was saved incorrectly causing the consent banner to appear again on other pages. This is fixed now. 
 
 = 1.0.6 =
 * [Feature] Added Google Consent Mode v2

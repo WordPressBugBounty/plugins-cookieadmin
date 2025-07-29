@@ -166,7 +166,7 @@ function cookieadmin_restore_cookies(update) {
     });
 }
 
-function cookieadmin_set_cookie(name, value, days = 365, domain = "", path = cookieadmin_get_base_path()) {
+function cookieadmin_set_cookie(name, value, days = 365, domain = "") {
   if (!name || !value) return false;
 
   const date = new Date();
@@ -174,7 +174,7 @@ function cookieadmin_set_cookie(name, value, days = 365, domain = "", path = coo
 
   let cookieString = `${encodeURIComponent(name)}=${JSON.stringify(value)};`;
   cookieString += ` expires=${date.toUTCString()};`;
-  cookieString += ` path=${path};`;
+  cookieString += ` path=${cookieadmin_policy.base_path};`;
   cookieString += ` SameSite=Lax;`;
   cookieString += ` Secure;`; // Only sent over HTTPS
 
@@ -579,11 +579,3 @@ function cookieadmin_set_consent(prefrenc, days){
 	
 }
 
-function cookieadmin_get_base_path() {
-	
-	if(window.location.pathname.trim() != '/'){
-		const parts = window.location.pathname.split('/');
-		return '/' + (parts[1] || '') + '/';
-	}
-	return '/';
-}
