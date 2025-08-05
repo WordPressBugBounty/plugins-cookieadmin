@@ -28,7 +28,10 @@
 		"cookieadmin_accept_btn_bg_color": "#1863dc",
 		"cookieadmin_save_btn" : "Save Preferences",
 		"cookieadmin_save_btn_color" : "#ffffff",
-		"cookieadmin_save_btn_bg_color" : "#1863dc"
+		"cookieadmin_save_btn_bg_color" : "#1863dc",
+		"cookieadmin_slider_off_bg_color" : "#808080",
+		"cookieadmin_slider_on_bg_color" : "#3582C4",
+		"cookieadmin_links_color" : "#1863dc"
     },
     "cookieadmin_us": {
 		"cookieadmin_layout": "box",
@@ -59,6 +62,9 @@
 		"cookieadmin_accept_btn_bg_color": "#1863dc",
 		"cookieadmin_save_btn" : "Save Preferences",
 		"cookieadmin_save_btn_color" : "#ffffff",
-		"cookieadmin_save_btn_bg_color" : "#1863dc"
+		"cookieadmin_save_btn_bg_color" : "#1863dc",
+		"cookieadmin_slider_off_bg_color" : "#808080",
+		"cookieadmin_slider_on_bg_color" : "#3582C4",
+		"cookieadmin_links_color" : "#1863dc"
     }
 }

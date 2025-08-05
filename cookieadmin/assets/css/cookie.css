@@ -551,8 +551,8 @@ input[type="color"] {
 }
 
 .cookieadmin_mod_head, .cookieadmin_wrapper{
-	padding: 20px;
-	border-bottom: 1px solid #F4F4F4;
+	padding: 15px;
+	border-bottom: 1px solid #CCCCCC;
 }
 
 .cookieadmin_close_pref{
@@ -561,11 +561,13 @@ input[type="color"] {
 	align-self: baseline;
 	color: gray;
 	cursor: pointer;
+	padding: 0px;
 }
 
 .cookieadmin_preference_title{
 	font-size: 20px;
 	font-weight: 801;
+	margin: 9px;
 }
 
 .preference_details{
@@ -583,17 +585,19 @@ input[type="color"] {
 	border: none;
 	color: #1863dc;
 	padding: 0px;
+	cursor: pointer;
 }
 
 .cookieadmin_details_wrapper{
 	padding: 15px;
 	height: calc(100% - 6%);
 	overflow: auto;
+	scrollbar-width: thin;
 }
 
 .cookieadmin_types{
 	padding: 10px 10px;
-	border-top: 1px solid #000000;
+	border-top: 1px solid #CCCCCC;
 }
 
 .cookieadmin_header{
@@ -633,10 +637,17 @@ input[type="color"] {
 }
 
 .cookieadmin_footer{
-	width: 100%;
 	left: 0px;
 	padding: 15px;
 	flex-wrap: wrap;
+	width: 100%;
+}
+
+.cookieadmin_modal_footer{
+	left: 0px;
+	padding: 15px;
+	flex-wrap: wrap;
+	border-top: 1px solid #CCCCCC;
 }
 
 .cookieadmin_btn{
@@ -1177,8 +1188,12 @@ table.cookieadmin-table td{
 }
 
 @media (max-width:480px){
-	.cookieadmin_btn {
+	.cookieadmin_consent_inside .cookieadmin_btn {
 		width: 100%;
 		margin: 5px 0;
+	}
+	
+	.cookieadmin_modal_footer{
+		padding: 8px;
 	}
 }

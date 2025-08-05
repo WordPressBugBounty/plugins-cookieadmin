@@ -67,7 +67,9 @@ function cookieadmin_load_plugin(){
 	// add_action('init', '\CookieAdmin\Enduser::cookieadmin_block_cookie_head_js', 0);
 	
 	//add Cookie Banner to user page
-	add_action('wp_footer', '\CookieAdmin\Enduser::cookieadmin_show_banner');
+	if(!cookieadmin_is_editor_mode()){
+		add_action('wp_footer', '\CookieAdmin\Enduser::cookieadmin_show_banner');
+	}
 	
 	add_filter('script_loader_tag', '\CookieAdmin\Enduser::check_if_cookies_allowed', 10, 3);
 	
@@ -84,6 +86,42 @@ function cookieadmin_load_plugin_admin(){
 	add_action('admin_enqueue_scripts', '\CookieAdmin\Admin::enqueue_scripts');
 	
 	add_action('admin_menu', '\CookieAdmin\Admin::cookieadmin_plugin_menu');
+	
+	// === Plugin Update Notice === //
+	$plugin_update_notice = get_option('softaculous_plugin_update_notice', []);
+	$available_update_list = get_site_transient('update_plugins'); 
+	$plugin_path_slug = 'cookieadmin/cookieadmin.php';
+
+	if(
+		!empty($available_update_list) &&
+		is_object($available_update_list) && 
+		!empty($available_update_list->response) &&
+		!empty($available_update_list->response[$plugin_path_slug]) && 
+		(empty($plugin_update_notice) || empty($plugin_update_notice[$plugin_path_slug]) || (!empty($plugin_update_notice[$plugin_path_slug]) &&
+		version_compare($plugin_update_notice[$plugin_path_slug], $available_update_list->response[$plugin_path_slug]->new_version, '<')))
+	){
+		add_action('admin_notices', '\CookieAdmin\Admin::plugin_update_notice');
+		add_filter('softaculous_plugin_update_notice', '\CookieAdmin\Admin::plugin_update_notice_filter');
+	}
+	// === Plugin Update Notice END === //
+	
+}
+
+function cookieadmin_is_editor_mode(){
+	
+	if (isset($_GET['pagelayer-live']) || isset($_GET['fl_builder'])) {
+		return true;
+	}
+	
+	if(isset($_GET['vc_action']) && $_GET['vc_action'] == 'vc_inline'){
+		return true;
+	}
+	
+	if(isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] == 'elementor')){
+		return true;
+	}
+
+	return false;
 	
 }
 
@@ -102,6 +140,7 @@ function cookieadmin_ajax_handler(){
 		'scan_cookies' => 'cookieadmin_scan_cookies',
 		'cookieadmin-auto-categorize' => 'cookieadmin_auto_configure_cookies',
 		'cookieadmin-edit-cookie' => 'cookieadmin_edit_cookies',
+		'close-update-notice' => 'close_plugin_update_notice'
 	);
 	
 	$general_actions = array(
@@ -344,4 +383,8 @@ function cookieadmin_categorize_cookies($cookies = []){
 	}
 	
 	return $sanitized_cookies;
+}
+
+function cookieadmin_is_pro(){
+	return defined('COOKIEADMIN_PREMIUM');
 }

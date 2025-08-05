@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -43,6 +43,12 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.0.8 =
+* [Pro Feature] Added option to customize the color for links and On/Off switch for the cookie consent preference modal
+* [Task] Consent Banner will not be rendered while editing pages
+* [Bug Fix] Consent Banner caused conflict with some forms on the page due to missing prefixes in some css classes. All css classes now have a prefix to avoid any conflict.
+* [Bug Fix] Consent preference was not saved on sites running without SSL certificate. This is fixed now.
 
 = 1.0.7 =
 * [Bug Fix] Consent saved by a visitor on a page other than home page was saved incorrectly causing the consent banner to appear again on other pages. This is fixed now. 

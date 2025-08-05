@@ -176,7 +176,9 @@ function cookieadmin_set_cookie(name, value, days = 365, domain = "") {
   cookieString += ` expires=${date.toUTCString()};`;
   cookieString += ` path=${cookieadmin_policy.base_path};`;
   cookieString += ` SameSite=Lax;`;
-  cookieString += ` Secure;`; // Only sent over HTTPS
+  if(cookieadmin_policy.is_ssl || window.location.protocol === 'https:'){
+	  cookieString += ` Secure;`;
+  }
 
   // Add domain if explicitly passed
   if (domain) {
@@ -403,7 +405,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	}*/
 
 	if(cookieadmin_policy.cookieadmin_modal == "side"){
-		document.getElementsByClassName("cookieadmin_footer")[0].style.flexDirection = "column";
+		document.getElementsByClassName("cookieadmin_modal_footer")[0].style.flexDirection = "column";
 	}
 		
 	// Remove modal close Button
@@ -521,7 +523,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 
-	document.querySelectorAll(".show_pref_cookies").forEach(function(e){
+	document.querySelectorAll(".cookieadmin_show_pref_cookies").forEach(function(e){
 		e.addEventListener("click", function(el){
 			
 			var tgt = el.target.id;

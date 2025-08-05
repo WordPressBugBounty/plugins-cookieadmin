@@ -22,7 +22,7 @@ class Enduser{
 		
 		if(!empty($policy) && !empty($view)){
 		
-			wp_enqueue_style('cookieadmin-style', COOKIEADMIN_PLUGIN_URL . 'assets/css/cookie.css', [], COOKIEADMIN_VERSION);
+			wp_enqueue_style('cookieadmin-style', COOKIEADMIN_PLUGIN_URL . 'assets/css/consent.css', [], COOKIEADMIN_VERSION);
 			
 			wp_enqueue_script('cookieadmin_js', COOKIEADMIN_PLUGIN_URL . 'assets/js/consent.js', [], COOKIEADMIN_VERSION, 'async');
 		
@@ -32,6 +32,7 @@ class Enduser{
 			$policy[$view]['home_url'] = home_url();
 			$policy[$view]['plugin_url'] = COOKIEADMIN_URL;
 			$policy[$view]['is_pro'] = (defined('COOKIEADMIN_PREMIUM') ? COOKIEADMIN_PREMIUM : 0);
+			$policy[$view]['ssl'] = is_ssl();
 			
 			$base_path = parse_url(home_url(), PHP_URL_PATH) ?: '/';
 			$base_path = ($base_path !== '/') ? rtrim($base_path, '/') . '/' : '/';
@@ -51,6 +52,7 @@ class Enduser{
 			$policy[$view]['categorized_cookies'] = self::$categorized_cookies = $cookie_data;
 			
 			wp_localize_script('cookieadmin_js', 'cookieadmin_policy', $policy[$view]);
+			
 		}
 	}
 

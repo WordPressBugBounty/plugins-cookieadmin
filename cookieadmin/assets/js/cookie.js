@@ -229,7 +229,16 @@ jQuery(document).ready(function($){
 		$(".cookieadmin_save_btn").text(law.cookieadmin_save_btn);
 		$(".cookieadmin_save_btn").css('background-color', $("#cookieadmin_save_btn_bg_color").val());
 		$(".cookieadmin_save_btn").css('color', $("#cookieadmin_save_btn_color").val());
-		
+
+		$(".cookieadmin_showmore").css('color', law.cookieadmin_links_color);
+		$(".act").css('color', law.cookieadmin_links_color);
+
+		const sliders = $("#cookieadmin_wrapper .cookieadmin_slider");
+		$(sliders[0]).css('background-color', law.cookieadmin_slider_on_bg_color);
+		$(sliders[1]).css('background-color', law.cookieadmin_slider_off_bg_color);
+		$(sliders[2]).css('background-color', law.cookieadmin_slider_off_bg_color);
+		$(sliders[3]).css('background-color', law.cookieadmin_slider_off_bg_color);
+
 		//Also set layout of consents
 		if(!!law.cookieadmin_position){
 			$.each(law.cookieadmin_position.split("_"), function(i,v){
@@ -343,6 +352,14 @@ jQuery(document).ready(function($){
 		$("#cookieadmin_cookie_modal_bg_color").val(cookieadmin_policy[law].cookieadmin_cookie_modal_bg_color);
 		$("#cookieadmin_cookie_modal_border_color_box").val(cookieadmin_policy[law].cookieadmin_cookie_modal_border_color);
 		$("#cookieadmin_cookie_modal_border_color").val(cookieadmin_policy[law].cookieadmin_cookie_modal_border_color);
+
+		$("#cookieadmin_slider_on_bg_color_box").val(cookieadmin_policy[law].cookieadmin_slider_on_bg_color);
+		$("#cookieadmin_slider_on_bg_color").val(cookieadmin_policy[law].cookieadmin_slider_on_bg_color);
+		$("#cookieadmin_slider_off_bg_color_box").val(cookieadmin_policy[law].cookieadmin_slider_off_bg_color);
+		$("#cookieadmin_slider_off_bg_color").val(cookieadmin_policy[law].cookieadmin_slider_off_bg_color);
+
+		$("#cookieadmin_links_color_box").val(cookieadmin_policy[law].cookieadmin_links_color);
+		$("#cookieadmin_links_color").val(cookieadmin_policy[law].cookieadmin_links_color);
 		
 		law == 'cookieadmin_gdpr' ? $(".setting-prior").show() : $(".setting-prior").hide();
 	});

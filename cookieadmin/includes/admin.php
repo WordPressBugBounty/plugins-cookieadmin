@@ -59,6 +59,7 @@ class Admin{
 		}
 		
 		wp_enqueue_script('cookieadmin_js_footer', COOKIEADMIN_PLUGIN_URL . 'assets/js/footer.js', [], COOKIEADMIN_VERSION);
+		wp_localize_script('cookieadmin_js_footer', 'cookieadmin_is_pro', (int) cookieadmin_is_pro());
 	}
 	
 	//Add Main Menu
@@ -479,6 +480,8 @@ class Admin{
 		$policy['set'] = $view;
 		$policy['admin_url'] = admin_url('admin-ajax.php');
 		$policy['cookieadmin_nonce'] = wp_create_nonce('cookieadmin_admin_js_nonce');
+		
+		$cookieadmin_requires_pro = self::is_feature_available(1);
 
 		echo '
 		<div class="cookieadmin_consent-wrap">
@@ -674,6 +677,30 @@ class Admin{
 								</div>
 							</div>
 							
+							<div class="cookieadmin-setting-colors cookieadmin-setting-contents cookieadmin-setting-color cookieadmin-horizontal" cookieadmin-pro-only="1">
+								<div class="cookieadmin-setting-color cookieadmin-vertical">
+									<label for="cookieadmin_links_color">'.esc_html__('Links', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+									<div class="cookieadmin-color-holder cookieadmin-horizontal">
+										<input type="color" id="cookieadmin_links_color_box" name="cookieadmin_links_color_box" value="'.esc_attr($policy[$view]['cookieadmin_links_color']).'">
+										<input type="text" id="cookieadmin_links_color" name="cookieadmin_links_color" value="'.esc_attr($policy[$view]['cookieadmin_links_color']).'" class="cookieadmin-color-input">
+									</div>
+								</div>
+								<div class="cookieadmin-setting-color cookieadmin-vertical">
+									<label for="cookieadmin_slider_on_bg_color">'.esc_html__('Button Switch On', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+									<div class="cookieadmin-color-holder cookieadmin-horizontal">
+										<input type="color" id="cookieadmin_slider_on_bg_color_box" name="cookieadmin_slider_on_bg_color_box" value="'.esc_attr($policy[$view]['cookieadmin_slider_on_bg_color']).'">
+										<input type="text" id="cookieadmin_slider_on_bg_color" name="cookieadmin_slider_on_bg_color" value="'.esc_attr($policy[$view]['cookieadmin_slider_on_bg_color']).'" class="cookieadmin-color-input">
+									</div>
+								</div>
+								<div class="cookieadmin-setting-color cookieadmin-vertical">
+									<label for="cookieadmin_slider_off_bg_color">'.esc_html__('Button Switch Off', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+									<div class="cookieadmin-color-holder cookieadmin-horizontal">
+										<input type="color" id="cookieadmin_slider_off_bg_color_box" name="cookieadmin_slider_off_bg_color_box" value="'.esc_attr($policy[$view]['cookieadmin_slider_off_bg_color']).'">
+										<input type="text" id="cookieadmin_slider_off_bg_color" name="cookieadmin_slider_off_bg_color" value="'.esc_attr($policy[$view]['cookieadmin_slider_off_bg_color']).'" class="cookieadmin-color-input">
+									</div>
+								</div>
+							</div>
+							
 							<span style="margin-top:30px;">
 							
 							<input type="submit" name="cookieadmin_save_settings" class="cookieadmin-btn cookieadmin-btn-primary action" value="'.esc_html__('Save Settings', 'cookieadmin').'">
@@ -812,6 +839,10 @@ class Admin{
 		
 		$setting['cookieadmin_cookie_modal_bg_color'] = !empty($_REQUEST['cookieadmin_cookie_modal_bg_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_cookie_modal_bg_color'])) : (!empty($policy[$law]['cookieadmin_cookie_modal_bg_color']) ? $policy[$law]['cookieadmin_cookie_modal_bg_color'] : '#ffffff');
 		$setting['cookieadmin_cookie_modal_border_color'] = !empty($_REQUEST['cookieadmin_cookie_modal_border_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_cookie_modal_border_color'])) : (!empty($policy[$law]['cookieadmin_cookie_modal_border_color']) ? $policy[$law]['cookieadmin_cookie_modal_border_color'] : '#000000');
+
+		$setting['cookieadmin_slider_off_bg_color'] = !empty($_REQUEST['cookieadmin_slider_off_bg_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_slider_off_bg_color'])) : (!empty($policy[$law]['cookieadmin_slider_off_bg_color']) ? $policy[$law]['cookieadmin_slider_off_bg_color'] : '#808080');
+		$setting['cookieadmin_slider_on_bg_color'] = !empty($_REQUEST['cookieadmin_slider_on_bg_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_slider_on_bg_color'])) : (!empty($policy[$law]['cookieadmin_slider_on_bg_color']) ? $policy[$law]['cookieadmin_slider_on_bg_color'] : '#3582c4');
+		$setting['cookieadmin_links_color'] = !empty($_REQUEST['cookieadmin_links_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_links_color'])) : (!empty($policy[$law]['cookieadmin_links_color']) ? $policy[$law]['cookieadmin_links_color'] : '#1863dc');
 		
 		$setting['cookieadmin_days'] = !empty($_REQUEST['cookieadmin_days']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_days'])) : (!empty($policy[$law]['cookieadmin_days']) ? $policy[$law]['cookieadmin_days'] : '365');
 		
@@ -975,5 +1006,83 @@ class Admin{
 		return $results;
 	}
 	
+	static function plugin_update_notice(){
+		if(defined('SOFTACULOUS_PLUGIN_UPDATE_NOTICE')){
+			return;
+		}
+
+		$to_update_plugins = apply_filters('softaculous_plugin_update_notice', []);
+
+		if(empty($to_update_plugins)){
+			return;
+		}
+
+		/* translators: %1$s is replaced with a "string" of name of plugins, and %2$s is replaced with "string" which can be "is" or "are" based on the count of the plugin */
+		$msg = sprintf(__('New versions of %1$s %2$s available. Updating ensures better performance, security, and access to the latest features.', 'cookieadmin'), '<b>'.esc_html(implode(', ', $to_update_plugins)).'</b>', (count($to_update_plugins) > 1 ? 'are' : 'is')) . ' <a class="button button-primary" href='.esc_url(admin_url('plugins.php?plugin_status=upgrade')).'>Update Now</a>';
+
+		define('SOFTACULOUS_PLUGIN_UPDATE_NOTICE', true); // To make sure other plugins don't return a Notice
+		echo '<div class="notice notice-info is-dismissible" id="cookieadmin-plugin-update-notice">
+			<p>'.$msg. '</p>
+		</div>';
+
+		wp_register_script('cookieadmin-update-notice', '', ['jquery'], '', true);
+		wp_enqueue_script('cookieadmin-update-notice');
+		wp_add_inline_script('cookieadmin-update-notice', 'jQuery("#cookieadmin-plugin-update-notice").on("click", function(e){
+			let target = jQuery(e.target);
+
+			if(!target.hasClass("notice-dismiss")){
+				return;
+			}
+
+			var data;
+			
+			// Hide it
+			jQuery("#cookieadmin-plugin-update-notice").hide();
+			
+			// Save this preference
+			jQuery.post("'.admin_url('admin-ajax.php?action=cookieadmin_ajax_handler&cookieadmin_act=close-update-notice').'&cookieadmin_security='.wp_create_nonce('cookieadmin_admin_js_nonce').'", data, function(response) {
+				//alert(response);
+			});
+		});');
+	}
+
+	static function plugin_update_notice_filter($plugins = []){
+		$plugins['cookieadmin/cookieadmin.php'] = 'CookieAdmin';
+		return $plugins;
+	}
+
+	static function close_plugin_update_notice(){
+		$plugin_update_notice = get_option('softaculous_plugin_update_notice', []);
+		$available_update_list = get_site_transient('update_plugins');
+		$to_update_plugins = apply_filters('softaculous_plugin_update_notice', []);
+
+		if(empty($available_update_list) || empty($available_update_list->response)){
+			return;
+		}
+
+		foreach($to_update_plugins as $plugin_path => $plugin_name){
+			if(isset($available_update_list->response[$plugin_path])){
+				$plugin_update_notice[$plugin_path] = $available_update_list->response[$plugin_path]->new_version;
+			}
+		}
+
+		update_option('softaculous_plugin_update_notice', $plugin_update_notice);
+	}
+
+	static function is_feature_available($return = 0){
+		
+		if(cookieadmin_is_pro()){
+			return '';
+		}
+		
+		$msg = ' <sup style="font-size:11px;"><a href="'.COOKIEADMIN_PRO_URL.'" target="_blank" style="text-decoration:none; color:red;"><b>'.__('Pro', 'cookieadmin').'</b></a></sup>';
+		
+		if(!empty($return)){
+			return $msg;
+		}else{
+			echo $msg;
+		}
+
+	}
 }
 
