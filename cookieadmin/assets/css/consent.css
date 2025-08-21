@@ -156,7 +156,6 @@
 	display: flex;
 	justify-content: space-evenly;
 	flex-wrap: wrap;
-	gap: 10px;
 }
 
 .cookieadmin_box{
@@ -357,6 +356,8 @@
 	border-radius: 4px;
 	margin: 2px 5px;
 	cursor: pointer;
+	flex: auto;
+	text-wrap: auto;
 }
 
 .cookieadmin_btn:hover{
@@ -500,6 +501,29 @@ input:disabled+.cookieadmin_slider:before {
 }
 
 /* Checkbox switch End */
+
+.cookieadmin-poweredby{
+margin-top: 10px;
+}
+
+.cookieadmin-poweredby a img{
+height: 15px;
+}
+
+.cookieadmin-poweredby a{
+color : unset;
+cursor: pointer;
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 11px;
+gap: 2px;
+text-decoration: none;
+}
+
+.cookieadmin_modal_footer .cookieadmin-poweredby a{
+justify-content: end;
+}
 
 /* CSS for phones only */
 @media (max-width: 767px) {

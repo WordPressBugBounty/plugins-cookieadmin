@@ -40,6 +40,11 @@ class Enduser{
 			// Used for setting cookie
 			$policy[$view]['base_path'] = $base_path;
 			
+			$policy[$view]['lang']['show_more'] = __('show more', 'cookieadmin');
+			$policy[$view]['lang']['show_less'] = __('show less', 'cookieadmin');
+			$policy[$view]['lang']['duration'] = __('Duration', 'cookieadmin');
+			$policy[$view]['lang']['session'] = __('Session', 'cookieadmin');
+			
 			// cookieadmin_r_print($policy);die();
 			
 			$rows = $wpdb->get_results("SELECT cookie_name, category, expires, description, patterns FROM {$table_name}");
@@ -129,20 +134,8 @@ class Enduser{
 		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');	
 		$policy = cookieadmin_load_policy();
 		
-		$allowed_tags = wp_kses_allowed_html( 'post' );
+		$allowed_tags = cookieadmin_kses_allowed_html();
 
-		// Add input tag for cookie consent form
-		$allowed_tags['input'] = array(
-			'type'    => true,
-			'name'    => true,
-			'value'   => true,
-			'class'   => true,
-			'id'      => true,
-			'checked' => true,
-			'disabled' => true,
-			'placeholder' => true,
-		);
-		
 		$templates = wp_kses(implode("", cookieadmin_load_consent_template($policy[$view], $view)), $allowed_tags);
 		
 		// var_dump($policy[$view]);
@@ -156,78 +149,5 @@ class Enduser{
 		
 		return $wpdb->get_var($query) === $table_name;
 	}
-
-	static function wp_head() {
-		
-		$policy = cookieadmin_load_policy();
-		
-		$law = get_option('cookieadmin_law', 'cookieadmin_gdpr');
-		
-		$cookieadmin_default_allowed = (!empty($policy[$law]['preload']) ? $policy[$law]['preload'] : []);
-		$cookieadmin_default_categories = ['functional', 'analytics', 'marketing', 'accept', 'reject'];
-		
-		$cookieadmin_js_preferences = [];
-		foreach ($cookieadmin_default_categories as $category) {
-			$cookieadmin_js_preferences[$category] = (!empty($cookieadmin_default_allowed) && in_array($category, $cookieadmin_default_allowed) ? true : false);
-		}
-		
-		$cookieadmin_js_preferences_json = json_encode($cookieadmin_js_preferences);
-		$inline_js = "
-		
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		
-		function cookieadmin_update_gcm(update) {
-		
-			let cookieadmin_preferences = $cookieadmin_js_preferences_json;
-				
-			const cookieAdminMatch = document.cookie.match(/(?:^|; )cookieadmin_consent=([^;]*)/);
-			
-			if (cookieAdminMatch) {
-				try {
-					const cookieadmin_parsed = JSON.parse(decodeURIComponent(cookieAdminMatch[1]));
-					cookieadmin_preferences.functional = cookieadmin_parsed.functional === 'true';
-					cookieadmin_preferences.analytics = cookieadmin_parsed.analytics === 'true';
-					cookieadmin_preferences.marketing = cookieadmin_parsed.marketing === 'true';
-					cookieadmin_preferences.accept = cookieadmin_parsed.accept === 'true';
-					cookieadmin_preferences.reject = cookieadmin_parsed.reject === 'true';
-				} catch (err) {
-					
-				}
-			}
-			
-			if (typeof gtag === 'function') {
-			
-				let cookieadmin_gtag_mode = update === 1 ? 'update' : 'default';
-				
-				try {
-					
-					gtag('consent', cookieadmin_gtag_mode, {
-						'ad_storage': cookieadmin_preferences.marketing || cookieadmin_preferences.accept ? 'granted' : 'denied',
-						'analytics_storage': cookieadmin_preferences.analytics || cookieadmin_preferences.accept  ? 'granted' : 'denied',
-						'ad_user_data': cookieadmin_preferences.marketing || cookieadmin_preferences.accept ? 'granted' : 'denied',
-						'ad_personalization': cookieadmin_preferences.marketing || cookieadmin_preferences.accept ? 'granted' : 'denied',
-						'personalization_storage': cookieadmin_preferences.marketing || cookieadmin_preferences.accept ? 'granted' : 'denied',
-						'security_storage': 'granted',
-						'functionality_storage': 'granted'
-					});
-					
-				} catch (e) {
-					
-				}
-			}
-		}
-		
-		cookieadmin_update_gcm(0);
-		";
-
-		wp_register_script('cookieadmin-gcm', '', [], null, false);
-
-		wp_add_inline_script('cookieadmin-gcm', $inline_js);
-
-		wp_enqueue_script('cookieadmin-gcm');
-		
-	}
-
 }
 

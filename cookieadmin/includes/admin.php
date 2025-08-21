@@ -198,6 +198,8 @@ class Admin{
 		$policy['set'] = $view;
 		$policy['admin_url'] = admin_url('admin-ajax.php');
 		$policy['cookieadmin_nonce'] = wp_create_nonce('cookieadmin_admin_js_nonce');
+
+		$cookieadmin_requires_pro = self::is_feature_available(1);
 		
 		echo '
 		<div class="cookieadmin_consent-wrap">
@@ -225,7 +227,7 @@ class Admin{
 						</div>
 						
 						<div class="cookieadmin-setting setting-reload">
-							<label class="cookieadmin-title">'.esc_html__('Reload page on consent', 'cookieadmin').'</label>
+							<label class="cookieadmin-title" for="cookieadmin_reload_on_consent">'.esc_html__('Reload page on consent', 'cookieadmin').'</label>
 							<div class="cookieadmin-setting-contents">
 								<label class="cookieadmin_toggle">
 									<input name="cookieadmin_reload_on_consent" type="checkbox" id="cookieadmin_reload_on_consent" '.(!empty($policy[$view]['reload_on_consent']) ? 'checked' : '').'>
@@ -233,17 +235,39 @@ class Admin{
 								</label>
 							</div>
 						</div>
-						
-						<div class="cookieadmin-setting">
-							<label class="cookieadmin-title">'.esc_html__('Google Consent Mode v2', 'cookieadmin').'</label>
-							<div class="cookieadmin-setting-contents">
-								<label class="cookieadmin_toggle">
-									<input name="cookieadmin_google_consent_mode_v2" type="checkbox" id="cookieadmin_google_consent_mode_v2" '.(!empty($cookieadmin_settings['google_consent_mode_v2']) ? 'checked' : '').'>
-									<span class="cookieadmin_slider"></span>
-								</label>
+
+						<div class="coookieadmin-contents cookieadmin-settings" cookieadmin-pro-only="1">
+							<div class="cookieadmin-setting">
+								<label class="cookieadmin-title" for="cookieadmin_google_consent_mode_v2">'.esc_html__('Google Consent Mode v2', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+								<div class="cookieadmin-setting-contents">
+									<label class="cookieadmin_toggle">
+										<input name="cookieadmin_google_consent_mode_v2" type="checkbox" id="cookieadmin_google_consent_mode_v2" '.(!empty($cookieadmin_settings['google_consent_mode_v2']) && cookieadmin_is_pro() ? 'checked' : '').'>
+										<span class="cookieadmin_slider"></span>
+									</label>
+								</div>
+							</div>
+
+							<div class="cookieadmin-setting setting-poweredby">
+								<label class="cookieadmin-title" for="cookieadmin_hide_powered_by">'.esc_html__('Hide Powered by Link', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+								<div class="cookieadmin-setting-contents">
+									<label class="cookieadmin_toggle">
+										<input name="cookieadmin_hide_powered_by" type="checkbox" id="cookieadmin_hide_powered_by" '.(!empty($cookieadmin_settings['hide_powered_by']) && cookieadmin_is_pro() ? 'checked' : '').'>
+										<span class="cookieadmin_slider"></span>
+									</label>
+								</div>
+							</div>
+
+							<div class="cookieadmin-setting setting-reconsent">
+								<label class="cookieadmin-title" for="cookieadmin_hide_reconsent">'.esc_html__('Hide Re-consent Icon', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+								<div class="cookieadmin-setting-contents">
+									<label class="cookieadmin_toggle">
+										<input name="cookieadmin_hide_reconsent" type="checkbox" id="cookieadmin_hide_reconsent" '.(!empty($cookieadmin_settings['hide_reconsent']) && cookieadmin_is_pro() ? 'checked' : '').'>
+										<span class="cookieadmin_slider"></span>
+									</label>
+								</div>
 							</div>
 						</div>
-						
+
 						<div class="cookieadmin-setting">
 							<div class="cookieadmin-setting-contents">
 								<span><input type="submit" name="cookieadmin_save_settings" class="cookieadmin-btn cookieadmin-btn-primary action" value="'.esc_html__('Save Settings', 'cookieadmin').'"></span>
@@ -426,15 +450,15 @@ class Admin{
 		
 		echo '
 		<!-- Modal Overlay -->
-		<div class="modal-overlay" id="edit-cookie-modal" hidden>
-			<div class="modal-container">
-				<div class="modal-header">
+		<div class="cookieadmin_modal-overlay" id="edit-cookie-modal" hidden>
+			<div class="cookieadmin_modal-container">
+				<div class="cookieadmin_modal-header">
 					<h2>'.esc_html__('Edit Cookie', 'cookieadmin').'</h2>
 					<button class="cookieadmin_dialog_modal_close_btn">&times;</button>
 				</div>
 
-				<div class="modal-body">
-					<div class="form-group">
+				<div class="cookieadmin_modal-body">
+					<div class="cookieadmin_form-group">
 						<label for="cookieadmin-dialog-cookie-category">'.esc_html__('Category', 'cookieadmin').'</label>
 						<select id="cookieadmin-dialog-cookie-category">
 							<option value="Unknown">'.esc_html__('Unknown', 'cookieadmin').'</option>
@@ -445,22 +469,22 @@ class Admin{
 						</select>
 					</div>
 					
-					<div class="form-group">
+					<div class="cookieadmin_form-group">
 						<label for="cookie_id">'.esc_html__('Cookie Name/ID', 'cookieadmin').'</label>
 						<input type="text" id="cookieadmin-dialog-cookie-name" Placeholder="'.esc_html__('Enter Cookie Name or id', 'cookieadmin').'">
 					</div>
 
-					<div class="form-group">
+					<div class="cookieadmin_form-group">
 						<label for="description">'.esc_html__('Description', 'cookieadmin').'</label>
 						<textarea id="cookieadmin-dialog-cookie-desc" Placeholder="'.esc_html__('Enter Cookie description here', 'cookieadmin').'"></textarea>
 					</div>
 
-					<div class="form-group">
+					<div class="cookieadmin_form-group">
 						<label for="duration">'.esc_html__('Duration', 'cookieadmin').'</label>
 						<input type="text" id="cookieadmin-dialog-cookie-duration" Placeholder="'.esc_html__('30 days', 'cookieadmin').'">
 					</div>
 
-					<div class="modal-footer" style="background-color:#ffffff;">
+					<div class="cookieadmin_modal-footer" style="background-color:#ffffff;">
 						<button class="cookieadmin-btn cookieadmin-btn-primary" id="cookieadmin_dialog_save_btn" form="edit-cookie-form">'.esc_html__('Save', 'cookieadmin').'</button>
 					</div>
 				</div>
@@ -476,7 +500,10 @@ class Admin{
 		
 		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');	
 		$policy = cookieadmin_load_policy();
-		$templates = wp_kses_post(implode("", cookieadmin_load_consent_template($policy[$view], $view)));
+		
+		$allowed_tags = cookieadmin_kses_allowed_html();
+		$templates = wp_kses(implode("", cookieadmin_load_consent_template($policy[$view], $view)), $allowed_tags);
+		
 		$policy['set'] = $view;
 		$policy['admin_url'] = admin_url('admin-ajax.php');
 		$policy['cookieadmin_nonce'] = wp_create_nonce('cookieadmin_admin_js_nonce');
@@ -492,7 +519,7 @@ class Admin{
 					<div class="cookieadmin-contents cookieadmin_consent">
 					
 						<div class="cookieadmin-setting">
-							<label class="cookieadmin-title">'.esc_html__('Consent Type', 'cookieadmin').'</label>
+							<label class="cookieadmin-title" for="cookieadmin_consent_type">'.esc_html__('Consent Type', 'cookieadmin').'</label>
 							<div class="cookieadmin-setting-contents">
 								<select name="cookieadmin_consent_type" id="cookieadmin_consent_type">
 									<option name="cookieadmin_gdpr" id="cookieadmin_gdpr" value="cookieadmin_gdpr">'.esc_html__('GDPR', 'cookieadmin').'</option>
@@ -502,7 +529,7 @@ class Admin{
 						</div>
 						
 						<div class="cookieadmin-setting cookieadmin_consent-expiry">
-							<label class="cookieadmin-title" for="cookieadmin_consent-expiry">'.esc_html__('Consent Expiry', 'cookieadmin').'</label>
+							<label class="cookieadmin-title" for="cookieadmin_consent_expiry">'.esc_html__('Consent Expiry', 'cookieadmin').'</label>
 							<div class="cookieadmin-setting-contents">
 								<input type="number" name="cookieadmin_days" id="cookieadmin_consent_expiry" style="max-width:70px;" value="'.esc_attr($policy[$view]['cookieadmin_days']).'">
 							</div>
@@ -553,7 +580,7 @@ class Admin{
 						<div class="cookieadmin-setting consent-notice">
 							<label class="cookieadmin-title">'.esc_html__('Notice Section', 'cookieadmin').'</label>
 							<div class="cookieadmin-setting-contents cookieadmin-vertical">
-								<label for="cookieadmin_notice_title">'.esc_html__('Title', 'cookieadmin').'</label>
+								<label for="cookieadmin_notice_title_layout">'.esc_html__('Title', 'cookieadmin').'</label>
 								<input type="text" id="cookieadmin_notice_title_layout" name="cookieadmin_notice_title" style="width: 270px;" value="'.esc_attr($policy[$view]['cookieadmin_notice_title']).'">
 								<label for="cookieadmin_notice_layout" style="margin-top:20px;">'.esc_html__('Notice', 'cookieadmin').'</label>
 								<textarea rows="5vh" cols="100vw" id="cookieadmin_notice_layout" name="cookieadmin_notice">'.esc_html($policy[$view]['cookieadmin_notice']).'</textarea>
@@ -573,7 +600,7 @@ class Admin{
 										</div>
 									</div>
 									<div class="cookieadmin-setting-color cookieadmin-vertical">
-										<label for="cookieadmin_consent_inside">'.esc_html__('Background', 'cookieadmin').'</label>
+										<label for="cookieadmin_consent_inside_bg_color">'.esc_html__('Background', 'cookieadmin').'</label>
 										<div class="cookieadmin-color-holder cookieadmin-horizontal">
 											<input type="color" id="cookieadmin_consent_inside_bg_color_box" name="cookieadmin_consent_inside_bg_color_box" value="'.esc_attr($policy[$view]['cookieadmin_consent_inside_bg_color']).'">
 											<input type="text" id="cookieadmin_consent_inside_bg_color" name="cookieadmin_consent_inside_bg_color" value="'.esc_attr($policy[$view]['cookieadmin_consent_inside_bg_color']).'" class="cookieadmin-color-input">
@@ -642,9 +669,9 @@ class Admin{
 					<div class="cookieadmin-setting consent-preference">
 						<label class="cookieadmin-title">'.esc_html__('Preference Section', 'cookieadmin').'</label>
 						<div class="cookieadmin-setting-contents cookieadmin-vertical">
-							<label for="cookieadmin_preference_title">'.esc_html__('Title', 'cookieadmin').'</label>
+							<label for="cookieadmin_preference_title_layout">'.esc_html__('Title', 'cookieadmin').'</label>
 							<input type="text" id="cookieadmin_preference_title_layout" name="cookieadmin_preference_title" style="width: 270px;" value="'.esc_html($policy[$view]['cookieadmin_preference_title']).'">
-							<label for="cookieadmin_preference" style="margin-top:20px;">'.esc_html__('Privacy Notice', 'cookieadmin').'</label>
+							<label for="cookieadmin_preference_layout" style="margin-top:20px;">'.esc_html__('Privacy Notice', 'cookieadmin').'</label>
 							<textarea rows="8vh" cols="100vw" id="cookieadmin_preference_layout" name="cookieadmin_preference">'.esc_html($policy[$view]['cookieadmin_preference']).'</textarea>
 							<div class="cookieadmin-setting-colors cookieadmin-setting-contents cookieadmin-setting-color cookieadmin-horizontal">
 								<div class="cookieadmin-setting-color cookieadmin-vertical">
@@ -662,7 +689,7 @@ class Admin{
 									</div>
 								</div>
 								<div class="cookieadmin-setting-color cookieadmin-vertical">
-									<label for="preference_background_color">'.esc_html__('Background', 'cookieadmin').'</label>
+									<label for="cookieadmin_cookie_modal_bg_color">'.esc_html__('Background', 'cookieadmin').'</label>
 									<div class="cookieadmin-color-holder cookieadmin-horizontal">
 										<input type="color" id="cookieadmin_cookie_modal_bg_color_box" name="cookieadmin_cookie_modal_bg_color_box" value="'.esc_attr($policy[$view]['cookieadmin_cookie_modal_bg_color']).'">
 										<input type="text" id="cookieadmin_cookie_modal_bg_color" name="cookieadmin_cookie_modal_bg_color" value="'.esc_attr($policy[$view]['cookieadmin_cookie_modal_bg_color']).'" class="cookieadmin-color-input">
@@ -773,15 +800,19 @@ class Admin{
 				update_option('cookieadmin_law', $law);
 			}
 		}
-		
-		$cookieadmin_settings['google_consent_mode_v2'] = (isset( $_REQUEST['cookieadmin_google_consent_mode_v2'] ) ? 1 : 0);
-		
-		if(empty($cookieadmin_error)){
-			update_option('cookieadmin_settings', $cookieadmin_settings);
-		}
 
 		if(isset($_REQUEST['page']) && $_REQUEST['page'] === 'cookieadmin-settings'){
-			// get the concent type from option table, if not saved then return default as 'gdpr'
+			
+			// Save cookieadmin_settings only on settings page
+			$cookieadmin_settings['google_consent_mode_v2'] = (isset( $_REQUEST['cookieadmin_google_consent_mode_v2'] ) ? 1 : 0);
+			$cookieadmin_settings['hide_powered_by'] = (isset( $_REQUEST['cookieadmin_hide_powered_by'] ) ? 1 : 0);
+			$cookieadmin_settings['hide_reconsent'] = (isset( $_REQUEST['cookieadmin_hide_reconsent'] ) ? 1 : 0);
+			
+			if(empty($cookieadmin_error)){
+				update_option('cookieadmin_settings', $cookieadmin_settings);
+			}
+			
+			// get the consent type from option table, if not saved then return default as 'gdpr'
 			$law = get_option('cookieadmin_law', 'cookieadmin_gdpr');
 
 			//set preload and consent field for "cookieadmin-settings" page

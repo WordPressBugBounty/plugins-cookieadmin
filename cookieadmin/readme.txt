@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -27,10 +27,10 @@ Free Features :
 * Categorized cookies list for users
 * GDPR & US State Laws support
 * ADA, EAA & WCAG Compliant
-* Google Consent Mode v2
 
 Pro Features :
 
+* Google Consent Mode v2
 * User Country Detection
 * Consent Logs
 * Export Consent Logs
@@ -43,6 +43,12 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.0.9 =
+* [Pro Feature] Added option to hide Powered by CookieAdmin link
+* [Pro Feature] Added option to hide Re-consent icon
+* [Task] Replaced hardcoded English strings with __() function for better translation support
+* [Bug Fix] Fixed a typo
 
 = 1.0.8 =
 * [Pro Feature] Added option to customize the color for links and On/Off switch for the cookie consent preference modal
