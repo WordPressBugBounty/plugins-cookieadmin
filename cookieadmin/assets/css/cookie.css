@@ -1067,7 +1067,7 @@ table.cookieadmin-table td{
 	font-size: 17px;
 }
 
-.cookieadmin-cookie-categorized tbody:not(:first-of-type)::after {
+.cookieadmin-cookie-categorized tbody:not(:last-of-type)::after {
 	content: "";
 	display: table-row;
 	height: 30px; /* This is your gap */

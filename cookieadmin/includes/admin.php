@@ -238,7 +238,7 @@ class Admin{
 
 						<div class="coookieadmin-contents cookieadmin-settings" cookieadmin-pro-only="1">
 							<div class="cookieadmin-setting">
-								<label class="cookieadmin-title" for="cookieadmin_google_consent_mode_v2">'.esc_html__('Google Consent Mode v2', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+								<label class="cookieadmin-title" for="cookieadmin_google_consent_mode_v2">'.esc_html__('Google Consent Mode v2', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</label>
 								<div class="cookieadmin-setting-contents">
 									<label class="cookieadmin_toggle">
 										<input name="cookieadmin_google_consent_mode_v2" type="checkbox" id="cookieadmin_google_consent_mode_v2" '.(!empty($cookieadmin_settings['google_consent_mode_v2']) && cookieadmin_is_pro() ? 'checked' : '').'>
@@ -248,7 +248,7 @@ class Admin{
 							</div>
 
 							<div class="cookieadmin-setting setting-poweredby">
-								<label class="cookieadmin-title" for="cookieadmin_hide_powered_by">'.esc_html__('Hide Powered by Link', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+								<label class="cookieadmin-title" for="cookieadmin_hide_powered_by">'.esc_html__('Hide Powered by Link', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</label>
 								<div class="cookieadmin-setting-contents">
 									<label class="cookieadmin_toggle">
 										<input name="cookieadmin_hide_powered_by" type="checkbox" id="cookieadmin_hide_powered_by" '.(!empty($cookieadmin_settings['hide_powered_by']) && cookieadmin_is_pro() ? 'checked' : '').'>
@@ -258,7 +258,7 @@ class Admin{
 							</div>
 
 							<div class="cookieadmin-setting setting-reconsent">
-								<label class="cookieadmin-title" for="cookieadmin_hide_reconsent">'.esc_html__('Hide Re-consent Icon', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+								<label class="cookieadmin-title" for="cookieadmin_hide_reconsent">'.esc_html__('Hide Re-consent Icon', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</label>
 								<div class="cookieadmin-setting-contents">
 									<label class="cookieadmin_toggle">
 										<input name="cookieadmin_hide_reconsent" type="checkbox" id="cookieadmin_hide_reconsent" '.(!empty($cookieadmin_settings['hide_reconsent']) && cookieadmin_is_pro() ? 'checked' : '').'>
@@ -313,7 +313,7 @@ class Admin{
 					if(!empty($data->expires) && ($data->expires > 0)){
 						$exp = round(($data->expires - time()) / 86400);
 						if($exp < 1 && !empty($data->max_age)){
-							$exp = $data->max_age;
+							$exp = $data->max_age . ' '.__('days', 'cookieadmin');
 						}
 					}
 					
@@ -333,6 +333,7 @@ class Admin{
 							if ($exp < 1 && !empty($data->max_age)) {
 								$exp = $data->max_age;
 							}
+							$exp .= ' '.__('days', 'cookieadmin');
 						}
 					}
 						
@@ -381,29 +382,6 @@ class Admin{
 							<input type="button" class="cookieadmin-btn cookieadmin-btn-primary cookieadmin-scan" value="Scan Cookies">
 						</div>
 						<div class="cookieadmin-manager-result">
-							<table class="cookieadmin-table cookieadmin-cookie-scan-result">
-							<thead>
-								<tr>
-									<th width="20%">'.esc_html__('Name', 'cookieadmin').'</th>
-									<th width="10%">'.esc_html__('Expiry', 'cookieadmin').'</th>
-									<th width="30%">'.esc_html__('Path', 'cookieadmin').'</th>
-									<th width="20%">'.esc_html__('Domain', 'cookieadmin').'</th>
-									<th width="10%">'.esc_html__('Secure', 'cookieadmin').'</th>
-								</tr>
-							</thead>
-							<tbody>
-							'.$cookies_scanned.'
-							</tbody>
-							</table>
-						</div>
-					</div>
-					
-					<div class="cookieadmin-setting cookieadmin-manager-cookie-categorize" style="margin-top:40px;">
-						<label class="cookieadmin-title">'.esc_html__('Categorized Cookies', 'cookieadmin').'</label>
-						<div class="cookieadmin-setting-contents cookieadmin-cookie-categorize">
-							<input type="button" class="cookieadmin-btn cookieadmin-btn-primary cookieadmin-auto-categorize" value="'.esc_attr__('Categorize Cookies', 'cookieadmin').'">
-						</div>
-						<div class="cookieadmin-manager-result">
 							<table class="cookieadmin-table cookieadmin-cookie-categorized">
 								<thead>
 									<tr>
@@ -415,23 +393,23 @@ class Admin{
 								</thead>
 								<tbody id="necessary_tbody">
 									<tr><td colspan=4>'.esc_html__('Necessary Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Necessary']) ? $categorized['Necessary'] : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
+									'.( !empty($categorized['Necessary']) ? wp_kses_post($categorized['Necessary']) : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
 								</tbody>
 								<tbody id="functional_tbody">
 									<tr><td colspan=4>'.esc_html__('Functional Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Functional']) ? $categorized['Functional'] : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
+									'.( !empty($categorized['Functional']) ? wp_kses_post($categorized['Functional']) : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
 								</tbody>
 								<tbody id="analytics_tbody">
 									<tr><td colspan=4>'.esc_html__('Analytical Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Analytics']) ? $categorized['Analytics'] : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
+									'.( !empty($categorized['Analytics']) ? wp_kses_post($categorized['Analytics']) : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
 								</tbody>
 								<tbody id="marketing_tbody">
 									<tr><td colspan=4>'.esc_html__('Marketing Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Marketing']) ? $categorized['Marketing'] : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
+									'.( !empty($categorized['Marketing']) ? wp_kses_post($categorized['Marketing']) : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
 								</tbody>
 								<tbody id="unknown_tbody">
 									<tr><td colspan=4>'.esc_html__('Unknown Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Unknown']) ? $categorized['Unknown'] : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
+									'.( !empty($categorized['Unknown']) ? wp_kses_post($categorized['Unknown']) : '<tr class="cookieadmin-empty-row"><td colspan=4>'.esc_html__('No Cookies Found!', 'cookieadmin').'</td></tr>' ).'
 								</tbody>
 							</table>
 						</div>
@@ -501,8 +479,7 @@ class Admin{
 		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');	
 		$policy = cookieadmin_load_policy();
 		
-		$allowed_tags = cookieadmin_kses_allowed_html();
-		$templates = wp_kses(implode("", cookieadmin_load_consent_template($policy[$view], $view)), $allowed_tags);
+		$templates = implode("", cookieadmin_load_consent_template($policy[$view], $view));
 		
 		$policy['set'] = $view;
 		$policy['admin_url'] = admin_url('admin-ajax.php');
@@ -706,21 +683,21 @@ class Admin{
 							
 							<div class="cookieadmin-setting-colors cookieadmin-setting-contents cookieadmin-setting-color cookieadmin-horizontal" cookieadmin-pro-only="1">
 								<div class="cookieadmin-setting-color cookieadmin-vertical">
-									<label for="cookieadmin_links_color">'.esc_html__('Links', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+									<label for="cookieadmin_links_color">'.esc_html__('Links', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</label>
 									<div class="cookieadmin-color-holder cookieadmin-horizontal">
 										<input type="color" id="cookieadmin_links_color_box" name="cookieadmin_links_color_box" value="'.esc_attr($policy[$view]['cookieadmin_links_color']).'">
 										<input type="text" id="cookieadmin_links_color" name="cookieadmin_links_color" value="'.esc_attr($policy[$view]['cookieadmin_links_color']).'" class="cookieadmin-color-input">
 									</div>
 								</div>
 								<div class="cookieadmin-setting-color cookieadmin-vertical">
-									<label for="cookieadmin_slider_on_bg_color">'.esc_html__('Button Switch On', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+									<label for="cookieadmin_slider_on_bg_color">'.esc_html__('Button Switch On', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</label>
 									<div class="cookieadmin-color-holder cookieadmin-horizontal">
 										<input type="color" id="cookieadmin_slider_on_bg_color_box" name="cookieadmin_slider_on_bg_color_box" value="'.esc_attr($policy[$view]['cookieadmin_slider_on_bg_color']).'">
 										<input type="text" id="cookieadmin_slider_on_bg_color" name="cookieadmin_slider_on_bg_color" value="'.esc_attr($policy[$view]['cookieadmin_slider_on_bg_color']).'" class="cookieadmin-color-input">
 									</div>
 								</div>
 								<div class="cookieadmin-setting-color cookieadmin-vertical">
-									<label for="cookieadmin_slider_off_bg_color">'.esc_html__('Button Switch Off', 'cookieadmin').$cookieadmin_requires_pro.'</label>
+									<label for="cookieadmin_slider_off_bg_color">'.esc_html__('Button Switch Off', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</label>
 									<div class="cookieadmin-color-holder cookieadmin-horizontal">
 										<input type="color" id="cookieadmin_slider_off_bg_color_box" name="cookieadmin_slider_off_bg_color_box" value="'.esc_attr($policy[$view]['cookieadmin_slider_off_bg_color']).'">
 										<input type="text" id="cookieadmin_slider_off_bg_color" name="cookieadmin_slider_off_bg_color" value="'.esc_attr($policy[$view]['cookieadmin_slider_off_bg_color']).'" class="cookieadmin-color-input">
@@ -748,22 +725,27 @@ class Admin{
 		</div>';
 		self::footer_theme();
 		
-		echo $templates;
+		$allowed_tags = cookieadmin_kses_allowed_html();
+		echo wp_kses($templates, $allowed_tags);
 	}
 
 	static function cookieadmin_scan_cookies($url = ''){
 		global $wpdb;
 		
-		$cookieData = \CookieAdmin\Scanner::start_scan($url);
-		//cookieadmin_r_print($cookieData);
+		$urls = array(get_site_url());
+		
+		if(cookieadmin_is_pro()){
+			$cookieData = apply_filters('cookieadmin_pro_scan_cookies', $urls);
+		}else{
+			$cookieData = \CookieAdmin\Scanner::start_scan($urls);
+		}
+		// cookieadmin_r_print($cookieData);
 		
 		if(!empty($cookieData) && self::save_raw_scan_results($cookieData)){
-			wp_send_json_success($cookieData);
+			self::cookieadmin_auto_configure_cookies();
 		}
 		
-		wp_send_json(['success' => true,
-		            'data'    => null,
-		            'message'   => __('No cookies found!', 'cookieadmin')]);
+		wp_send_json_error(array('message' =>__('No cookies found!', 'cookieadmin')));
 	}
 
 	static function cookieadmin_table_exists($table_name) {
@@ -1053,7 +1035,7 @@ class Admin{
 
 		define('SOFTACULOUS_PLUGIN_UPDATE_NOTICE', true); // To make sure other plugins don't return a Notice
 		echo '<div class="notice notice-info is-dismissible" id="cookieadmin-plugin-update-notice">
-			<p>'.$msg. '</p>
+			<p>'.wp_kses_post($msg). '</p>
 		</div>';
 
 		wp_register_script('cookieadmin-update-notice', '', ['jquery'], '', true);
@@ -1111,7 +1093,7 @@ class Admin{
 		if(!empty($return)){
 			return $msg;
 		}else{
-			echo $msg;
+			echo wp_kses_post($msg);
 		}
 
 	}

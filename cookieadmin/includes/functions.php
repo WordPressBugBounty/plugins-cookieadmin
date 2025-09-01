@@ -194,7 +194,14 @@ function cookieadmin_load_policy(){
 }
 
 function cookieadmin_load_strings(){
+	
+	$cookieadmin_powered_by_html = '<div class="cookieadmin-poweredby"><a href="https://cookieadmin.net/?utm_source=wpplugin&utm_medium=footer" target="_blank"><span>[[powered_by]]</span> [[logo_svg]]</a></div>';
+	
+	$cookieadmin_powered_by_html = apply_filters('cookieadmin_powered_by_html', $cookieadmin_powered_by_html);
+	
+	
 	return [
+			'powered_by_html' => $cookieadmin_powered_by_html,
 			'logo_svg' => cookieadmin_logo_svg(),
 			'plugin_url' => esc_url(COOKIEADMIN_PLUGIN_URL),
 			'powered_by' => __('Powered by', 'cookieadmin'),

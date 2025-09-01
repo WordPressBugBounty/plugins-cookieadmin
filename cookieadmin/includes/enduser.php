@@ -133,13 +133,13 @@ class Enduser{
 		
 		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');	
 		$policy = cookieadmin_load_policy();
+
+		$templates = implode("", cookieadmin_load_consent_template($policy[$view], $view));
 		
 		$allowed_tags = cookieadmin_kses_allowed_html();
-
-		$templates = wp_kses(implode("", cookieadmin_load_consent_template($policy[$view], $view)), $allowed_tags);
 		
 		// var_dump($policy[$view]);
-		echo $templates;
+		echo wp_kses($templates, $allowed_tags);
 	}
 	
 	static function cookieadmin_table_exists($table_name) {

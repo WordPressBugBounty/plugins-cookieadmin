@@ -389,8 +389,8 @@ jQuery(document).ready(function($){
 	
 	$(".cookieadmin-scan").on("click", function(){
 		
-		$(this).prop("disabled", true);
-		$('.cookieadmin-cookie-scan-result tbody').find("tr").remove();
+		let cookieadmin_btn_val = $(this).prop('value');
+		$(this).prop("disabled", true).prop('value', 'Scanning...');
 		
 		$.ajax({
 			url: cookieadmin_policy.admin_url,
@@ -402,107 +402,54 @@ jQuery(document).ready(function($){
 			},
 			success: function(result){
 				
-				$(".cookieadmin-scan").removeAttr("disabled");
-				var row;
-				
-				if(!result.data){
-					alert(result.message);
-					return;
-				}
-				
-				$.each(result.data, function(index, res){
-					
-					exp = 'Session';
-					if(!!res.expires){
-						exp = Math.round((res.expires - Date.now())/86400);
-						if(exp < 1 && !!res['Max-Age']){
-							exp = res['Max-Age'];
-						}else{
-							exp = 'Session';
-						}
-					}
-					
-					row = '<tr>';
-					row += '<td>' + res.cookie_name + '</td>';
-					row += '<td>' + exp + '</td>';
-					row += '<td>' + (!!res.path ? res.path : '/') + '</td>';
-					row += '<td>' + (!!res.domain ? res.domain : 'Host only') + '</td>';
-					row += '<td>' + (!!res.secure ? 'Yes' : 'No') + '</td>';
-					row += '</tr>';
-					$('.cookieadmin-cookie-scan-result tbody').append(row);
-				});
-			},	
-			error: function(xhr, status, error) {
-				
-				$(".cookieadmin-scan").removeAttr("disabled");
-				
-				// console.log(xhr.responseText); // Check the error message
-				// console.log('AJAX Error:', status, error);
-			}
-		});
-		
-	});
-	
-	$(".cookieadmin-auto-categorize").on("click", function(){
-		
-		$(this).prop("disabled", true);
-		$('.cookieadmin-cookie-categorized tbody').find("tr:gt(1)").remove();
-		
-		$.ajax({
-			url: cookieadmin_policy.admin_url,
-			method: "POST",
-			data : {
-				action : 'cookieadmin_ajax_handler',
-				cookieadmin_act : 'cookieadmin-auto-categorize',
-				cookieadmin_security : cookieadmin_policy.cookieadmin_nonce,
-			},
-			success: function(result){
-				
-				if(!result.data){
-					alert(result.message);
-					return;
-				}
+				if (result.success) {
 								
-				$.each(result.data, function(index, res){
-					
-					var row = '';
-					exp = 'Session';
-					
-					if(!!res.expires){
-						exp = Math.round((res.expires - Date.now())/86400);
-						if(exp < 1 && !!res['Max-Age']){
-							exp = res['Max-Age'];
-						}else{
-							exp = 'Session';
+					$('.cookieadmin-cookie-categorized tbody').find("tr:gt(1)").remove();
+					$.each(result.data, function(index, res){
+						
+						var row = '';
+						exp = 'Session';
+						
+						if(!!res.expires){
+							exp = Math.round((res.expires - Date.now())/86400);
+							if(exp < 1 && !!res['Max-Age']){
+								exp = res['Max-Age'] + " days";
+							}else{
+								exp = 'Session';
+							}
 						}
-					}
+						
+						row = '<tr>';
+						row += '<td>' + res.cookie_name + '</td>';
+						row += '<td>' + res.description + '</td>';
+						row += '<td>' + exp + '</td>';
+						row += '<td> <span class="dashicons dashicons-edit cookieadmin_edit_icon" id="edit_'+res.id+'"></span> <span class="dashicons dashicons-trash cookieadmin_delete_icon" id="delete_'+res.id+'"></span> </td>';
+						row += '</tr>';
+						categorized_cookies[res.id] = res;
+						categorized_cookies[res.id]['expires'] = exp;
+						
+						if(!!res.category){
+							type = "#" + res.category.toLowerCase() + "_tbody";
+							$(type).find('.cookieadmin-empty-row').remove();
+							$(type).append(row);
+						}else{
+							$("#unknown_tbody").find('.cookieadmin-empty-row').remove();
+							$("#unknown_tbody").append(row);
+						}
+					});
 					
-					row = '<tr>';
-					row += '<td>' + res.cookie_name + '</td>';
-					row += '<td>' + res.description + '</td>';
-					row += '<td>' + exp + '</td>';
-					row += '<td> <span class="dashicons dashicons-edit cookieadmin_edit_icon" id="edit_'+res.id+'"></span> <span class="dashicons dashicons-trash cookieadmin_delete_icon" id="delete_'+res.id+'"></span> </td>';
-					row += '</tr>';
-					categorized_cookies[res.id] = res;
-					categorized_cookies[res.id]['expires'] = exp;
-					
-					if(!!res.category){
-						type = "#" + res.category.toLowerCase() + "_tbody";
-						$(type).find('.cookieadmin-empty-row').remove();
-						$(type).append(row);
-					}else{
-						$("#unknown_tbody").find('.cookieadmin-empty-row').remove();
-						$("#unknown_tbody").append(row);
-					}
-				});
-				$(".cookieadmin-auto-categorize").removeAttr("disabled");
+				} else {
+					alert(result.data.message);
+				}
+				
 			},	
 			error: function(xhr, status, error) {
-				// console.log(xhr.responseText); // Check the error message
-				// console.log('AJAX Error:', status, error);
+				alert("Request failed: " + error);
+			},
+			complete: function() {
+				$(".cookieadmin-scan").prop("disabled", false).prop("value", cookieadmin_btn_val);
 			}
 		});
-		
 	});
 	
 	$("#cookieadmin_dialog_save_btn").on("click", function(){
@@ -527,33 +474,31 @@ jQuery(document).ready(function($){
 				cookieadmin_security : cookieadmin_policy.cookieadmin_nonce,
 			},
 			success: function(result){
-				var row = '';
 				
-				if(!result.data){
-					alert(result.message);
-					return;
-				}
-									
-				row = '<tr>';
-				row += '<td>' + cookie_info.name + '</td>';
-				row += '<td>' + cookie_info.description + '</td>';
-				row += '<td>' + cookie_info.duration + '</td>';
-				row += '<td> <span class="dashicons dashicons-edit cookieadmin_edit_icon" id="edit_'+cookie_info.id+'"></span> <span class="dashicons dashicons-trash cookieadmin_delete_icon" id="edit_'+cookie_info.id+'"></span> </td>';
-				row += '</tr>';
-				
-				tbody = "#" + cookie_info.type.toLowerCase() + "_tbody";
-				$(tbody).find('.cookieadmin-empty-row').remove();
-				$(tbody).append(row);
-				$("#edit_"+cookie_info.id).parents("tr").remove();
+				if(result.success){
+						
+					var row = '';
+										
+					row = '<tr>';
+					row += '<td>' + cookie_info.name + '</td>';
+					row += '<td>' + cookie_info.description + '</td>';
+					row += '<td>' + cookie_info.duration + '</td>';
+					row += '<td> <span class="dashicons dashicons-edit cookieadmin_edit_icon" id="edit_'+cookie_info.id+'"></span> <span class="dashicons dashicons-trash cookieadmin_delete_icon" id="edit_'+cookie_info.id+'"></span> </td>';
+					row += '</tr>';
+					
+					$("#edit_"+cookie_info.id).parents("tr").remove();
+					tbody = "#" + cookie_info.type.toLowerCase() + "_tbody";
+					$(tbody).find('.cookieadmin-empty-row').remove();
+					$(tbody).append(row);
 
-				delete categorized_cookies[cookie_info.id];
-				categorized_cookies[cookie_info.id] = {};
-				categorized_cookies[cookie_info.id]['cookie_name'] = cookie_info.id;
-				categorized_cookies[cookie_info.id]['description'] = cookie_info.description;
-				categorized_cookies[cookie_info.id]['expires'] = cookie_info.duration;
-				categorized_cookies[cookie_info.id]['category'] = cookie_info.type;
-				
-				$(".cookieadmin_dialog_save_btn").removeAttr("disabled");
+					categorized_cookies[cookie_info.id]['cookie_name'] = cookie_info.name;
+					categorized_cookies[cookie_info.id]['description'] = cookie_info.description;
+					categorized_cookies[cookie_info.id]['expires'] = cookie_info.duration;
+					categorized_cookies[cookie_info.id]['category'] = cookie_info.type;
+					
+				}else{
+					alert(result.data.message);
+				}
 			}
 		});
 		$(this).prop("disabled", false);		
@@ -583,12 +528,11 @@ jQuery(document).ready(function($){
 				},
 				success: function(result){
 					
-					if(!result.data){
-						alert(result.message);
-						return;
+					if (result.success) {
+						delete categorized_cookies[cookie_raw_id];
+					}else{
+						alert(result.data.message);
 					}
-
-					delete categorized_cookies[cookie_raw_id];
 				}
 			});
 			

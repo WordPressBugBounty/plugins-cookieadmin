@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 1.0.9
+Stable tag: 1.1.0
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -23,13 +23,14 @@ Free Features :
 * Customizable Consent Form
 * Preview Consent Form from admin panel
 * Anonymized User IP
-* Scan cookies
+* Basic Cookie Scanning
 * Categorized cookies list for users
 * GDPR & US State Laws support
 * ADA, EAA & WCAG Compliant
 
 Pro Features :
 
+* Advanced Cookie Scanning
 * Google Consent Mode v2
 * User Country Detection
 * Consent Logs
@@ -43,6 +44,10 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.0 =
+* [Pro Feature] Added advanced cookie scanner to detect cookies set by javascript on the site
+* [Bug Fix] In some rare cases, "hide powered by link" setting when enabled was conflicting with some other plugins. This has been fixed. 
 
 = 1.0.9 =
 * [Pro Feature] Added option to hide Powered by CookieAdmin link

@@ -26,8 +26,13 @@ function cookieadmin_is_obj(consentObj){
 			return originalCookieDescriptor.get.call(document);
 		},
 		set: function(val){
+			if (!val) return false;
 			
-			val_name = val.split("=")[0].trim();
+			splited_val = val.split("=");
+			val_name = splited_val[0].trim();
+			
+			if(splited_val[1].trim().startsWith("deleted;")) return false;
+			
 			rm_val = val_name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 			
 			if(val_name === "cookieadmin_consent"){
@@ -35,34 +40,23 @@ function cookieadmin_is_obj(consentObj){
 			}
 			
 			if(cookieadmin_is_obj(cookieadmin_is_consent) && (val_name in cookieadmin_allcookies) ){
-				
-				switch(cookieadmin_is_consent.action){
 					
-					case "reject":
-						if(cookieadmin_allcookies[val_name].sync){
-							cookieadmin_allcookies[val_name].sync = false;
-							return originalCookieDescriptor.set.call(document, rm_val);
-						}
-						return true;
-						
-					case "accept":
-						if(!cookieadmin_allcookies[val_name].sync){
-							cookieadmin_allcookies[val_name].sync = true;
-							return originalCookieDescriptor.set.call(document, val);
-						}
-						return true;
-						
-					default:
-						if(cookieadmin_is_consent.action[cookieadmin_allcookies[val_name].category] && !cookieadmin_allcookies[val_name].sync){
-							cookieadmin_allcookies[val_name].sync = true;
-							return originalCookieDescriptor.set.call(document, val);
-						}
-						else if(!(cookieadmin_is_consent.action[cookieadmin_allcookies[val_name].category]) && cookieadmin_allcookies[val_name].sync){
-							cookieadmin_allcookies[val_name].sync = false;
-							return originalCookieDescriptor.set.call(document, rm_val);
-						}
-						return true;
-				}				
+				if(!!cookieadmin_is_consent.action.reject){
+					return originalCookieDescriptor.set.call(document, rm_val);
+				}					
+				else if(!!cookieadmin_is_consent.action.accept){
+					return originalCookieDescriptor.set.call(document, val);
+				}
+				else if(!!cookieadmin_allcookies[val_name].category){
+					
+					if(cookieadmin_is_consent.action[cookieadmin_allcookies[val_name].category.toLowerCase()]){
+						return originalCookieDescriptor.set.call(document, val);
+					}
+					else{
+						return originalCookieDescriptor.set.call(document, rm_val);
+					}
+					return true;
+				}					
 				
 			}else{
 				(cookieadmin_allcookies[val_name] = cookieadmin_allcookies[val_name] || {}).string = val.trim();
@@ -103,6 +97,7 @@ function cookieadmin_check_consent(){
 			cookieadmin_is_consent.consent = cookieadmin_cookie.consent;
 			delete cookieadmin_cookie.consent;
 		}
+		
 		cookieadmin_is_consent.action = cookieadmin_cookie;
 	}
 }
@@ -131,6 +126,11 @@ function cookieadmin_restore_cookies(update) {
 			}
 		}
 	}
+	
+	
+  	for(cookie in cookieadmin_allcookies){
+  		document.cookie = cookie.string;
+  	};
 	
     cookieadmin_accepted_categories.forEach(function(category) {
 		
