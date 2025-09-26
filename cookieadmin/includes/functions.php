@@ -171,6 +171,7 @@ function cookieadmin_ajax_handler(){
 
 // Load policies from the file and database and merge them.
 function cookieadmin_load_policy(){
+	global $cookieadmin_policies;
 	
 	$policy = get_option('cookieadmin_consent_settings', array());
 	
@@ -178,13 +179,13 @@ function cookieadmin_load_policy(){
 		$policy = array();
 	}
 	
-	if(!file_exists(COOKIEADMIN_DIR.'assets/cookie/policy.json')){
+	if(!file_exists(COOKIEADMIN_DIR.'assets/cookie/policies.php')){
 		return $policy;
 	}
 	
-	$j_policy = file_get_contents(COOKIEADMIN_DIR.'assets/cookie/policy.json');
-	
-	$j_policy = json_decode($j_policy, true);
+	include_once(COOKIEADMIN_DIR.'assets/cookie/policies.php');
+	$j_policy = $cookieadmin_policies;
+	// print_r($j_policy);
 	
 	if(empty($j_policy) || !is_array($j_policy)){
 		return $policy;
@@ -439,6 +440,12 @@ function cookieadmin_kses_allowed_html(){
 
 	$allowed_tags['defs'] = array();
 	
+	$allowed_tags['a'] = array(
+		'href' => true,
+	);
+	
+	$allowed_tags['br'] = array();
+	
 	$allowed_tags['image'] = array(
 		'href' => true,
 		'id' => true,
@@ -479,8 +486,9 @@ function cookieadmin_kses_allowed_protocols($protocols){
 	
 	if(empty($cookieadmin_settings['hide_powered_by'])){
 		$protocols[] = 'data';
-		return $protocols;
 	}
+
+	return $protocols;
 }
 
 function cookieadmin_logo_svg(){

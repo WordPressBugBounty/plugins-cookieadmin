@@ -102,9 +102,10 @@ class Enduser{
 					if (strpos($src, $pattern) !== false) {
 						
 						if ( $category !== 'necessary' && 
-							(empty($cookieadmin_consent) || 
-							(!empty($cookieadmin_consent[$category]) && $cookieadmin_consent[$category] == 'false') || 
-							$cookieadmin_consent['reject'] == 'true')
+								(empty($cookieadmin_consent) || 
+									(!empty($cookieadmin_consent[$category]) && $cookieadmin_consent[$category] == 'false') || 
+									(!empty($cookieadmin_consent['reject']) && $cookieadmin_consent['reject'] == 'true')
+								)
 							) {
 							
 							// User has NOT consented -> block the script

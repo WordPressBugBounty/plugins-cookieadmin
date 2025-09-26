@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -33,8 +33,28 @@ Pro Features :
 * Advanced Cookie Scanning
 * Google Consent Mode v2
 * User Country Detection
+* Multilingual - 17 Languages supported
 * Consent Logs
 * Export Consent Logs
+
+Supported Languages (requires pro) :
+* English
+* Bulgarian
+* Chinese
+* Czech
+* Dutch
+* French
+* German
+* Hungarian
+* Italian
+* Japanese
+* Polish
+* Portuguese
+* Portuguese Brazilian
+* Russian
+* Slovak
+* Spanish
+* Turkish
 
 == Installation ==
 
@@ -44,6 +64,13 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.1 =
+* [Pro Feature] Multilingual - 17 Languages added
+* [Improvement] Added support for common HTML tags in cookie banner while customizing the content to be displayed.
+* [Bug Fix] Users were unable to save posts/pages when error reporting was enabled in PHP configuration (this is generally disabled in production environments). This is fixed now. 
+* [Bug Fix] Users were unable to save posts/pages when using CookieAdmin Pro v1.0.9 and higher. This is fixed now. 
+* [Bug Fix] In rare cases, due to conflict with some cache plugin the reconsent icon was not visible. This is fixed now. 
 
 = 1.1.0 =
 * [Pro Feature] Added advanced cookie scanner to detect cookies set by javascript on the site

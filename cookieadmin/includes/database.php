@@ -23,7 +23,8 @@ class Database{
 	static function cookieadmin_create_tables() {
 		
 		$charset_collate = self::$wpdb->get_charset_collate();
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		$db_path = !defined('SITEPAD') ? ABSPATH . 'wp-admin/includes/upgrade.php' : ABSPATH . 'site-admin/includes/upgrade.php';
+		require_once($db_path);
 		
 		//Create scanned Cookies table
 		$sql = "CREATE TABLE IF NOT EXISTS ".self::$scanned_cookies_table." (

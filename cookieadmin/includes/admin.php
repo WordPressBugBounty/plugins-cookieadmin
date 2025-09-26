@@ -83,10 +83,11 @@ class Admin{
 		
 		if(defined('COOKIEADMIN_PREMIUM')){
 			add_submenu_page('cookieadmin', __('Consent Logs', 'cookieadmin'), __('Consent Logs', 'cookieadmin'), $capability, 'cookieadmin-consent-logs', '\CookieAdminPro\Admin::show_consent_logs');
-			
-			add_submenu_page('cookieadmin', __('License', 'cookieadmin'), __('License', 'cookieadmin'), $capability, 'cookieadmin-license', '\CookieAdminPro\License::cookieadmin_show_license');
-		}else{
-			
+
+			if(!defined('SITEPAD')){
+				add_submenu_page('cookieadmin', __('License', 'cookieadmin'), __('License', 'cookieadmin'), $capability, 'cookieadmin-license', '\CookieAdminPro\License::cookieadmin_show_license');
+			}
+		}else if(!defined('SITEPAD')){
 			// Go Pro link
 			add_submenu_page('cookieadmin', __('CookieAdmin Go Pro', 'cookieadmin'), __('Go Pro', 'cookieadmin'), $capability, COOKIEADMIN_PRO_URL);
 		}
@@ -120,32 +121,34 @@ class Admin{
 	static function footer_theme($no_twitter = 0){
 		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg;
 		
-		echo '</div>
-		<div class="cookieadmin-footer">';
+		if(!defined('SITEPAD')){
+			echo '</div>
+			<div class="cookieadmin-footer">';
 
-		if(empty($no_twitter)){
+			if(empty($no_twitter)){
 		
-			echo '<br/><div class="cookieadmin-twitter">
-				<span>'.esc_html__('Share with your followers', 'cookieadmin').'</span><br /><br />
-				<form method="get" action="https://twitter.com/intent/tweet" id="tweet" onsubmit="return cookieadmin_dotweet(this);">
-					<textarea name="text" cols="60" row="4" style="resize:none;">'.esc_html__('I easily manage Cookie Consent Banner on my #WordPress site using @cookieadmin', 'cookieadmin').'</textarea>
-					<br />
-					<input type="submit" value="Tweet!" class="cookieadmin-btn cookieadmin-btn-secondary" onsubmit="return false;" id="twitter-btn" style="margin-top:7px;"/>	
-				</form>				
-			</div>
-			<br/>
-			<hr>';
+				echo '<br/><div class="cookieadmin-twitter">
+					<span>'.esc_html__('Share with your followers', 'cookieadmin').'</span><br /><br />
+					<form method="get" action="https://twitter.com/intent/tweet" id="tweet" onsubmit="return cookieadmin_dotweet(this);">
+						<textarea name="text" cols="60" row="4" style="resize:none;">'.esc_html__('I easily manage Cookie Consent Banner on my #WordPress site using @cookieadmin', 'cookieadmin').'</textarea>
+						<br />
+						<input type="submit" value="Tweet!" class="cookieadmin-btn cookieadmin-btn-secondary" onsubmit="return false;" id="twitter-btn" style="margin-top:7px;"/>	
+					</form>				
+				</div>
+				<br/>
+				<hr>';
 		
+			}
+		
+			echo '<a href="'.esc_url(COOKIEADMIN_WWW_URL).'" target="_blank">CookieAdmin</a><span> v'.esc_html(COOKIEADMIN_VERSION).esc_html__(' You can report any bugs ', 'cookieadmin').'</span><a href="http://wordpress.org/support/plugin/cookieadmin" target="_blank">'.esc_html__('here', 'cookieadmin').'</a>. ';
+		
+			if(defined('COOKIEADMIN_PREMIUM')){
+				echo 'Or email us at <a href="mailto:support@cookieadmin.net">support@cookieadmin.net</a>';
+			}
+		
+			echo '</div>
+			</div>';
 		}
-		
-		echo '<a href="'.esc_url(COOKIEADMIN_WWW_URL).'" target="_blank">CookieAdmin</a><span> v'.esc_html(COOKIEADMIN_VERSION).esc_html__(' You can report any bugs ', 'cookieadmin').'</span><a href="http://wordpress.org/support/plugin/cookieadmin" target="_blank">'.esc_html__('here', 'cookieadmin').'</a>. ';
-		
-		if(defined('COOKIEADMIN_PREMIUM')){
-			echo 'Or email us at <a href="mailto:support@cookieadmin.net">support@cookieadmin.net</a>';
-		}
-		
-		echo '</div>
-		</div>';
 	}
 	
 	static function dashboard_page(){
@@ -758,7 +761,7 @@ class Admin{
 	
 	static function cookieadmin_save_settings(){
 		
-		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg, $cookieadmin_settings;
+		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg, $cookieadmin_settings, $cookieadmin_policies;
 	
 		// debug_print_backtrace();die;
 		
@@ -822,7 +825,7 @@ class Admin{
 		$setting['cookieadmin_notice_title'] = !empty($_REQUEST['cookieadmin_notice_title']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_notice_title'])) : $policy[$law]['cookieadmin_notice_title'];
 		$setting['cookieadmin_notice_title_color'] = !empty($_REQUEST['cookieadmin_notice_title_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_notice_title_color'])) : (!empty($policy[$law]['cookieadmin_notice_title_color']) ? $policy[$law]['cookieadmin_notice_title_color'] : '#000000');
 		
-		$setting['cookieadmin_notice'] = !empty($_REQUEST['cookieadmin_notice']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_notice'])) : $policy[$law]['cookieadmin_notice'];
+		$setting['cookieadmin_notice'] = !empty($_REQUEST['cookieadmin_notice']) ? wp_kses(wp_unslash($_REQUEST['cookieadmin_notice']), cookieadmin_kses_allowed_html()) : $policy[$law]['cookieadmin_notice'];
 		$setting['cookieadmin_notice_color'] = !empty($_REQUEST['cookieadmin_notice_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_notice_color'])) : (!empty($policy[$law]['cookieadmin_notice_color']) ? $policy[$law]['cookieadmin_notice_color'] : '#000000');
 		
 		$setting['cookieadmin_consent_inside_bg_color'] = !empty($_REQUEST['cookieadmin_consent_inside_bg_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_consent_inside_bg_color'])) : (!empty($policy[$law]['cookieadmin_consent_inside_bg_color']) ? $policy[$law]['cookieadmin_consent_inside_bg_color'] : '#ffffff');
@@ -847,7 +850,7 @@ class Admin{
 		$setting['cookieadmin_preference_title'] = !empty($_REQUEST['cookieadmin_preference_title']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_preference_title'])) : $policy[$law]['cookieadmin_preference_title'];
 		$setting['cookieadmin_preference_title_color'] = !empty($_REQUEST['cookieadmin_preference_title_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_preference_title_color'])) : (!empty($policy[$law]['cookieadmin_preference_title_color']) ? $policy[$law]['cookieadmin_preference_title_color'] : '#000000');
 		
-		$setting['cookieadmin_preference'] = !empty($_REQUEST['cookieadmin_preference']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_preference'])) : $policy[$law]['cookieadmin_preference'];
+		$setting['cookieadmin_preference'] = !empty($_REQUEST['cookieadmin_preference']) ? wp_kses(wp_unslash($_REQUEST['cookieadmin_preference']), cookieadmin_kses_allowed_html()) : $policy[$law]['cookieadmin_preference'];
 		$setting['cookieadmin_details_wrapper_color'] = !empty($_REQUEST['cookieadmin_details_wrapper_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_details_wrapper_color'])) : (!empty($policy[$law]['cookieadmin_details_wrapper_color']) ? $policy[$law]['cookieadmin_details_wrapper_color'] : '#000000');
 		
 		$setting['cookieadmin_cookie_modal_bg_color'] = !empty($_REQUEST['cookieadmin_cookie_modal_bg_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_cookie_modal_bg_color'])) : (!empty($policy[$law]['cookieadmin_cookie_modal_bg_color']) ? $policy[$law]['cookieadmin_cookie_modal_bg_color'] : '#ffffff');
@@ -860,6 +863,17 @@ class Admin{
 		$setting['cookieadmin_days'] = !empty($_REQUEST['cookieadmin_days']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_days'])) : (!empty($policy[$law]['cookieadmin_days']) ? $policy[$law]['cookieadmin_days'] : '365');
 		
 		$policy[$law] = $setting;
+		
+		// Check for certain fields to be saved only if their values is not the same as default
+		$cookieadmin_check_changes = array('cookieadmin_notice_title', 'cookieadmin_notice', 'cookieadmin_preference_title', 'cookieadmin_preference', 'reConsent_title', 'cookieadmin_customize_btn', 'cookieadmin_reject_btn', 'cookieadmin_accept_btn', 'cookieadmin_save_btn');
+		
+		foreach($cookieadmin_check_changes as $c_field){
+			foreach($policy as $c_law => $c_val){
+				if(!empty($c_val[$c_field]) && $c_val[$c_field] == $cookieadmin_policies[$c_law][$c_field]){
+					unset($policy[$c_law][$c_field]);
+				}
+			}
+		}
 		
 		update_option('cookieadmin_consent_settings', $policy);
 		
