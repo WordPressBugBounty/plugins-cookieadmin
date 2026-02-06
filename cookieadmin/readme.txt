@@ -2,9 +2,9 @@
 Contributors: softaculous
 Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 1.1.1
+Stable tag: 1.1.4
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -36,8 +36,14 @@ Pro Features :
 * Multilingual - 17 Languages supported
 * Consent Logs
 * Export Consent Logs
+* Shortcode [/] Examples below :
+- Shortcode to render all cookies in tabular format :
+[cookieadmin_render]
+- Shortcode to render cookies from selected categories in tabular format :
+[cookieadmin_render categories="functional,analytics,marketing"]
 
 Supported Languages (requires pro) :
+
 * English
 * Bulgarian
 * Chinese
@@ -45,16 +51,20 @@ Supported Languages (requires pro) :
 * Dutch
 * French
 * German
+* German Formal
 * Hungarian
 * Italian
 * Japanese
 * Polish
 * Portuguese
 * Portuguese Brazilian
+* Romanian
 * Russian
 * Slovak
 * Spanish
 * Turkish
+* Canadian French
+* Lithuanian
 
 == Installation ==
 
@@ -64,6 +74,20 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.4 =
+* [Pro Feature] Added Canadian French and Lithuanian languages.
+* [Bug Fix] Improved Cookie handling for some rare cases based on user selected preferences.
+* [Task] Compatible with WordPress v6.9
+
+= 1.1.3 =
+* [Bug Fix] Cookie Consent js file was being enqueued while editing pages/posts from WordPress admin. Now the Cookie banner and the js will not be loaded in editor mode.
+
+= 1.1.2 =
+* [Pro Feature] Added German Formal & Romanian languages.
+* [Pro Feature] Added Shortcode [/] which can be used by admins to display the cookies list on privacy policy or similar pages.
+* [Bug Fix] [Pro] Improved the delay caused while submitting the consent preference in consent banner. Now the banner will be hidden instantly while the processing will complete in background. 
+* [Bug Fix] [Pro] Google Consent Mode v2, functionality_storage consent value was passed as granted by default. Now based on the CookieAdmin settings set by the admin, it will pass the value as granted or denied.
 
 = 1.1.1 =
 * [Pro Feature] Multilingual - 17 Languages added

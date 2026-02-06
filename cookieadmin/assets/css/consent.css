@@ -377,11 +377,11 @@
 	background: linear-gradient(to left, rgb(0, 51, 204) 0%, rgb(102, 102, 255) 100%);
 	height: 50px;
 	width: 50px;
-	border-radius: 50%;
+	border-radius: 50% !important;
 	cursor: pointer;
 	border: 0px;
 	z-index: 99999;
-	padding: 5px;
+	padding: 5px !important;
 }
 
 .cookieadmin-cookie-card {

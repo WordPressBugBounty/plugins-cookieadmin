@@ -55,6 +55,9 @@ class Admin{
 			$policy['cookieadmin_nonce'] = wp_create_nonce('cookieadmin_admin_js_nonce');
 			//cookieadmin_r_print($policy);die();
 			
+			$policy['lang']['show_more'] = __('Show more', 'cookieadmin');
+			$policy['lang']['show_less'] = __('Show less', 'cookieadmin');
+			
 			wp_localize_script('cookieadmin_js', 'cookieadmin_policy', $policy);
 		}
 		
@@ -382,7 +385,7 @@ class Admin{
 					<div class="cookieadmin-setting cookieadmin-manager-cookie-scan">
 						<label class="cookieadmin-title">'.esc_html__('Scanned Cookies', 'cookieadmin').'</label>
 						<div class="cookieadmin-setting-contents cookieadmin-cookie-scan">
-							<input type="button" class="cookieadmin-btn cookieadmin-btn-primary cookieadmin-scan" value="Scan Cookies">
+							<input type="button" class="cookieadmin-btn cookieadmin-btn-primary cookieadmin-scan" value="'.esc_html__('Scan Cookies', 'cookieadmin').'">
 						</div>
 						<div class="cookieadmin-manager-result">
 							<table class="cookieadmin-table cookieadmin-cookie-categorized">

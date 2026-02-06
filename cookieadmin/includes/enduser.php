@@ -20,7 +20,7 @@ class Enduser{
 		//cookieadmin_r_print($view);
 		//cookieadmin_r_print($policy);
 		
-		if(!empty($policy) && !empty($view)){
+		if(!empty($policy) && !empty($view) && !cookieadmin_is_editor_mode()){
 		
 			wp_enqueue_style('cookieadmin-style', COOKIEADMIN_PLUGIN_URL . 'assets/css/consent.css', [], COOKIEADMIN_VERSION);
 			

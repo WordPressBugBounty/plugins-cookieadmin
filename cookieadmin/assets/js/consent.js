@@ -1,4 +1,4 @@
-const days = cookieadmin_policy.cookieadmin_days;
+var days = cookieadmin_policy.cookieadmin_days;
 
 if(typeof cookieadmin_is_consent === 'undefined'){
 	window.cookieadmin_is_consent = {};
@@ -13,7 +13,7 @@ function cookieadmin_is_obj(consentObj){
 
 // function cookieadmin_cookie_interceptor(){
 	
-	const originalCookieDescriptor =
+	var originalCookieDescriptor =
     Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') ||
     Object.getOwnPropertyDescriptor(document, 'cookie');
 	var allowed_cookies = '';
@@ -26,40 +26,54 @@ function cookieadmin_is_obj(consentObj){
 			return originalCookieDescriptor.get.call(document);
 		},
 		set: function(val){
-			if (!val) return false;
-			
-			splited_val = val.split("=");
-			val_name = splited_val[0].trim();
-			
-			if(splited_val[1].trim().startsWith("deleted;")) return false;
-			
-			rm_val = val_name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-			
-			if(val_name === "cookieadmin_consent"){
-				return originalCookieDescriptor.set.call(document, val);
+
+			if (!val) return;
+
+			var separatorIndex = val.indexOf('=');
+			if(separatorIndex === -1) {
+				return;
 			}
 			
-			if(cookieadmin_is_obj(cookieadmin_is_consent) && (val_name in cookieadmin_allcookies) ){
+			var cookieName = val.substring(0, separatorIndex).trim();
+			var cookieValue = val.substring(separatorIndex + 1).trim();
+
+			if(cookieName === "cookieadmin_consent"){
+				originalCookieDescriptor.set.call(document, val);
+				return;
+			}
+
+			if(val.includes('expires=Thu, 01 Jan 1970') || cookieValue.startsWith("deleted;")){
+				originalCookieDescriptor.set.call(document, val);
+				return;
+			}
+
+			var cookieInfo = cookieadmin_allcookies[cookieName] || {};
+			var category = (cookieInfo.category || 'uncategorized').toLowerCase();
+
+			if(category == "necessary"){
+				originalCookieDescriptor.set.call(document, val);
+				return;
+			}
+
+			if(cookieadmin_is_obj(cookieadmin_is_consent)){
+
+				var consentAction = cookieadmin_is_consent.action;
+
+				if(consentAction.accept || consentAction[category]){
+					originalCookieDescriptor.set.call(document, val);
+				}else{
 					
-				if(!!cookieadmin_is_consent.action.reject){
-					return originalCookieDescriptor.set.call(document, rm_val);
-				}					
-				else if(!!cookieadmin_is_consent.action.accept){
-					return originalCookieDescriptor.set.call(document, val);
+					var pathMatch = val.match(/path=([^;]+)/i);
+					var domainMatch = val.match(/domain=([^;]+)/i);
+					var path = pathMatch ? pathMatch[1].trim() : '/';
+					var domain = domainMatch ? `domain=${domainMatch[1].trim()};` : '';
+					
+					var deleteString = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; ${domain}`;
+					originalCookieDescriptor.set.call(document, deleteString.trim());
 				}
-				else if(!!cookieadmin_allcookies[val_name].category){
-					
-					if(cookieadmin_is_consent.action[cookieadmin_allcookies[val_name].category.toLowerCase()]){
-						return originalCookieDescriptor.set.call(document, val);
-					}
-					else{
-						return originalCookieDescriptor.set.call(document, rm_val);
-					}
-					return true;
-				}					
 				
 			}else{
-				(cookieadmin_allcookies[val_name] = cookieadmin_allcookies[val_name] || {}).string = val.trim();
+				(cookieadmin_allcookies[cookieName] = cookieadmin_allcookies[cookieName] || {}).string = val.trim();
 				return false;
 			}
 			
@@ -120,7 +134,7 @@ function cookieadmin_restore_cookies(update) {
 	}else if(update.reject && update.reject == "true"){
 		return true;
 	}else{
-		for (const [key, value] of Object.entries(update)) {
+		for (var [key, value] of Object.entries(update)) {
 			if(key != "consent"){
 				cookieadmin_accepted_categories.push(key);
 			}
@@ -129,7 +143,7 @@ function cookieadmin_restore_cookies(update) {
 	
 	
   	for(cookie in cookieadmin_allcookies){
-  		document.cookie = cookie.string;
+  		document.cookie = cookieadmin_allcookies[cookie].string;
   	};
 	
     cookieadmin_accepted_categories.forEach(function(category) {
@@ -137,7 +151,7 @@ function cookieadmin_restore_cookies(update) {
         document.querySelectorAll(
             'script[type="text/plain"][data-cookieadmin-category="' + category + '"]'
         ).forEach(function(el) {
-            const newScript = document.createElement('script');
+            var newScript = document.createElement('script');
 
             // Copy attributes
             if (el.src) {
@@ -164,7 +178,7 @@ function cookieadmin_restore_cookies(update) {
 function cookieadmin_set_cookie(name, value, days = 365, domain = "") {
   if (!name || !value) return false;
 
-  const date = new Date();
+  var date = new Date();
   date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // default 1 year
 
   let cookieString = `${encodeURIComponent(name)}=${JSON.stringify(value)};`;
@@ -271,7 +285,7 @@ function cookieadmin_categorize_cookies(){
 		return;
 	}
 	
-	/* const xhttp2 = new XMLHttpRequest();
+	/* var xhttp2 = new XMLHttpRequest();
 	
 	var data = 'action=cookieadmin_ajax_handler&cookieadmin_act=categorize_cookies&cookieadmin_security=' + cookieadmin_policy.nonce + "&cookieadmin_cookies=" + JSON.stringify(cookieadmin_chk_cookies);
 	
@@ -472,12 +486,6 @@ document.addEventListener("DOMContentLoaded", function() {
 		cookieadmin_toggle_overlay();
 
 		cookieadmin_set_consent(prefer, days);
-		
-		if(!!cookieadmin_policy.reload_on_consent){
-			location.reload();
-		}else{
-			cookieadmin_restore_cookies(prefer);
-		}
 	});
 
 
@@ -502,12 +510,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			var prefer2 = e.classList.contains("cookieadmin_reject_btn") ? {reject: "true"} : {accept: "true"};
 			
 			cookieadmin_set_consent(prefer2, days);
-			
-			if(!!cookieadmin_policy.reload_on_consent){
-				location.reload();
-			}else{
-				cookieadmin_restore_cookies(prefer2);
-			}
 		});
 	});
 	
@@ -558,15 +560,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function cookieadmin_set_consent(prefrenc, days){
 	
-	var cookieadmin_consent = prefrenc;
-	
 	if (typeof cookieadmin_pro_set_consent === "function") {
-		consent_id = cookieadmin_pro_set_consent(prefrenc, days);
+		return cookieadmin_pro_set_consent(prefrenc, days);
+	}else{
+		return cookieadmin_save_consent_cookie(prefrenc, days);
+	}
+}
+
+function cookieadmin_save_consent_cookie(prefrenc, days, consent_id){
+	
+	var cookieadmin_consent = prefrenc;
 		
-		if(consent_id){
-			cookieadmin_is_consent.consent = consent_id;
-			cookieadmin_consent['consent'] = consent_id;
-		}
+	if(consent_id){
+		cookieadmin_is_consent.consent = consent_id;
+		cookieadmin_consent['consent'] = consent_id;
 	}
 	
 	if(!cookieadmin_is_consent.consent){
@@ -582,5 +589,10 @@ function cookieadmin_set_consent(prefrenc, days){
 		cookieadmin_update_gcm(1);
 	}
 	
+	if(!!cookieadmin_policy.reload_on_consent){
+		location.reload();
+	}else{
+		cookieadmin_restore_cookies(prefrenc);
+	}
 }
 

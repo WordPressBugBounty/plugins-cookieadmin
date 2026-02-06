@@ -3,12 +3,12 @@ jQuery(document).ready(function($){
 	var law = '';
 	
 	$(".cookieadmin_showmore").on("click", function(){
-		if($(".cookieadmin_showmore").html().includes("more")){
+		if($(".cookieadmin_showmore").html().includes(cookieadmin_policy.lang.show_more)){
 			$(".cookieadmin_preference").height("auto");
-			$(this).html("Show less");
+			$(this).html(cookieadmin_policy.lang.show_less);
 		}else{
 			$(".cookieadmin_preference").height("");
-			$(this).html("Show more");
+			$(this).html(cookieadmin_policy.lang.show_more);
 		}
 	});
 	

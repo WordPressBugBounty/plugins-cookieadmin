@@ -239,9 +239,9 @@ function cookieadmin_load_consent_template($policy, $view){
 	}
 	
 	$template = array();
-	$template[$view] = $content["cookieadmin_layout"][$policy["cookieadmin_layout"]];
-	$template[$view] .= $content["cookieadmin_modal"][$policy["cookieadmin_modal"]];
-	$template[$view] .= $content["cookieadmin_reconsent"];
+	$template[$view] = $content['cookieadmin_layout'][$policy['cookieadmin_layout']];
+	$template[$view] .= $content['cookieadmin_modal'][$policy['cookieadmin_modal']];
+	$template[$view] .= $content['cookieadmin_reconsent'];
 	
 	$cookieadmin_strings = cookieadmin_load_strings();
 	
