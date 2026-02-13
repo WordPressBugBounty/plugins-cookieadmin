@@ -4,10 +4,12 @@ function cookieadmin_dotweet(ele){
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-	if(!cookieadmin_is_pro){
+	if(!cookieadmin_data['is_pro']){
 		jQuery("[cookieadmin-pro-only]").each(function(index) {
-			jQuery(this).find( "input, textarea, select" ).attr("disabled", true);
+			jQuery(this).filter("input, textarea, select").attr("disabled", true).css('cursor', 'not-allowed');
+			jQuery(this).find( "input, textarea, select, span" ).attr("disabled", true).css('cursor', 'not-allowed');
 			jQuery(this).find( "input.cookieadmin-color-input" ).css("margin-left", "0px");
+			jQuery(this).find( "label span" ).not('.cookieadmin-tooltip-box').css("background-color", "#e8e8e8").css("color", "#9f9f9f");
 		});
 	}
 });

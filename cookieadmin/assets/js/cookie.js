@@ -1,44 +1,39 @@
+// This file is a part of the admin side of CookieAdmin
+
 jQuery(document).ready(function($){
 	
 	var law = '';
 	
-	$(".cookieadmin_showmore").on("click", function(){
-		if($(".cookieadmin_showmore").html().includes(cookieadmin_policy.lang.show_more)){
-			$(".cookieadmin_preference").height("auto");
-			$(this).html(cookieadmin_policy.lang.show_less);
-		}else{
-			$(".cookieadmin_preference").height("");
-			$(this).html(cookieadmin_policy.lang.show_more);
-		}
-	});
-	
-	$("#cookieadmin_layout_footer").on("change", function(){
+	function cookieadminSelectFooterLayout(){
 		$("input[name=cookieadmin_position]").prop("checked", false);
 		$(".consent-position").slideDown();
 		$(".cookieadmin_foter_layout").fadeIn(800);
 		$(".cookieadmin_box_layout").hide();
 		$(".consent-modal-layout").show();
-	});
+	}
+	$("#cookieadmin_layout_footer").on("change", cookieadminSelectFooterLayout);
 	
-	$("#cookieadmin_layout_box").on("change", function(){
+	function cookieadminSelectBoxLayout(){
 		$("input[name=cookieadmin_position]").prop("checked", false);
 		$(".consent-position").slideDown();
 		$(".cookieadmin_foter_layout").hide();
 		$(".cookieadmin_box_layout").fadeIn(800);
 		$(".consent-modal-layout").slideDown();
-	});
+	}
+	$("#cookieadmin_layout_box").on("change", cookieadminSelectBoxLayout);
 
-	$("#cookieadmin_layout_popup").on("change", function(){
+	function cookieadminSelectPopLayout(){
 		$("input[name=cookieadmin_position]").prop("checked", false);
 		$(".consent-position").slideUp();
 		$(".consent-modal-layout").slideUp();
-	});
+	}
+	$("#cookieadmin_layout_popup").on("change", cookieadminSelectPopLayout);
 	
 	setTimeout( function(){
 		$('.updated, .error').not('.no-autohide').fadeOut('slow');
 	}, 5000);
 
-	//==== Notice Section Preview
+	//==== Notice Section Preview Live Change
 
 	$('#cookieadmin_notice_title_layout').on('input', function () {
 		const titleValue = $(this).val().trim();
@@ -230,14 +225,12 @@ jQuery(document).ready(function($){
 		$(".cookieadmin_save_btn").css('background-color', $("#cookieadmin_save_btn_bg_color").val());
 		$(".cookieadmin_save_btn").css('color', $("#cookieadmin_save_btn_color").val());
 
-		$(".cookieadmin_showmore").css('color', law.cookieadmin_links_color);
 		$(".act").css('color', law.cookieadmin_links_color);
 
 		const sliders = $("#cookieadmin_wrapper .cookieadmin_slider");
-		$(sliders[0]).css('background-color', law.cookieadmin_slider_on_bg_color);
+		$(sliders[0]).css('background-color', law.cookieadmin_slider_off_bg_color);
 		$(sliders[1]).css('background-color', law.cookieadmin_slider_off_bg_color);
 		$(sliders[2]).css('background-color', law.cookieadmin_slider_off_bg_color);
-		$(sliders[3]).css('background-color', law.cookieadmin_slider_off_bg_color);
 
 		//Also set layout of consents
 		if(!!law.cookieadmin_position){
@@ -266,13 +259,14 @@ jQuery(document).ready(function($){
 		}
 	}
 	
-	$("#cookieadmin_show_preview").on("click", function(){
+	function cookieadminShowPreview(){
 		if($("#cookieadmin_layout_popup").prop("checked")){
 			show_modal();
 		}else{
 			$(".cookieadmin_law_container").toggle();
 		}
-	});
+	}
+	$("#cookieadmin_show_preview").on("click", cookieadminShowPreview);
 	
 	$(".cookieadmin_customize_btn").on("click", function(){
 		show_modal();
@@ -282,7 +276,7 @@ jQuery(document).ready(function($){
 		$(".cookieadmin_cookie_modal").hide();
 	});
 	
-	$("#cookieadmin_consent_type").on("change", function(){
+	function cookieadminChangeLaw(){
 		
 		var law = $("#cookieadmin_consent_type").find(":selected").attr("name");
 		
@@ -362,20 +356,22 @@ jQuery(document).ready(function($){
 		$("#cookieadmin_links_color").val(cookieadmin_policy[law].cookieadmin_links_color);
 		
 		law == 'cookieadmin_gdpr' ? $(".setting-prior").show() : $(".setting-prior").hide();
-	});
+	}
+	$("#cookieadmin_consent_type").on("change", cookieadminChangeLaw);
 
-	$("consent_page").submit(function(){
+	function cookieadminSubmitConsent(e){		
 		var checked = false;
 		
 		if (!$("input[name=cookieadmin_position]:checked").length && !$("#cookieadmin_layout_popup").prop("checked")) {
-			alert('Please select one of the radio buttons.');
-			event.preventDefault(); // Prevent form submission
+			alert('Please select a notice position.');
+			e.preventDefault(); // Prevent form submission
 		}
-	});
+	}
+	$("#consent_submenu").submit(cookieadminSubmitConsent);
 	
-	$("[id$=_preload]").on("click", function(){
+	function cookieadminPreloadCookies(){
 		
-		if(!$(".setting-prior").find("[id$=_preload]:checked").length && $(".cookieadmin-settings").find(".cookieadmin-collapsible-notice").length){
+		if(!($(".setting-prior").find("[id$=_preload]:checked").length - 1) && $(".cookieadmin-settings").find(".cookieadmin-collapsible-notice").length){
 			$(".cookieadmin-settings").find(".cookieadmin-collapsible-notice").remove();
 			return;
 		}
@@ -385,12 +381,14 @@ jQuery(document).ready(function($){
 			$(".cookieadmin-collapsible-notice").show();
 		}
 		
-	});
+	}
+	$("[id$=_preload]").on("click", cookieadminPreloadCookies);
 	
-	$(".cookieadmin-scan").on("click", function(){
+	function cookieadminScanCookies(){
 		
 		let cookieadmin_btn_val = $(this).prop('value');
-		$(this).prop("disabled", true).prop('value', 'Scanning...');
+		var this_btn = $(this);
+		this_btn.prop("disabled", true).prop('value', 'Scanning...');
 		
 		$.ajax({
 			url: cookieadmin_policy.admin_url,
@@ -402,67 +400,64 @@ jQuery(document).ready(function($){
 			},
 			success: function(result){
 				
-				if (result.success) {
-								
-					$('.cookieadmin-cookie-categorized tbody').find("tr:gt(1)").remove();
-					$.each(result.data, function(index, res){
-						
-						var row = '';
-						exp = 'Session';
-						
-						if(!!res.expires){
-							exp = Math.round((res.expires - Date.now())/86400);
-							if(exp < 1 && !!res['Max-Age']){
-								exp = res['Max-Age'] + " days";
-							}else{
-								exp = 'Session';
-							}
-						}
-						
-						row = '<tr>';
-						row += '<td>' + res.cookie_name + '</td>';
-						row += '<td>' + res.description + '</td>';
-						row += '<td>' + exp + '</td>';
-						row += '<td> <span class="dashicons dashicons-edit cookieadmin_edit_icon" id="edit_'+res.id+'"></span> <span class="dashicons dashicons-trash cookieadmin_delete_icon" id="delete_'+res.id+'"></span> </td>';
-						row += '</tr>';
-						categorized_cookies[res.id] = res;
-						categorized_cookies[res.id]['expires'] = exp;
-						
-						if(!!res.category){
-							type = "#" + res.category.toLowerCase() + "_tbody";
-							$(type).find('.cookieadmin-empty-row').remove();
-							$(type).append(row);
-						}else{
-							$("#unknown_tbody").find('.cookieadmin-empty-row').remove();
-							$("#unknown_tbody").append(row);
-						}
-					});
-					
-				} else {
-					alert(result.data.message);
+				if(result.success){
+					if(typeof cookieadmin_pro_policy === 'object'){
+						alert(cookieadmin_pro_policy.lang.background_scan);
+					}else{
+						alert(cookieadmin_policy.lang.scan_completed);
+						window.location.reload();
+					}
+				}else{
+					alert(result.message);
 				}
 				
 			},	
 			error: function(xhr, status, error) {
+				console.log('CookieAdmin AJAX Error:', status, error);
+				console.log('CookieAdmin response: ' + xhr.responseText); // Check the error message
 				alert("Request failed: " + error);
 			},
 			complete: function() {
-				$(".cookieadmin-scan").prop("disabled", false).prop("value", cookieadmin_btn_val);
+				this_btn.prop("disabled", false).prop("value", cookieadmin_btn_val);
 			}
 		});
-	});
+	}
+	$(".cookieadmin-scan").on("click", cookieadminScanCookies);
 	
-	$("#cookieadmin_dialog_save_btn").on("click", function(){
+	function cookieadminSaveCookie(){
 		
+		$('#cookieadmin-message').removeClass().addClass('spinner is-active').text('').css('height','auto');
 		$(this).prop("disabled", true);
+		
+		//set 0 to add real id to delete
+		cookie_id = $(this).attr("cookieadmin_cookie_id");
 		
 		let cookie_info = {
 			name: $("#cookieadmin-dialog-cookie-name").val(),
-			id: $(this).attr("cookieadmin_cookie_id"),
+			id: cookie_id,
 			description: $("#cookieadmin-dialog-cookie-desc").val(),
 			duration: $("#cookieadmin-dialog-cookie-duration").val(),
 			type: $("#cookieadmin-dialog-cookie-category").val()
 		};
+		
+		$.each(cookie_info, function (i, val){
+			if(!val){
+				cookie_info = null;
+				return false;
+			}
+		});
+    
+		if(!cookie_info){
+			$(this).prop("disabled", false);
+			$('#cookieadmin-message').removeClass().addClass('cookieadmin-error-message').text('Please fill all the fields');
+			return false;
+		}
+		
+		// Used to call add cookie, in the Pro file.
+		if(cookie_id == 0 && typeof cookieadminProSaveCookie === 'function'){
+			cookieadminProSaveCookie(cookie_info);
+			return;
+		}
 		
 		$.ajax({
 			url: cookieadmin_policy.admin_url,
@@ -476,72 +471,63 @@ jQuery(document).ready(function($){
 			success: function(result){
 				
 				if(result.success){
-						
-					var row = '';
-										
-					row = '<tr>';
-					row += '<td>' + cookie_info.name + '</td>';
-					row += '<td>' + cookie_info.description + '</td>';
-					row += '<td>' + cookie_info.duration + '</td>';
-					row += '<td> <span class="dashicons dashicons-edit cookieadmin_edit_icon" id="edit_'+cookie_info.id+'"></span> <span class="dashicons dashicons-trash cookieadmin_delete_icon" id="edit_'+cookie_info.id+'"></span> </td>';
-					row += '</tr>';
-					
-					$("#edit_"+cookie_info.id).parents("tr").remove();
-					tbody = "#" + cookie_info.type.toLowerCase() + "_tbody";
-					$(tbody).find('.cookieadmin-empty-row').remove();
-					$(tbody).append(row);
-
-					categorized_cookies[cookie_info.id]['cookie_name'] = cookie_info.name;
-					categorized_cookies[cookie_info.id]['description'] = cookie_info.description;
-					categorized_cookies[cookie_info.id]['expires'] = cookie_info.duration;
-					categorized_cookies[cookie_info.id]['category'] = cookie_info.type;
-					
+					cookieadminAddCookieToTable(cookie_info);
+					$('#cookieadmin-message').removeClass().addClass('cookieadmin-success-message').text(result.message);
 				}else{
-					alert(result.data.message);
+					alert(result.message);
 				}
+			},
+			error: function(xhr, status, error) {
+				console.log('CookieAdmin AJAX Error:', status, error);
+				console.log('CookieAdmin response: ' + xhr.responseText); // Check the error message
+				alert("Request failed: " + error);
 			}
 		});
 		$(this).prop("disabled", false);		
-	});
+	}
+	$("#cookieadmin_dialog_save_btn").on("click", cookieadminSaveCookie);
 	
-
 	$("input[type=color]").on("input", function(){
 		elemt = $(this).attr("id").replace("_box", "");
 		$("#"+elemt).val($(this).val());
 	});
 	
 	
-	$(document).on("click", ".cookieadmin_delete_icon", function(){
+	function cookieadminDeleteCookie(){
 		
 		if(confirm("Are you sure you want to delete ?")){
 			
 			cookie_raw_id = $(this).attr("id").replace("delete_", "");
+			var row = $(this).parents("tr")
 			
 			$.ajax({
 				url: cookieadmin_policy.admin_url,
 				method: "POST",
 				data : {
 					action : 'cookieadmin_ajax_handler',
-					cookieadmin_act : 'cookieadmin-edit-cookie',
+					cookieadmin_act : 'cookieadmin-delete-cookie',
 					cookie_raw_id : cookie_raw_id,
 					cookieadmin_security : cookieadmin_policy.cookieadmin_nonce,
 				},
 				success: function(result){
-					
 					if (result.success) {
+						row.remove();
 						delete categorized_cookies[cookie_raw_id];
 					}else{
-						alert(result.data.message);
+						alert(result.message);
 					}
+				},
+				error: function(xhr, status, error) {
+					console.log('CookieAdmin AJAX Error:', status, error);
+					console.log('CookieAdmin response: ' + xhr.responseText); // Check the error message
+					alert("Request failed: " + error);
 				}
 			});
-			
-			$(this).parents("tr").remove();
 		}
-	});
+	}
+	$('.cookieadmin-metabox-holder').on("click", ".cookieadmin_delete_icon", cookieadminDeleteCookie);
 	
-	
-	$(document).on("click", ".cookieadmin_edit_icon, .cookieadmin_dialog_modal_close_btn", function(){
+	function cookieadminOpenCookieDialog(){
 		
 		const modal = document.getElementById('edit-cookie-modal');
 		
@@ -549,23 +535,41 @@ jQuery(document).ready(function($){
 			modal.classList.remove('active');
 		}else{
 			modal.classList.add('active');
-			var cookie_id = $(this).attr("id").replace("edit_", "");
 			
-			$("#cookieadmin_dialog_save_btn").attr("cookieadmin_cookie_id", cookie_id);
-			$("#cookieadmin-dialog-cookie-name").val(categorized_cookies[cookie_id]['cookie_name']);
-			$("#cookieadmin-dialog-cookie-desc").val(categorized_cookies[cookie_id]['description']);
-			$("#cookieadmin-dialog-cookie-duration").val(categorized_cookies[cookie_id]['expires']);
-			if(!!categorized_cookies[cookie_id]['category']){
-				$("#cookieadmin-dialog-cookie-category").val(categorized_cookies[cookie_id]['category']);
+			if($(this).hasClass('cookieadmin-add-cookie')){
+				$("#cookieadmin_dialog_save_btn").attr("cookieadmin_cookie_id", 0);
+				$('.cookieadmin_modal-header').children()[0].innerHTML = 'Add Cookie';
+				$('.cookieadmin_modal-container').find('input,textarea,select').val('');
 			}else{
-				$("#cookieadmin-dialog-cookie-category").val("unknown");
+				
+				$('.cookieadmin_modal-header').children()[0].innerHTML = 'Edit Cookie';
+				var cookie_id = $(this).attr("id").replace("edit_", "");
+				
+				$("#cookieadmin_dialog_save_btn").attr("cookieadmin_cookie_id", cookie_id);
+				$("#cookieadmin-dialog-cookie-name").val(categorized_cookies[cookie_id]['cookie_name']);
+				$("#cookieadmin-dialog-cookie-desc").val(categorized_cookies[cookie_id]['description']);
+				$("#cookieadmin-dialog-cookie-duration").val(categorized_cookies[cookie_id]['expires']);
+				if(!!categorized_cookies[cookie_id]['category']){
+					$("#cookieadmin-dialog-cookie-category").val(categorized_cookies[cookie_id]['category']);
+				}else{
+					$("#cookieadmin-dialog-cookie-category").val("unknown");
+				}
 			}
+			
+			$('.cookieadmin-metabox-holder').on('mousedown.cookieadmin-close-dialog2', function(e){
+				if ( !$(".cookieadmin_modal-container").is(e.target) && $(".cookieadmin_modal-container").has(e.target).length === 0 && !$(".cookieadmin_modal-container").is(e.target) && $(".cookieadmin_modal-container").has(e.target).length === 0) {
+					modal.classList.remove('active');
+					$('#cookieadmin-message').removeClass().addClass('cookieadmin-success-message').text('');
+					$('.cookieadmin-metabox-holder').off('mousedown.cookieadmin-close-dialog2');
+				}
+			});
 		}		
-	});
+	}
+	$(document).on("click", ".cookieadmin_edit_icon, .cookieadmin_dialog_modal_close_btn, .cookieadmin-add-cookie", cookieadminOpenCookieDialog);
 	
 	
-	$(document).on('click', '.cookieadmin-cookie-categorized tbody > tr:first-child', function() {
-	  var $tbody = jQuery(this).closest('tbody');
+	function cookieadminExpandCollapseCookiesList() {
+	  var $tbody = $(this).closest('tbody');
 	  var $rows = $tbody.find('tr:not(:first-child)');
 
 	  if ($rows.is(':visible')) {
@@ -575,7 +579,97 @@ jQuery(document).ready(function($){
   		$rows.slideDown();
   		$tbody.removeClass('collapsed');
 	  }
+	}
+	$('.cookieadmin-metabox-holder').on('click', '.cookieadmin-cookie-categorized tbody > tr:first-child', cookieadminExpandCollapseCookiesList);
+	
+	// Tooltip
+	let cookieadminToolTip;
+	
+	function cookieadminCreateTooltip(){
+		cookieadminToolTip = $('<div>', {
+			class: 'cookieadmin-tooltip'
+		}).appendTo('body');
+	}
+
+	$('.cookieadmin-tooltip-box').on('mouseenter', function(e){
+		
+		if(!cookieadminToolTip){
+			cookieadminCreateTooltip();
+		}
+		
+		var tip = $(this).attr('data-tip') || '';
+		cookieadminToolTip.text(tip).css('opacity', 1);
+		
+	}).on('mousemove', function(e){
+		
+		if(!cookieadminToolTip){
+			return;
+		}
+		
+		var offset = 12;
+		var tooltipRect = cookieadminToolTip[0].getBoundingClientRect();
+		
+		var top = e.clientY - tooltipRect.height - offset;
+		var left = e.clientX + offset;
+		
+		// Flip below if not enough space above
+		if(top < 8){
+			top = e.clientY + offset;
+		}
+		
+		// Prevent right overflow
+		if(left + tooltipRect.width > window.innerWidth - 8){
+			left = e.clientX - tooltipRect.width - offset;
+		}
+		
+		cookieadminToolTip.css({
+			top: top + 'px',
+			left: left + 'px'
+		});
+	})
+	.on('mouseleave', function(){
+
+		if(!cookieadminToolTip){
+			return;
+		}
+		
+		cookieadminToolTip.css('opacity', 0);
 	});
 	
 	
 });
+
+function cookieadminAddCookieToTable(cookie_info){
+
+	var row = '';
+
+	categorized_cookies[cookie_info.id] = !categorized_cookies[cookie_info.id] ? {} : categorized_cookies[cookie_info.id];
+
+	categorized_cookies[cookie_info.id]['id'] = cookie_info.id;
+	categorized_cookies[cookie_info.id]['cookie_name'] = cookie_info.name;
+	categorized_cookies[cookie_info.id]['description'] = cookie_info.description;
+	categorized_cookies[cookie_info.id]['expires'] = cookie_info.duration;
+	categorized_cookies[cookie_info.id]['category'] = cookie_info.type;
+	
+	if(cookie_info.duration > 0){
+		cookie_info.duration += ' ' + cookieadmin_policy.lang.days;
+	}else{
+		cookie_info.duration = cookieadmin_policy.lang.session;
+	}
+	
+	row = '<tr>';
+	row += '<td>' + cookie_info.name + '</td>';
+	row += '<td>' + cookie_info.description + '</td>';
+	row += '<td>' + cookie_info.duration + '</td>';
+	row += '<td> <span class="dashicons dashicons-edit cookieadmin_edit_icon" id="edit_'+cookie_info.id+'"></span> <span class="dashicons dashicons-trash cookieadmin_delete_icon" id="edit_'+cookie_info.id+'"></span> </td>';
+	row += '</tr>';
+	
+	jQuery("#edit_"+cookie_info.id).parents("tr").remove();
+	tbody = "#" + cookie_info.type.toLowerCase() + "_tbody";
+	jQuery(tbody).find('.cookieadmin-empty-row').remove();
+	jQuery(tbody).append(row);
+	
+	if(!categorized_cookies[cookie_id]){
+		jQuery('.cookieadmin_modal-container').find('input,textarea,select').val('');
+	}
+}

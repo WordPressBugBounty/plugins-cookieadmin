@@ -16,15 +16,7 @@
 	--cookieadmin-red-color: #dd2727;
 }
 
-/* Buttons End */
-
 /*  Consent page css */
-
-.cookieadmin-postbox-container { 
-	max-width: 92vw;
-	float: unset;
-	margin: 10px;
-}
 
 .cookieadmin_cookie_modal label, .cookieadmin_cookie_modal input {
 	padding: 5px;
@@ -79,65 +71,7 @@
 
 /* Modal animations Ends */
 
-.cookieadmin_consent-header{
-	display: flex;
-	background: #12625f4d;
-	color: black;
-	padding: 12px;
-	box-sizing: border-box;
-	margin: 4px;
-	align-items: center;
-	justify-content: space-between;
-}
 
-.cookieadmin_consent-contents {
-	display: flex;
-	margin: 0px 5px;
-}
-
-.cookieadmin_consent_settings {
-	display: flex;
-	width: 100%;
-	flex-direction: column;
-	background: #ffffff;
-	/*margin-left: -3px;*/
-}
-
-
-
-.cookieadmin-contents {
-	width: 100%;
-}
-
-.cookieadmin-setting {
-	display: flex;
-	padding: 6px 0px;
-	justify-content: flex-start;
-}
-
-.cookieadmin-setting-head {
-	width: 100%;
-	padding: 5px;
-	align-content: center;
-}
-
-.cookieadmin-setting-contents {
-	align-items: baseline;
-	padding: 5px;
-	margin: 5px;
-}
-
-.cookieadmin-setting-results {
-	align-items: baseline;
-	padding: 5px;
-	margin: 5px;
-	width: 80%;
-}
-
-.cookieadmin-button{
-	padding: 5px;
-	row-gap: 5px;
-}
 /* Consent page css End*/
 
 
@@ -273,21 +207,14 @@
 }
 
 .cookieadmin_preference{
-	overflow: hidden;
-	height: 83px;
+	overflow: auto;
 	font-size: 15px;
-}
-
-.cookieadmin_showmore{
-	background: none;
-	border: none;
-	color: #1863dc;
-	padding: 0px;
-	cursor: pointer;
+	height: auto;
+	padding: 10px 0px;
 }
 
 .cookieadmin_details_wrapper{
-	padding: 15px;
+	padding: 0px 15px;
 	height: calc(100% - 6%);
 	overflow: auto;
 	scrollbar-width: thin;
@@ -317,7 +244,7 @@
 	color: #1863dc;
 }
 
-.cookieadmin-nece-cookies{
+.cookieadmin-modal-cookies-list{
 	display:none;
 	padding:1px;
 	border-radius: 10px;
@@ -374,7 +301,7 @@
 	position: fixed;
 	bottom: 15px;
 	left: 15px;
-	background: linear-gradient(to left, rgb(0, 51, 204) 0%, rgb(102, 102, 255) 100%);
+	background-color: #374FD4;
 	height: 50px;
 	width: 50px;
 	border-radius: 50% !important;
@@ -382,6 +309,9 @@
 	border: 0px;
 	z-index: 99999;
 	padding: 5px !important;
+	box-shadow: -4px 5px 10px rgba(0, 0, 0, 0.4);
+	align-items: center;
+	justify-content: center;
 }
 
 .cookieadmin-cookie-card {
@@ -440,7 +370,7 @@
 
 /* Checkbox switch Start */
 
-.cookieadmin_toggle, .cookieadmin_toggle_disabled {
+.cookieadmin_toggle {
 	position: relative;
 	display: inline-block;
 	width: 24px;
@@ -448,7 +378,7 @@
 }
 
 /* Hide the checkbox input */
-.cookieadmin_toggle input, .cookieadmin_toggle_disabled input {
+.cookieadmin_toggle input{
 	display: none;
 }
 
@@ -490,13 +420,6 @@ input:checked+.cookieadmin_slider {
 /* When the checkbox is checked, shift the 
   white ball towards the right within the slider. */
 input:checked+.cookieadmin_slider:before {
-	transform: translateX(13px);
-}
-
-input:disabled+.cookieadmin_slider {
-	background-color: #3582c4;
-}
-input:disabled+.cookieadmin_slider:before {
 	transform: translateX(13px);
 }
 

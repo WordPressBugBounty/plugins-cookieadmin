@@ -3,7 +3,7 @@
 Plugin Name: CookieAdmin - Cookie Consent Banner
 Plugin URI: https://cookieadmin.net
 Description: CookieAdmin provides easy to configure cookie consent banner with GDPR and CCPA law support.
-Version: 1.1.4
+Version: 1.1.5
 Author: Softaculous
 Author URI: https://www.softaculous.com
 License: LGPL v2.1
@@ -37,7 +37,7 @@ if(defined('COOKIEADMIN_VERSION')) {
 define('COOKIEADMIN_FILE', __FILE__);
 define('COOKIEADMIN_BASE', plugin_basename(COOKIEADMIN_FILE));
 define('COOKIEADMIN_DIR', plugin_dir_path(__FILE__));
-define('COOKIEADMIN_VERSION', '1.1.4');
+define('COOKIEADMIN_VERSION', '1.1.5');
 define('COOKIEADMIN_URL', plugins_url('', COOKIEADMIN_FILE));
 define('COOKIEADMIN_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('COOKIEADMIN_PRO_URL', 'https://cookieadmin.net/pricing?from=plugin');
@@ -51,7 +51,30 @@ function cookieadmin_load_textdomain() {
 }
 add_action( 'plugins_loaded', 'cookieadmin_load_textdomain', 9 );
 
-include_once(dirname(__FILE__).'/init.php');
+//Auto-loader
+function cookieadmin_autoloader($class){
+	
+	if(!preg_match('/^CookieAdmin\\\(.*)/is', $class, $m)){
+		return;
+	}
+
+	$m[1] = str_replace('\\', '/', $m[1]);
+	
+	if(file_exists(COOKIEADMIN_DIR.'includes/'.strtolower($m[1]).'.php')){
+		include_once(COOKIEADMIN_DIR.'includes/'.strtolower($m[1]).'.php');
+	}
+}
+
+spl_autoload_register(__NAMESPACE__.'\cookieadmin_autoloader');
+
+
+if(!class_exists('CookieAdmin')){
+#[\AllowDynamicProperties]
+class CookieAdmin{
+}
+}
+
+add_action('plugins_loaded', 'cookieadmin_load_plugin');
 
 // Activation & Deactivation Hooks
 register_activation_hook(__FILE__, 'cookieadmin_activate');

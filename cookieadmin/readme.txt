@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -74,6 +74,15 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.5 =
+* [Pro Feature] Added German (Switzerland), Spanish (Argentina), Finnish and Croatian languages.
+* [Pro Feature] Introduced monthly automatic cookie scanning across all website pages.
+* [Pro Feature] Added automatic consent log cleanup with configurable limit.
+* [Fix] Improved Google Consent Mode v2 compatibility for cached websites.
+* [Fix] Improved consent saving reliability on cached websites by making frontend requests cache-safe.
+* [UI] Adjusted Consent Preferences modal description to auto height for better readability and removed Show more button.
+* [UI] Fixed Re-Consent icon styling issues caused by page builder CSS conflicts.
 
 = 1.1.4 =
 * [Pro Feature] Added Canadian French and Lithuanian languages.

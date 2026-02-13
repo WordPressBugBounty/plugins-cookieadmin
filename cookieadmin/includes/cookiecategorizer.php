@@ -14,7 +14,7 @@ class CookieCategorizer {
      * @param array $found_cookies The array of cookies from the Scanner class.
      * @return array The enriched list of cookies.
      */
-    static function categorize_cookies(array $found_cookies, array $categorized_cookies) {
+    static function categorize_cookies($found_cookies, $categorized_cookies) {
         if (empty($found_cookies)) {
             return [];
         }
@@ -35,7 +35,7 @@ class CookieCategorizer {
     }
 
 
-    static function generate_query_prefixes(array $cookie_names): array {
+    static function generate_query_prefixes($cookie_names){
         $prefixes = [];
         foreach ($cookie_names as $name) {
 			
@@ -54,7 +54,7 @@ class CookieCategorizer {
     }
 
 
-    static function fetch_candidates_from_db(array $prefixes): array {
+    static function fetch_candidates_from_db($prefixes){
 	
 		if (empty($prefixes)) {
 			return [];
@@ -70,9 +70,8 @@ class CookieCategorizer {
     }
 
 
-    static function match_and_enrich_cookies(array $found_cookies, array $db_candidates, array $old_categorized_cookies): array {
+    static function match_and_enrich_cookies($found_cookies, $db_candidates, $old_categorized_cookies){
         $categorized_cookies = [];
-        $old_categorized_cookies = [];
         $remove_cookies = [];
 
         foreach ($found_cookies as $scanned_name => $cookie_data) {
@@ -102,15 +101,15 @@ class CookieCategorizer {
             }
 			
             if (!empty($best_match)) {
-			
-				if(!empty($old_categorized_cookies) && array_key_exists($best_match['cookie_name'], $old_categorized_cookies)){
-					$remove_cookies[] = $scanned_name;
-					continue;
+				
+				$cookie_name = $best_match['cookie_name'];
+				
+				if(!empty($old_categorized_cookies) && array_key_exists($cookie_name, $old_categorized_cookies)){
+					$remove_cookies[] = $old_categorized_cookies[$cookie_name];
 				}
 
-				$cookie_name = $best_match['cookie_name'];
-                $categorized_cookies[$cookie_name]['cookie_name'] = $cookie_name;
-                $categorized_cookies[$cookie_name]['raw_name'] = $scanned_name;
+				$categorized_cookies[$cookie_name]['cookie_name'] = $cookie_name;
+				$categorized_cookies[$cookie_name]['raw_name'] = $scanned_name;
 				$categorized_cookies[$cookie_name]['category'] = $best_match['category'];
 				$categorized_cookies[$cookie_name]['description'] = $best_match['description'];
 				$categorized_cookies[$cookie_name]['patterns'] = $best_match['patterns'];

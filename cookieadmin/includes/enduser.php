@@ -24,7 +24,7 @@ class Enduser{
 		
 			wp_enqueue_style('cookieadmin-style', COOKIEADMIN_PLUGIN_URL . 'assets/css/consent.css', [], COOKIEADMIN_VERSION);
 			
-			wp_enqueue_script('cookieadmin_js', COOKIEADMIN_PLUGIN_URL . 'assets/js/consent.js', [], COOKIEADMIN_VERSION, 'async');
+			wp_enqueue_script('cookieadmin_js', COOKIEADMIN_PLUGIN_URL . 'assets/js/consent.js', [], COOKIEADMIN_VERSION);
 		
 			$policy[$view]['ajax_url'] = admin_url('admin-ajax.php');
 			$policy[$view]['nonce'] = wp_create_nonce('cookieadmin_js_nonce');
@@ -40,10 +40,10 @@ class Enduser{
 			// Used for setting cookie
 			$policy[$view]['base_path'] = $base_path;
 			
-			$policy[$view]['lang']['show_more'] = __('show more', 'cookieadmin');
-			$policy[$view]['lang']['show_less'] = __('show less', 'cookieadmin');
+			$policy[$view]['lang']['show_less'] = __('Show less', 'cookieadmin');
 			$policy[$view]['lang']['duration'] = __('Duration', 'cookieadmin');
 			$policy[$view]['lang']['session'] = __('Session', 'cookieadmin');
+			$policy[$view]['lang']['days'] = __('Days', 'cookieadmin');
 			
 			// cookieadmin_r_print($policy);die();
 			
@@ -94,8 +94,8 @@ class Enduser{
 		} );
 		
 		foreach (self::$categorized_cookies as $item) {
-			$category = strtolower($item->category);
-			$patterns = json_decode($item->patterns, true);
+			$category = !empty($item->category) ? strtolower($item->category) : '';
+			$patterns = !empty($item->patterns) ? json_decode($item->patterns, true) : '';
 			
 			if (!empty($patterns) && !empty($category)) {
 				foreach ($patterns as $pattern) {

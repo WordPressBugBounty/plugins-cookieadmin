@@ -54,6 +54,11 @@ function cookieadmin_load_plugin(){
 	// Enduser loading
 	///////////////////////////
 	
+	// Check if our scanner is visiting
+	if(defined('COOKIEADMIN_SCANNER')){	
+		return false;
+	}
+	
 	add_action('wp_enqueue_scripts', '\CookieAdmin\Enduser::enqueue_scripts');
 	
 	// Insert Cookie blocker in the head.
@@ -98,7 +103,6 @@ function cookieadmin_load_plugin_admin(){
 		add_filter('softaculous_plugin_update_notice', '\CookieAdmin\Admin::plugin_update_notice_filter');
 	}
 	// === Plugin Update Notice END === //
-	
 }
 
 function cookieadmin_is_editor_mode(){
@@ -131,10 +135,11 @@ function cookieadmin_ajax_handler(){
 	$user_allowed_actions = array();
 	
 	$admin_allowed_actions = array(
-		'scan_cookies' => 'cookieadmin_scan_cookies',
-		'cookieadmin-auto-categorize' => 'cookieadmin_auto_configure_cookies',
-		'cookieadmin-edit-cookie' => 'cookieadmin_edit_cookies',
-		'close-update-notice' => 'close_plugin_update_notice'
+		'scan_cookies' => '\CookieAdmin\Admin\Scan::scan_cookies_ajax',
+		'cookieadmin-edit-cookie' => '\CookieAdmin\Admin\Scan::edit_cookies',
+		'cookieadmin-delete-cookie' => '\CookieAdmin\Admin\Scan::delete_cookies',
+		'close-update-notice' => '\CookieAdmin\Admin::close_plugin_update_notice',
+		'close-notice' => '\CookieAdmin\Admin::close_notices'
 	);
 	
 	$general_actions = array(
@@ -155,7 +160,8 @@ function cookieadmin_ajax_handler(){
 			wp_send_json_error(array('message' => 'Sorry, but you do not have permissions to perform this action'));
 		}
 		
-		call_user_func('\CookieAdmin\Admin::'.$admin_allowed_actions[$cookieadmin_fn]);
+		// TODO: Need to test this throughly
+		call_user_func($admin_allowed_actions[$cookieadmin_fn]);
 		
 	}elseif(array_key_exists($cookieadmin_fn, $general_actions)){
 		
@@ -206,10 +212,9 @@ function cookieadmin_load_strings(){
 			'logo_svg' => cookieadmin_logo_svg(),
 			'plugin_url' => esc_url(COOKIEADMIN_PLUGIN_URL),
 			'powered_by' => __('Powered by', 'cookieadmin'),
-			'show_more' => __('show more', 'cookieadmin'),
 			'reconsent' => __('Re-consent', 'cookieadmin'),
 			'cookie_preferences' => __('Cookie Preferences', 'cookieadmin'),
-			'remark_standard' => __('Standard', 'cookieadmin'),
+			'remark_standard' => __('Always Active', 'cookieadmin'),
 			'remark' => __('Remark', 'cookieadmin'),
 			'none' => __('None', 'cookieadmin'),
 			'necessary_cookies' => __('Necessary Cookies', 'cookieadmin'),
@@ -228,18 +233,18 @@ function cookieadmin_load_strings(){
 //Loads consent data from file
 function cookieadmin_load_consent_template($policy, $view){
 	
-	if(!file_exists(COOKIEADMIN_DIR.'assets/cookie/template.json')){
+	if(!file_exists(COOKIEADMIN_DIR.'assets/cookie/template.php')){
 		return false;
 	}
 	
-	$content = json_decode(file_get_contents(COOKIEADMIN_DIR.'assets/cookie/template.json'), true);
+	include_once(COOKIEADMIN_DIR.'assets/cookie/template.php');
 	
 	if(empty($content)){
 		return false;
 	}
 	
 	$template = array();
-	$template[$view] = $content['cookieadmin_layout'][$policy['cookieadmin_layout']];
+	$template[$view] = ($policy['cookieadmin_layout'] != 'popup') ? $content['cookieadmin_layout'][$policy['cookieadmin_layout']] : '';
 	$template[$view] .= $content['cookieadmin_modal'][$policy['cookieadmin_modal']];
 	$template[$view] .= $content['cookieadmin_reconsent'];
 	
