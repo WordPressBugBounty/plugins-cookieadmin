@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -36,6 +36,7 @@ Pro Features :
 * Multilingual - 17 Languages supported
 * Consent Logs
 * Export Consent Logs
+* Global Privacy Control(GPC)
 * Shortcode [/] Examples below :
 - Shortcode to render all cookies in tabular format :
 [cookieadmin_render]
@@ -74,6 +75,18 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.6 =
+* [Pro Feature] Added Global Privacy Control (GPC).
+* [Pro Feature] Added Re-Consent icons options with support for custom icon upload and custom link.
+* [Fix] Fixed async loading issue.
+* [Fix] Improved Elementor banner compatibility.
+* [Fix] Fixed Re-Consent icon JS error when modal banner only option is selected.
+* [Fix] Optimized dependency JS.
+* [Task] Maintained default priority for enqueue scripts function.
+* [Task] Moved plugin activation/deactivation hooks before short-circuit loading.
+* [Task] Removed unused database query comments and added missing table notice.
+* [Task] Minor code improvements and structural changes.
 
 = 1.1.5 =
 * [Pro Feature] Added German (Switzerland), Spanish (Argentina), Finnish and Croatian languages.

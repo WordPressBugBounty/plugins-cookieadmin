@@ -9,7 +9,7 @@ if(!defined('COOKIEADMIN_VERSION') || !defined('ABSPATH')){
 class Settings{
 	
 	static function settings(){
-		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg, $cookieadmin_settings;
+		global $cookieadmin, $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg, $cookieadmin_settings;
 		
 		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');	
 		$policy = cookieadmin_load_policy();
@@ -117,6 +117,36 @@ class Settings{
 									</label>
 									<input name="cookieadmin_consent_logs_expiry_days" class="cookieadmin-tooltip-box" id="cookieadmin_consent_logs_expiry_days" value="'.((!empty($cookieadmin_settings['consent_logs_expiry_days']) && cookieadmin_is_pro()) ? esc_attr($cookieadmin_settings['consent_logs_expiry_days']) : '365').'" data-tip="'.esc_html__('Keep consent logs for these many days', 'cookieadmin').'">
 									<input type="button" class="button '.(cookieadmin_is_pro() ? ' cookieadmin-purge-consent-btn cookieadmin-tooltip-box' : '').'" data-tip="'.esc_html__('Delete consent logs older than the set limit (runs once)', 'cookieadmin').'" value="'.esc_html__('Delete Now', 'cookieadmin').'"/>
+								</div>
+							</div>
+
+							<div class="cookieadmin-setting">
+								<label class="cookieadmin-title" for="cookieadmin_respect_gpc">'.esc_html__('Respect Global Privacy Control', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
+									<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Automatically honor GPC signals from browsers. When enabled, users with GPC enabled will automatically have non-essential cookies rejected.', 'cookieadmin').'"></span>
+								</label>
+								<div class="cookieadmin-setting-contents">
+									<label class="cookieadmin_toggle">
+										<input name="cookieadmin_respect_gpc" type="checkbox" id="cookieadmin_respect_gpc" '.(!empty($cookieadmin_settings['respect_gpc']) && cookieadmin_is_pro() ? 'checked' : '').'>
+										<span class="cookieadmin_slider"></span>
+									</label>
+								</div>
+							</div>
+
+							<div class="cookieadmin-setting">
+								<label class="cookieadmin-title" for="cookieadmin_gpc_message">'.esc_html__('GPC Message', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
+									<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Custom message shown when GPC preference is honored.', 'cookieadmin').'"></span>
+								</label>
+								<div class="cookieadmin-setting-contents">
+									<textarea name="cookieadmin_gpc_message" id="cookieadmin_gpc_message" rows="5" cols="50" '.(!cookieadmin_is_pro() ? 'disabled' : '').'>'.esc_textarea(!empty($cookieadmin_settings['gpc_message']) ? $cookieadmin_settings['gpc_message'] : (!empty($cookieadmin['gpc_message_default']) ? $cookieadmin['gpc_message_default'] : '')).'</textarea>
+								</div>
+							</div>
+
+							<div class="cookieadmin-setting">
+								<label class="cookieadmin-title" for="cookieadmin_gpc_override_warning">'.esc_html__('GPC Override Warning', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
+									<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Warning shown when user tries to enable cookies while GPC signal is active.', 'cookieadmin').'"></span>
+								</label>
+								<div class="cookieadmin-setting-contents">
+									<textarea name="cookieadmin_gpc_override_warning" id="cookieadmin_gpc_override_warning" rows="5" cols="50" '.(!cookieadmin_is_pro() ? 'disabled' : '').'>'.esc_textarea(!empty($cookieadmin_settings['gpc_override_warning']) ? $cookieadmin_settings['gpc_override_warning'] : (!empty($cookieadmin['gpc_override_warning_default']) ? $cookieadmin['gpc_override_warning_default'] : '')).'</textarea>
 								</div>
 							</div>
 						</div>

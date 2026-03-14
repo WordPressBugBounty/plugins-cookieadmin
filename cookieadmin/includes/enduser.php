@@ -24,7 +24,15 @@ class Enduser{
 		
 			wp_enqueue_style('cookieadmin-style', COOKIEADMIN_PLUGIN_URL . 'assets/css/consent.css', [], COOKIEADMIN_VERSION);
 			
-			wp_enqueue_script('cookieadmin_js', COOKIEADMIN_PLUGIN_URL . 'assets/js/consent.js', [], COOKIEADMIN_VERSION);
+			$js_deps = [];
+			// Free consent.js is the base script from where the functionality gets triggered
+			// So we need to make sure the dependencies of free script gets loaded first
+			// Like the pro/consent.js is a dependency of the free one.
+			if(defined('COOKIEADMIN_PREMIUM')){
+				$js_deps[] = 'cookieadmin_pro_js';
+			}
+			
+			wp_enqueue_script('cookieadmin_js', COOKIEADMIN_PLUGIN_URL . 'assets/js/consent.js', $js_deps, COOKIEADMIN_VERSION);
 		
 			$policy[$view]['ajax_url'] = admin_url('admin-ajax.php');
 			$policy[$view]['nonce'] = wp_create_nonce('cookieadmin_js_nonce');
@@ -138,6 +146,8 @@ class Enduser{
 		$templates = implode("", cookieadmin_load_consent_template($policy[$view], $view));
 		
 		$allowed_tags = cookieadmin_kses_allowed_html();
+		
+		$templates = apply_filters('cookieadmin_after_banner', $templates);
 		
 		// var_dump($policy[$view]);
 		echo wp_kses($templates, $allowed_tags);

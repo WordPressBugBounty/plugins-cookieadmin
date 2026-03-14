@@ -3,6 +3,7 @@
 jQuery(document).ready(function($){
 	
 	var law = '';
+	var mediaUploader;
 	
 	function cookieadminSelectFooterLayout(){
 		$("input[name=cookieadmin_position]").prop("checked", false);
@@ -490,6 +491,11 @@ jQuery(document).ready(function($){
 	$("input[type=color]").on("input", function(){
 		elemt = $(this).attr("id").replace("_box", "");
 		$("#"+elemt).val($(this).val());
+		
+		// Updating the background color of the reconsent icon list
+		if(elemt === 'cookieadmin_re_consent_bg_color'){
+			$('.cookieadmin-reconsent-icon').css('background-color', $(this).val());
+		}
 	});
 	
 	
@@ -581,6 +587,32 @@ jQuery(document).ready(function($){
 	  }
 	}
 	$('.cookieadmin-metabox-holder').on('click', '.cookieadmin-cookie-categorized tbody > tr:first-child', cookieadminExpandCollapseCookiesList);
+
+	function cookieadminUploadReconsentIcon(e){
+
+		e.preventDefault();
+
+		if(mediaUploader){
+            mediaUploader.open();
+            return;
+    }
+
+		mediaUploader = wp.media({
+            title: 'Select or Upload Icon',
+            button: {text: 'Use this icon'},
+            multiple: false,
+            library: {type: 'image'}
+        });
+
+		mediaUploader.on('select', function() {
+            const attachment = mediaUploader.state().get('selection').first().toJSON();
+            $('#cookieadmin_reconsent_img_url').val(attachment.url);
+        });
+
+        mediaUploader.open();
+		
+	}
+	$('.cookieadmin-metabox-holder').on('click', '#cookieadmin_upload_icon_btn', cookieadminUploadReconsentIcon);
 	
 	// Tooltip
 	let cookieadminToolTip;

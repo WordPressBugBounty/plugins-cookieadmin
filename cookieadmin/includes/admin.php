@@ -68,6 +68,12 @@ class Admin{
 		
 		wp_enqueue_script('cookieadmin_js_footer', COOKIEADMIN_PLUGIN_URL . 'assets/js/footer.js', [], COOKIEADMIN_VERSION);
 		wp_localize_script('cookieadmin_js_footer', 'cookieadmin_data', array('is_pro' => cookieadmin_is_pro()));
+
+		// We only need to upload icon on consent form page
+		if(!empty($_GET['page']) && $_GET['page'] == 'cookieadmin-consent'){
+			//to upload icons
+			wp_enqueue_media();
+		}
 	}
 	
 	//Add Main Menu

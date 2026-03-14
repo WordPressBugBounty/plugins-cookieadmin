@@ -17,6 +17,8 @@ class Consent{
 		$templates = implode("", cookieadmin_load_consent_template($policy[$view], $view));
 		
 		$cookieadmin_requires_pro = \CookieAdmin\Admin::is_feature_available(1);
+		
+		$icons_grid = apply_filters('cookieadmin_reconsent_icons', '', $policy[$view]);
 
 		//Start UI
 		\CookieAdmin\Admin::header_theme(__('Consent Form', 'cookieadmin'));
@@ -265,6 +267,70 @@ class Consent{
 							
 						</div>
 					</div>
+					
+					<div class="cookieadmin-setting reconsent">
+						<label class="cookieadmin-title">'.esc_html__('Re-consent Icon', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</label>
+						<div class="cookieadmin-setting-contents cookieadmin-vertical" cookieadmin-pro-only="1">
+						
+							<div class="cookieadmin-setting-contents cookieadmin-reconsent-icons-grid">
+								' . wp_kses($icons_grid, cookieadmin_kses_allowed_html()) . '
+								<div class="cookieadmin-custom-reconsent-url">
+									<input type="text" id="cookieadmin_reconsent_img_url" name="cookieadmin_reconsent_img_url" style="width: 50vw;" placeholder="'.esc_attr__('Insert custom icon url here', 'cookieadmin').'" value="'.(!empty($policy[$view]['cookieadmin_reconsent_img_url']) ? esc_attr($policy[$view]['cookieadmin_reconsent_img_url']) : '').'">
+								</div>
+								<div class="cookieadmin-reconsent-file-upload">
+									<input type="button" class="button button-secondary" id="cookieadmin_upload_icon_btn" value="'.esc_attr__( 'Upload Icon', 'cookieadmin' ).'">
+								</div>
+							</div>
+							
+							<div class="cookieadmin-setting-contents cookieadmin-setting-colors cookieadmin-horizontal">
+								<div class="cookieadmin-setting-colors cookieadmin-vertical">
+									<label for="cookieadmin_re_consent_bg_color">'.esc_html__('Background', 'cookieadmin').'</label>
+									<div class="cookieadmin-color-holder cookieadmin-horizontal">
+										<input type="color" id="cookieadmin_re_consent_bg_color_box" name="cookieadmin_re_consent_bg_color_box" value="'.(!empty($policy[$view]['cookieadmin_re_consent_bg_color']) ? esc_attr($policy[$view]['cookieadmin_re_consent_bg_color']) : '#374FD4').'">
+										<input type="text" id="cookieadmin_re_consent_bg_color" name="cookieadmin_re_consent_bg_color" value="'.(!empty($policy[$view]['cookieadmin_re_consent_bg_color']) ? esc_attr($policy[$view]['cookieadmin_re_consent_bg_color']) : '#374FD4').'" class="cookieadmin-color-input">
+									</div>
+								</div>
+							</div>					
+						</div>
+					</div>
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title">'.esc_html__('Policy Links', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</label>
+						<div class="cookieadmin-setting-contents cookieadmin-vertical cookieadmin-policy-links" cookieadmin-pro-only="1">
+							<div class="cookieadmin-policy-link cookieadmin-vertical">
+									<label for="cookieadmin_privacy_policy">'.esc_html__('Privacy Policy', 'cookieadmin').'</label>
+									<input type="text" id="cookieadmin_privacy_policy" name="cookieadmin_privacy_policy" style="width: 61vw;" placeholder="'.__('Insert Privacy Policy link here...', 'cookieadmin').'" value="'.(!empty($policy[$view]['cookieadmin_privacy_policy']) ? esc_attr($policy[$view]['cookieadmin_privacy_policy']) : '').'">
+							</div>
+							<div class="cookieadmin-policy-link cookieadmin-vertical">
+									<label for="cookieadmin_cookie_policy">'.esc_html__('Cookie Policy', 'cookieadmin').'</label>
+									<input type="text" id="cookieadmin_cookie_policy" name="cookieadmin_cookie_policy" style="width: 61vw;" placeholder="'.__('Insert Cookie Policy link here...', 'cookieadmin').'" value="'.(!empty($policy[$view]['cookieadmin_cookie_policy']) ? esc_attr($policy[$view]['cookieadmin_cookie_policy']) : '').'">
+							</div>
+							
+							<div class="cookieadmin-vertical">
+								<label for="cookieadmin_privacy_policy_visibility">'.esc_html__('Visiblity', 'cookieadmin').'</label>
+								<div class="cookieadmin-horizontal cookieadmin-privacy-policy-visibility">
+									<span>
+										<input type="checkbox" id="cookieadmin_privacy_policy_banner" name="cookieadmin_privacy_policy_banner" '.(!empty($policy[$view]['cookieadmin_privacy_policy_banner']) ? 'checked' : '').'>
+										<label for="cookieadmin_privacy_policy_banner">'.esc_html__('Banner', 'cookieadmin').'</label>
+									</span>
+									<span>
+										<input type="checkbox" id="cookieadmin_privacy_policy_pref" name="cookieadmin_privacy_policy_pref" '.(!empty($policy[$view]['cookieadmin_privacy_policy_pref']) ? 'checked' : '').'>
+										<label for="cookieadmin_privacy_policy_pref">'.esc_html__('Preference', 'cookieadmin').'</label>
+									</span>
+								</div>
+							</div>
+							
+							<div class="cookieadmin-horizontal">
+								<div class="cookieadmin-setting-colors cookieadmin-vertical">
+									<label for="cookieadmin_policy_link_color">'.esc_html__('Link', 'cookieadmin').'</label>
+									<div class="cookieadmin-color-holder cookieadmin-horizontal">
+										<input type="color" id="cookieadmin_policy_link_color_box" name="cookieadmin_policy_link_color_box" value="'.(!empty($policy[$view]['cookieadmin_policy_link_color']) ? esc_attr($policy[$view]['cookieadmin_policy_link_color']) : '').'">
+										<input type="text" id="cookieadmin_policy_link_color" name="cookieadmin_policy_link_color" value="'.(!empty($policy[$view]['cookieadmin_policy_link_color']) ? esc_attr($policy[$view]['cookieadmin_policy_link_color']) : '').'" class="cookieadmin-color-input">
+									</div>
+								</div>
+							</div>					
+						</div>
+					</div>
+					
 					<div class="cookieadmin-setting cookieadmin-save-settings">
 						<div class="cookieadmin-setting-contents">
 							<input type="submit" name="cookieadmin_save_settings" class="cookieadmin-btn cookieadmin-btn-primary action" value="'.esc_html__('Save Settings', 'cookieadmin').'">
@@ -360,6 +426,18 @@ class Consent{
 		$setting['cookieadmin_slider_off_bg_color'] = !empty($_REQUEST['cookieadmin_slider_off_bg_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_slider_off_bg_color'])) : (!empty($policy[$law]['cookieadmin_slider_off_bg_color']) ? $policy[$law]['cookieadmin_slider_off_bg_color'] : '#808080');
 		$setting['cookieadmin_slider_on_bg_color'] = !empty($_REQUEST['cookieadmin_slider_on_bg_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_slider_on_bg_color'])) : (!empty($policy[$law]['cookieadmin_slider_on_bg_color']) ? $policy[$law]['cookieadmin_slider_on_bg_color'] : '#3582c4');
 		$setting['cookieadmin_links_color'] = !empty($_REQUEST['cookieadmin_links_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_links_color'])) : (!empty($policy[$law]['cookieadmin_links_color']) ? $policy[$law]['cookieadmin_links_color'] : '#1863dc');
+		
+		// Set Reconsent Icons 
+		$setting['cookieadmin_reconsent_icon'] = !empty($_REQUEST['cookieadmin_reconsent_icon']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_reconsent_icon'])) : '';
+		$setting['cookieadmin_reconsent_img_url'] = !empty($_REQUEST['cookieadmin_reconsent_img_url']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_reconsent_img_url'])) : '';
+		$setting['cookieadmin_re_consent_bg_color'] = !empty($_REQUEST['cookieadmin_re_consent_bg_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_re_consent_bg_color'])) : (!empty($policy[$law]['cookieadmin_re_consent_bg_color']) ? $policy[$law]['cookieadmin_re_consent_bg_color'] : '#374FD4');
+
+		// Set Policy Links
+		$setting['cookieadmin_privacy_policy'] = !empty($_REQUEST['cookieadmin_privacy_policy']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_privacy_policy'])) : '';
+		$setting['cookieadmin_cookie_policy'] = !empty($_REQUEST['cookieadmin_cookie_policy']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_cookie_policy'])) : '';
+		$setting['cookieadmin_privacy_policy_banner'] = !empty($_REQUEST['cookieadmin_privacy_policy_banner']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_privacy_policy_banner'])) : 0;
+		$setting['cookieadmin_privacy_policy_pref'] = !empty($_REQUEST['cookieadmin_privacy_policy_pref']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_privacy_policy_pref'])) : 0;
+		$setting['cookieadmin_policy_link_color'] = !empty($_REQUEST['cookieadmin_policy_link_color']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_policy_link_color'])) : '#cbba8d';
 		
 		$setting['cookieadmin_days'] = !empty($_REQUEST['cookieadmin_days']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_days'])) : (!empty($policy[$law]['cookieadmin_days']) ? $policy[$law]['cookieadmin_days'] : '365');
 		

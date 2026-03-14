@@ -113,7 +113,17 @@ function cookieadmin_is_cookie(name){
 	
 	for(var i=0; i < coki.length; i++){
 		if(coki[i].trim().indexOf(nam) == 0){
-				return coki[i].trim();
+			try {
+				var cookie_value = coki[i].trim().split("=");
+				if(!cookie_value[1]){
+					return false;
+				}
+
+				var decoded = decodeURIComponent(cookie_value[1]);
+				return JSON.parse(decoded);
+			} catch {
+				return false;
+			}
 		}
 	}
 	
@@ -121,9 +131,8 @@ function cookieadmin_is_cookie(name){
 }
 
 function cookieadmin_check_consent(){
-	var cookieadmin_cookie = cookieadmin_is_cookie("cookieadmin_consent")
+	var cookieadmin_cookie = cookieadmin_is_cookie("cookieadmin_consent");
 	if(!!cookieadmin_cookie){
-		cookieadmin_cookie = JSON.parse(cookieadmin_cookie.split("=")[1]);
 		if(!!cookieadmin_cookie.consent){
 			cookieadmin_is_consent.consent = cookieadmin_cookie.consent;
 			delete cookieadmin_cookie.consent;
@@ -355,7 +364,7 @@ function cookieadmin_categorize_cookies(){
 document.addEventListener("DOMContentLoaded", function() {
 	
 	var cookieadmin_show_reconsent = 0;
-	if(cookieadmin_policy.is_pro != 0 && cookieadmin_pro_vars.reconsent != 0){
+	if(cookieadmin_policy.is_pro != 0 && cookieadmin_pro_vars !== 'undefined' && cookieadmin_pro_vars.reconsent != 0){
 		var cookieadmin_show_reconsent = 1;
 	}
 
@@ -364,11 +373,17 @@ document.addEventListener("DOMContentLoaded", function() {
 	cookieadmin_ovrlay.className = "cookieadmin_modal_overlay";
 	document.body.appendChild(cookieadmin_ovrlay);
 	
+	var before_consent_dispaly = new CustomEvent('cookieadmin_before_consent_display');
+	
+	// For anything that needs to be done before disaplying consent.
+	cookieadmin_policy.hide_banner = false; // initializing
+	window.dispatchEvent(before_consent_dispaly);
+
 	//Show notice or re-consent icon as needed
-	if(!cookieadmin_is_obj(cookieadmin_is_consent)){
+	if(!cookieadmin_is_obj(cookieadmin_is_consent) && !cookieadmin_policy.hide_banner){
 		
 		if(cookieadmin_policy.cookieadmin_layout !== "popup"){
-			document.getElementsByClassName("cookieadmin_law_container")[0].style.display = "block";
+				document.getElementsByClassName("cookieadmin_law_container")[0].style.display = "block";
 		}else{
 			cookieadmin_toggle_overlay();
 			document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "flex";
@@ -394,7 +409,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 	
 	//Edit Notice and Modal contents
-	document.getElementsByClassName("cookieadmin_reconsent_img")[0].src = cookieadmin_policy.plugin_url + "/assets/images/cookieadmin_icon.svg";
 
 	cookieadmin_populate_preference();
 
@@ -486,8 +500,15 @@ document.addEventListener("DOMContentLoaded", function() {
 			
 			cookieadmin_toggle_overlay();
 			document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "flex";
-			document.getElementsByClassName("cookieadmin_re_consent")[0].style.display = "none";
-			document.getElementsByClassName("cookieadmin_law_container")[0].style.display = "none";
+			var cookieadmin_re_consent = document.getElementsByClassName("cookieadmin_re_consent")[0];
+			if(cookieadmin_re_consent){
+				cookieadmin_re_consent.style.display = "none";
+			}
+
+			var cookieadmin_law_container = document.getElementsByClassName("cookieadmin_law_container")[0];
+			if(cookieadmin_law_container){
+				cookieadmin_law_container.style.display = "none";
+			}
 			
 			if(cookieadmin_policy["cookieadmin_modal"] == "side"){
 				document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "grid";
@@ -518,12 +539,28 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 		
 		if(Object.keys(prefer).length !== 0){
-			if(Object.keys(prefer).length === 3){
-				document.querySelectorAll(".cookieadmin_accept_btn")[1].click();
+			var override_gpc = document.getElementById('cookieadmin-override_gpc');
+			var is_override_gpc = false;
+			if(override_gpc && override_gpc.checked){
+				is_override_gpc = true;
+			}
+
+			if(Object.keys(prefer).length === 3 && !is_override_gpc){
+				let accept_btn = document.querySelectorAll(".cookieadmin_accept_btn");
+			
+				if(accept_btn.length > 0){
+					accept_btn[accept_btn.length-1].click();
+				}
+
 				return;
 			}
 		}else{
-			document.querySelectorAll(".cookieadmin_reject_btn")[1].click();
+			let reject_btn = document.querySelectorAll(".cookieadmin_reject_btn");
+			
+			if(reject_btn.length > 0){
+				reject_btn[reject_btn.length-1].click();
+			}
+			
 			return;
 		}
 		
@@ -542,9 +579,14 @@ document.addEventListener("DOMContentLoaded", function() {
 			// console.log(e);
 
 			document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "none";
-			document.getElementsByClassName("cookieadmin_law_container")[0].style.display = "none";
-			if(cookieadmin_show_reconsent){
-				document.getElementsByClassName("cookieadmin_re_consent")[0].style.display = "block";
+			var cookieadmin_law_container = document.getElementsByClassName("cookieadmin_law_container")[0];
+			if(cookieadmin_law_container){
+				cookieadmin_law_container.style.display = "none";
+			}
+			
+			var cookieadmin_re_consent = document.getElementsByClassName("cookieadmin_re_consent")[0];
+			if(cookieadmin_re_consent){
+				cookieadmin_re_consent.style.display = "block";
 			}
 			
 			if(e.id.includes("modal")){
@@ -579,9 +621,15 @@ document.addEventListener("DOMContentLoaded", function() {
 		document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "none";
 		cookieadmin_toggle_overlay();
 		if(!cookieadmin_is_obj(cookieadmin_is_consent)){
-			document.getElementsByClassName("cookieadmin_law_container")[0].style.display = "block";
+			var cookieadmin_law_container = document.getElementsByClassName("cookieadmin_law_container")[0];
+			if(cookieadmin_law_container){
+				cookieadmin_law_container.style.display = "block";
+			}
 		}else if(cookieadmin_show_reconsent){
-			document.getElementsByClassName("cookieadmin_re_consent")[0].style.display = "block";
+			var cookieadmin_re_consent = document.getElementsByClassName("cookieadmin_re_consent")[0];
+			if(cookieadmin_re_consent){
+				cookieadmin_re_consent.style.display = "block";
+			}
 		}
 	});
 	

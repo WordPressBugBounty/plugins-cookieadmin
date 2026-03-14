@@ -227,7 +227,7 @@ class Scan{
 			if(!method_exists('\CookieAdminPro\Admin', 'cookieadmin_get_site_urls')){
 				$urls = [home_url()];
 			} else {
-				$urls = \CookieAdminPro\Admin::cookieadmin_get_site_urls($urls, 1);
+				$urls = \CookieAdminPro\Admin::cookieadmin_get_site_urls($urls, 2);
 			}
 
 			$cookieData = apply_filters('cookieadmin_pro_scan_cookies', $urls);
@@ -250,7 +250,7 @@ class Scan{
 				
 				if(function_exists('cookieadmin_pro_get_remaining_urls')){
 					// Check Remaining urls
-					$remainig_urls = cookieadmin_pro_get_remaining_urls($urls);
+					$remaining_urls = cookieadmin_pro_get_remaining_urls($urls);
 					
 					if(!empty($remaining_urls)){
 						//send next batch for scan

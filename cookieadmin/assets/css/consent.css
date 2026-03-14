@@ -275,7 +275,7 @@
 	border-top: 1px solid #CCCCCC;
 }
 
-.cookieadmin_btn{
+button.cookieadmin_btn{
 	background-color: transparent;
 	border: 1px solid gray;
 	color: #1863dc;
@@ -294,9 +294,10 @@
 .cookieadmin_show_pref_cookies{
 	cursor: pointer;
 	font-size: 18px;
+	font-family: initial;
 }
 
-.cookieadmin_re_consent{
+button.cookieadmin_re_consent{
 	display: none;
 	position: fixed;
 	bottom: 15px;
@@ -425,8 +426,12 @@ input:checked+.cookieadmin_slider:before {
 
 /* Checkbox switch End */
 
-.cookieadmin-poweredby{
+.cookieadmin_law_container .cookieadmin-poweredby{
 margin-top: 10px;
+}
+
+.cookieadmin_modal_footer_links .cookieadmin-poweredby{
+margin-left: auto;
 }
 
 .cookieadmin-poweredby a img{
@@ -446,6 +451,52 @@ text-decoration: none;
 
 .cookieadmin_modal_footer .cookieadmin-poweredby a{
 justify-content: end;
+}
+
+#cookieadmin-gpc-toast{
+display:flex;
+visibility: hidden;
+position: fixed;
+bottom: 24px;
+right: 24px;
+color: #ffffff;
+padding: 10px 14px;
+border-radius: 6px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+font-size: 14px;
+z-index: 99999;
+opacity: 0;
+transform: translateY(20px);
+transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+line-height:1.5;
+}
+
+#cookieadmin_gpc_override{
+padding-bottom:10px;
+}
+
+/* Policy Links */
+.cookieadmin_policy_link_box{
+	display: flex;
+	justify-content: space-around;
+	font-size: 13px;
+	flex-wrap: wrap;
+}
+
+.cookieadmin_modal_policy_link_box{
+	display: flex;
+	gap: 5px;
+	font-size: 13px;
+	flex-wrap: wrap;
+}
+
+.cookieadmin_modal_footer_links{
+	display:flex;
+	justify-content:space-between;
+	margin:9px 9px 0 9px;
 }
 
 /* CSS for phones only */

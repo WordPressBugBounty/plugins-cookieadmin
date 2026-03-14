@@ -200,15 +200,20 @@ function cookieadmin_load_policy(){
 	return array_replace_recursive($j_policy, $policy);
 }
 
-function cookieadmin_load_strings(){
+function cookieadmin_load_strings($policy){
 	
 	$cookieadmin_powered_by_html = '<div class="cookieadmin-poweredby"><a href="https://cookieadmin.net/?utm_source=wpplugin&utm_medium=footer" target="_blank"><span>[[powered_by]]</span> [[logo_svg]]</a></div>';
 	
 	$cookieadmin_powered_by_html = apply_filters('cookieadmin_powered_by_html', $cookieadmin_powered_by_html);
-	
+	$privacy_policy_links = apply_filters('cookieadmin_privacy_policy_links', array(), $policy);
+	$reconsent_icon_url = apply_filters('cookieadmin_reconsent_icon_url', '', $policy);
 	
 	return [
+			'override_gpc' => apply_filters('cookieadmin_override_gpc_html', ''),
 			'powered_by_html' => $cookieadmin_powered_by_html,
+			'banner_policy_links' => !empty($privacy_policy_links['banner']) ? $privacy_policy_links['banner'] : '',
+			'modal_policy_links' => !empty($privacy_policy_links['modal']) ? $privacy_policy_links['modal'] : '',
+			'reconsent_icon_url' => esc_url($reconsent_icon_url),
 			'logo_svg' => cookieadmin_logo_svg(),
 			'plugin_url' => esc_url(COOKIEADMIN_PLUGIN_URL),
 			'powered_by' => __('Powered by', 'cookieadmin'),
@@ -248,7 +253,7 @@ function cookieadmin_load_consent_template($policy, $view){
 	$template[$view] .= $content['cookieadmin_modal'][$policy['cookieadmin_modal']];
 	$template[$view] .= $content['cookieadmin_reconsent'];
 	
-	$cookieadmin_strings = cookieadmin_load_strings();
+	$cookieadmin_strings = cookieadmin_load_strings($policy);
 	
 	foreach($cookieadmin_strings as $ck => $cv){
 		$template[$view] = str_replace('[['.$ck.']]', $cv, $template[$view]);
@@ -447,6 +452,7 @@ function cookieadmin_kses_allowed_html(){
 	
 	$allowed_tags['a'] = array(
 		'href' => true,
+		'target' => true,
 	);
 	
 	$allowed_tags['br'] = array();

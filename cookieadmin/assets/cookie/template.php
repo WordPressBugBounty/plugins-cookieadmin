@@ -20,6 +20,7 @@ $content = array(
 						<button type="button" class="cookieadmin_btn cookieadmin_reject_btn" id="cookieadmin_reject_button">Reject All</button>
 						<button type="button" class="cookieadmin_btn cookieadmin_accept_btn" id="cookieadmin_accept_button">Accept All</button>
 					</div>
+					[[banner_policy_links]]
 					[[powered_by_html]]
 				</div>
 			</div>',
@@ -38,6 +39,7 @@ $content = array(
 							<button type="button" class="cookieadmin_btn cookieadmin_accept_btn" id="cookieadmin_accept_button">Accept All</button>
 						</div>
 					</div>
+					[[banner_policy_links]]
 					[[powered_by_html]]
 				</div>
 			</div>'
@@ -125,10 +127,14 @@ $content = array(
 					</div>
 				</div>
 				<div class="cookieadmin_modal_footer">
+					[[override_gpc]]
 					<button type="button" class="cookieadmin_btn cookieadmin_reject_btn" id="cookieadmin_reject_modal_button">Reject All</button>
 					<button type="button" class="cookieadmin_btn cookieadmin_save_btn" id="cookieadmin_prf_modal_button">Save My Preferences</button>
 					<button type="button" id="cookieadmin_accept_modal_button" class="cookieadmin_btn cookieadmin_accept_btn">Accept All</button>
+					<div class="cookieadmin_modal_footer_links">
+					[[modal_policy_links]]
 					[[powered_by_html]]
+					</div>
 				</div>
 			</div>',
 		
@@ -216,7 +222,10 @@ $content = array(
 					<button type="button" class="cookieadmin_btn cookieadmin_reject_btn" id="cookieadmin_reject_modal_button">Reject All</button>
 					<button type="button" class="cookieadmin_btn cookieadmin_save_btn" id="cookieadmin_prf_modal_button">Save My Preferences</button>
 					<button type="button" class="cookieadmin_btn cookieadmin_accept_btn" id="cookieadmin_accept_modal_button">Accept All</button>
+					<div class="cookieadmin_modal_footer_links">
+					[[modal_policy_links]]
 					[[powered_by_html]]
+					</div>
 				</div>
 			</div>',
 		
@@ -304,14 +313,17 @@ $content = array(
 					<button type="button" class="cookieadmin_btn cookieadmin_reject_btn" id="cookieadmin_reject_modal_button">Reject All</button>
 					<button type="button" class="cookieadmin_btn cookieadmin_save_btn" id="cookieadmin_prf_modal_button">Save My Preferences</button>
 					<button type="button" class="cookieadmin_btn cookieadmin_accept_btn" id="cookieadmin_accept_modal_button">Accept All</button>
+					<div class="cookieadmin_modal_footer_links">
+					[[modal_policy_links]]
 					[[powered_by_html]]
+					</div>
 				</div>
 			</div>'
 	),
 	'cookieadmin_reconsent' => 
 		'<div>
 			<button type="button" class="cookieadmin_re_consent">
-				<img class="cookieadmin_reconsent_img" height="40" width="40" src="[[plugin_url]]assets/images/cookieadmin_icon.svg" alt="[[reconsent]]">
+				<img class="cookieadmin_reconsent_img" height="40" width="40" src="[[reconsent_icon_url]]" alt="[[reconsent]]">
 			</button>
 		</div>'
 );
