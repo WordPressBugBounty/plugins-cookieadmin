@@ -2,9 +2,9 @@
 Contributors: softaculous
 Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -75,6 +75,13 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.7 =
+* [Pro Bug Fix] There was an issue with Cookie scans resulting in timeouts that has been fixed.
+* [Pro Bug Fix] There was an issue where toggle color customization was not working, this has been fixed.
+* [Bug Fix] For some users scanning was giving a wait error after 1 hour of last scan, this has been fixed.
+* [Task] Uninstalling the plugin was not cleaning the added options this has been fixed.
+* [Task] Tested with WordPress 7.0.
 
 = 1.1.6 =
 * [Pro Feature] Added Global Privacy Control (GPC).

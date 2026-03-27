@@ -1,13 +1,13 @@
 <?php
 
-if (!defined('WP_UNINSTALL_PLUGIN')) {
-    exit;
+// if uninstall.php is not called by WordPress, die
+if(!defined('WP_UNINSTALL_PLUGIN')){
+    die;
 }
 
-global $wpdb;
-
+// Deleting options
 delete_option('cookieadmin_version');
 delete_option('cookieadmin_law');
+delete_option('cookieadmin_scan');
+delete_option('cookieadmin_settings');
 delete_option('cookieadmin_consent_settings');
-
-$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix . 'cookieadmin_cookies');

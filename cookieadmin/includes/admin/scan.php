@@ -198,7 +198,7 @@ class Scan{
 		if(cookieadmin_is_pro()){
 			$scanner_info = get_option('cookieadmin_pro_scanner', []);
 			
-			if(!empty($scanner_info['last_scan']) && (time() > $scanner_info['last_scan'] + 3600)){
+			if(!empty($scanner_info['last_scan']) && (time() < $scanner_info['last_scan'] + 3600)){
 				wp_send_json([
 					'success' => false,
 					'message' => __('Cookie Scan can be triggered once an hour', 'cookieadmin')
@@ -227,7 +227,7 @@ class Scan{
 			if(!method_exists('\CookieAdminPro\Admin', 'cookieadmin_get_site_urls')){
 				$urls = [home_url()];
 			} else {
-				$urls = \CookieAdminPro\Admin::cookieadmin_get_site_urls($urls, 2);
+				$urls = \CookieAdminPro\Admin::cookieadmin_get_site_urls($urls, 1);
 			}
 
 			$cookieData = apply_filters('cookieadmin_pro_scan_cookies', $urls);
@@ -312,7 +312,6 @@ class Scan{
 
 			// Step 3: Check if the cookie exists in our DB.
 			if (isset($existing_cookies_lookup[$cookie_name])) {
-				
 				$wpdb->update(
 					$table_name,
 					[
@@ -332,6 +331,20 @@ class Scan{
 				$results['updated']++;
 
 			} else {
+				
+				if($cookie_name == 'cookieadmin_consent' && empty($cookie_data['expires'])){
+					$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');		
+					$policy = cookieadmin_load_policy();
+					
+					if(!empty($policy) && !empty($policy[$view])){
+						$cookie_exp_days = (int) (!empty($policy[$view]['cookieadmin_days']) ? $policy[$view]['cookieadmin_days'] : 365);
+						$utc_time = gmdate('Y-m-d H:i:s', strtotime('+'.$cookie_exp_days.' days'));
+					} else {
+						$utc_time = gmdate('Y-m-d H:i:s', strtotime('+365 days'));
+					}
+					
+					$cookie_data['expires'] = $utc_time; 
+				}
 
 				// ------ INSERT a NEW cookie ------
 				$data = [
