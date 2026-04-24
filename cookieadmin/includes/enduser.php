@@ -142,8 +142,14 @@ class Enduser{
 		
 		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');	
 		$policy = cookieadmin_load_policy();
+		
+		$raw_template = cookieadmin_load_consent_template($policy[$view], $view);
+		
+		if(!is_array($raw_template) || empty($raw_template)){
+			return false;
+		}
 
-		$templates = implode("", cookieadmin_load_consent_template($policy[$view], $view));
+		$templates = implode('', $raw_template);
 		
 		$allowed_tags = cookieadmin_kses_allowed_html();
 		

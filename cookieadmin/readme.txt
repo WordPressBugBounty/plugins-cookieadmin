@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 1.1.7
+Stable tag: 1.1.8
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -75,6 +75,13 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.8 =
+* [Pro Feature] Support for Microsoft Clarity consent mode.
+* [Pro Improvement] Now you can select the pages you want to get scanned.
+* [Improvement] Added wpml-config.xml file to support translation of Banner related strings stored in Options table.
+* [Pro Bug Fix] When Pro was getting installed before free version it was generating fatal error, this has been fixed.
+* [Bug Fix] Fatal error was getting generated when loading banner template for some users, this has been fixed.
 
 = 1.1.7 =
 * [Pro Bug Fix] There was an issue with Cookie scans resulting in timeouts that has been fixed.

@@ -95,7 +95,9 @@ class Scan{
 								'.wp_kses_post($cookieadmin_requires_pro).'
 							</div>
 						</div>
-						<div class="cookieadmin-manager-result">
+						';
+						do_action('cookieadmin_before_scan_results');
+						echo '<div class="cookieadmin-manager-result">
 							<table class="cookieadmin-table cookieadmin-cookie-categorized">
 								<thead>
 									<tr>
@@ -227,7 +229,7 @@ class Scan{
 			if(!method_exists('\CookieAdminPro\Admin', 'cookieadmin_get_site_urls')){
 				$urls = [home_url()];
 			} else {
-				$urls = \CookieAdminPro\Admin::cookieadmin_get_site_urls($urls, 1);
+				$urls = \CookieAdminPro\Admin::cookieadmin_get_site_urls($urls);
 			}
 
 			$cookieData = apply_filters('cookieadmin_pro_scan_cookies', $urls);

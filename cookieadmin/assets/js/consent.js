@@ -594,7 +594,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 			
 			var prefer2 = e.classList.contains("cookieadmin_reject_btn") ? {reject: "true"} : {accept: "true"};
-			
+
 			cookieadmin_set_consent(prefer2, days);
 		});
 	});
@@ -664,6 +664,10 @@ function cookieadmin_save_consent_cookie(prefrenc, days, consent_id){
 	
 	if (typeof cookieadmin_update_gcm === "function") {
 		cookieadmin_update_gcm(1);
+	}
+
+	if (typeof cookieadmin_pro_update_clarity_cookie === "function") {
+		cookieadmin_pro_update_clarity_cookie();
 	}
 	
 	if(!!cookieadmin_policy.reload_on_consent){

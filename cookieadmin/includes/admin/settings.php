@@ -71,6 +71,18 @@ class Settings{
 							</div>
 
 							<div class="cookieadmin-setting">
+								<label class="cookieadmin-title" for="cookieadmin_clarity_consent">'.esc_html__('Clarity Consent Mode V2', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
+									<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Enable Microsoft Clarity consent mode v2.', 'cookieadmin').'"></span>
+								</label>
+								<div class="cookieadmin-setting-contents">
+									<label class="cookieadmin_toggle">
+										<input name="cookieadmin_clarity_consent" type="checkbox" id="cookieadmin_clarity_consent" '.(!empty($cookieadmin_settings['clarity_consent']) && cookieadmin_is_pro() ? 'checked' : '').'>
+										<span class="cookieadmin_slider"></span>
+									</label>
+								</div>
+							</div>
+
+							<div class="cookieadmin-setting">
 								<label class="cookieadmin-title" for="cookieadmin_hide_powered_by">'.esc_html__('Hide Powered by Link', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
 									<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Hide powered by CookieAdmin on banner.', 'cookieadmin').'"></span>
 								</label>
@@ -166,7 +178,7 @@ class Settings{
 			</div>
 			</form>
 		</div>';
-		
+
 		\CookieAdmin\Admin::footer_theme();
 	}
 	
@@ -190,6 +202,8 @@ class Settings{
 		$cookieadmin_settings['cookieadmin_auto_scan'] = (isset( $_REQUEST['cookieadmin_auto_scan'] ) ? 1 : 0);
 		$cookieadmin_settings['consent_logs_expiry'] = (isset( $_REQUEST['cookieadmin_consent_logs_expiry'] ) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_consent_logs_expiry'])) : 0);
 		$cookieadmin_settings['consent_logs_expiry_days'] = (isset( $_REQUEST['cookieadmin_consent_logs_expiry_days'] ) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_consent_logs_expiry_days'])) : 365);
+		
+		$cookieadmin_settings['clarity_consent'] = !empty($_REQUEST['cookieadmin_clarity_consent']);
 		
 		if(empty($cookieadmin_error)){
 			update_option('cookieadmin_settings', $cookieadmin_settings);

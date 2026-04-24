@@ -14,7 +14,23 @@ class Consent{
 		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');		
 		$policy = cookieadmin_load_policy();
 		
-		$templates = implode("", cookieadmin_load_consent_template($policy[$view], $view));
+		$raw_template = cookieadmin_load_consent_template($policy[$view], $view);
+		
+		if(!is_array($raw_template) || empty($raw_template)){
+			return false;
+		}
+
+		$templates = implode("", $raw_template);
+		
+		if(empty($templates)){
+			echo '<div class="notice notice-error">
+					<p>
+						<strong>CookieAdmin Error:</strong> Cannot load required template file. 
+						Please reinstall the plugin or contact support.
+					</p>
+				</div>';
+			return false;
+		}
 		
 		$cookieadmin_requires_pro = \CookieAdmin\Admin::is_feature_available(1);
 		

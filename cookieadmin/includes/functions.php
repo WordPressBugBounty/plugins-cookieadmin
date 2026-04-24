@@ -238,21 +238,34 @@ function cookieadmin_load_strings($policy){
 //Loads consent data from file
 function cookieadmin_load_consent_template($policy, $view){
 	
+	$template = array();
+	
 	if(!file_exists(COOKIEADMIN_DIR.'assets/cookie/template.php')){
-		return false;
+		if(defined('WP_DEBUG') && WP_DEBUG){
+			error_log('CookieAdmin: template file missing');
+		}
+		return $template;
 	}
 	
 	include_once(COOKIEADMIN_DIR.'assets/cookie/template.php');
 	
 	if(empty($content)){
-		return false;
+		if(defined('WP_DEBUG') && WP_DEBUG){
+			error_log('CookieAdmin: Could not load template file');
+		}
+		return $template;
 	}
 	
-	$template = array();
 	$template[$view] = ($policy['cookieadmin_layout'] != 'popup') ? $content['cookieadmin_layout'][$policy['cookieadmin_layout']] : '';
 	$template[$view] .= $content['cookieadmin_modal'][$policy['cookieadmin_modal']];
-	$template[$view] .= $content['cookieadmin_reconsent'];
 	
+	global $cookieadmin_settings;
+	
+	// Show consent only if hide reconsent is not enabled
+	if(defined('COOKIEADMIN_PRO_VERSION') && empty($cookieadmin_settings['hide_reconsent'])){
+		$template[$view] .= $content['cookieadmin_reconsent'];
+	}
+
 	$cookieadmin_strings = cookieadmin_load_strings($policy);
 	
 	foreach($cookieadmin_strings as $ck => $cv){
