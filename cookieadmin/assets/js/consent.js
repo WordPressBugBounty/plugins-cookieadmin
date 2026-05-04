@@ -204,12 +204,18 @@ function cookieadmin_restore_cookies(update) {
 function cookieadmin_set_cookie(name, value, days = 365, domain = "") {
   if (!name || !value) return false;
 
+	if((cookieadmin_policy.is_pro != 0) && (cookieadmin_pro_vars !== 'undefined')){
+		if(cookieadmin_pro_vars.shared_subdomain_consent && cookieadmin_pro_vars.base_domain){
+			domain = cookieadmin_pro_vars.base_domain;
+		}
+	}
+  
   var date = new Date();
   date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // default 1 year
 
   var cookieString = `${encodeURIComponent(name)}=${JSON.stringify(value)};`;
   cookieString += ` expires=${date.toUTCString()};`;
-  cookieString += ` path=${cookieadmin_policy.base_path};`;
+	cookieString += ` path=${!domain ? cookieadmin_policy.base_path : '/'};`;
   cookieString += ` SameSite=Lax;`;
   if(cookieadmin_policy.is_ssl || window.location.protocol === 'https:'){
 	  cookieString += ` Secure;`;

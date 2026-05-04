@@ -117,58 +117,53 @@ class Admin{
 	static function header_theme($title = 'Dashboard'){
 		
 		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg;
-			
+
 		echo '
-		<div class="cookieadmin-metabox-holder columns-2">
-			<div class="cookieadmin-postbox-container">
-				<div style="margin: 10px 20px 0 2px;" class="wrap">			
+		<div class="cookieadmin-metabox-holder">
+			<div class="cookieadmin-header">
+				<div class="cookieadmin-header-left">
 					<div class="cookieadmin-icon">
 						<img class="cookieadmin-logo" src="'.esc_attr(COOKIEADMIN_PLUGIN_URL).'assets/images/cookieadmin-logo.png" alt="CookieAdmin Logo"> 
 					</div>
+					<span class="cookieadmin-header-version">v'.esc_html(COOKIEADMIN_VERSION).'</span>
 				</div>
-				<h2>'.esc_html($title).'</h2>';
-		
+				<div class="cookieadmin-header-right">
+					<a href="https://cookieadmin.net/docs" class="cookieadmin-header-link" target="_blank"><span class="dashicons dashicons-book-alt"></span> ' . esc_html__('Documentation', 'cookieadmin') . '</a>
+					<span class="cookieadmin-header-separator"></span>
+					<a href="https://softaculous.deskuss.com/open.php?topicId=26" class="cookieadmin-header-link" target="_blank"><span class="dashicons dashicons-sos"></span> ' . esc_html__('Support', 'cookieadmin') . '</a>
+				</div>
+			</div>
+			<h1 class="cookieadmin-page-title">'.esc_html($title).'</h1>';
+
 		if(!empty($cookieadmin_error)){
-			echo '<div id="cookieadmin_message" class="error"><p>'.esc_html($cookieadmin_error).'</p></div>';
+			echo '<div class="cookieadmin-notice"><div id="cookieadmin_message" class="error"><p>'.esc_html($cookieadmin_error).'</p></div></div>';
 		}
 		
 		if(!empty($cookieadmin_msg)){
-			echo '<div id="cookieadmin_message" class="updated"><p>'.esc_html($cookieadmin_msg).'</p></div>';
+			echo '<div class="cookieadmin-notice"><div id="cookieadmin_message" class="updated"><p>'.esc_html($cookieadmin_msg).'</p></div></div>';
 		}
+
+		echo '<div class="cookieadmin-postbox-container">';
 	}
 
 	// cookieadmin footer
 	static function footer_theme($no_twitter = 0){
 		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg;
-		
-		if(!defined('SITEPAD')){
-			echo '</div>
-			<div class="cookieadmin-footer">';
 
-			if(empty($no_twitter)){
-		
-				echo '<br/><div class="cookieadmin-twitter">
-					<span>'.esc_html__('Share with your followers', 'cookieadmin').'</span><br /><br />
-					<form method="get" action="https://twitter.com/intent/tweet" id="tweet" onsubmit="return cookieadmin_dotweet(this);">
-						<textarea name="text" cols="60" row="4" style="resize:none;">'.esc_html__('I easily manage Cookie Consent Banner on my #WordPress site using @cookieadmin', 'cookieadmin').'</textarea>
-						<br />
-						<input type="submit" value="Tweet!" class="cookieadmin-btn cookieadmin-btn-secondary" onsubmit="return false;" id="twitter-btn" style="margin-top:7px;"/>	
-					</form>				
-				</div>
-				<br/>
-				<hr>';
-		
-			}
-		
-			echo '<a href="'.esc_url(COOKIEADMIN_WWW_URL).'" target="_blank">CookieAdmin</a><span> v'.esc_html(COOKIEADMIN_VERSION).esc_html__(' You can report any bugs ', 'cookieadmin').'</span><a href="http://wordpress.org/support/plugin/cookieadmin" target="_blank">'.esc_html__('here', 'cookieadmin').'</a>. ';
-		
+		echo '</div>';
+
+		if(!defined('SITEPAD')){
+			echo '<div class="cookieadmin-footer">
+				<a href="'.esc_url(COOKIEADMIN_WWW_URL).'" target="_blank">CookieAdmin</a> v'.esc_html(COOKIEADMIN_VERSION).' &middot; ' . esc_html__('Report bugs', 'cookieadmin') . ' <a href="https://softaculous.deskuss.com/open.php?topicId=26" target="_blank">'.esc_html__('here', 'cookieadmin').'</a>';
+
 			if(defined('COOKIEADMIN_PREMIUM')){
-				echo 'Or email us at <a href="mailto:support@cookieadmin.net">support@cookieadmin.net</a>';
+				echo ' &middot; <a href="mailto:support@cookieadmin.net">'.esc_html__('Email support', 'cookieadmin').'</a>';
 			}
-		
-			echo '</div>
-			</div>';
+
+			echo '</div>';
 		}
+
+		echo '</div>';
 	}
 
 	static function cookieadmin_table_exists($table_name) {
@@ -387,7 +382,7 @@ class Admin{
 			return '';
 		}
 		
-		$msg = ' <sup style="font-size:11px;"><a href="'.COOKIEADMIN_PRO_URL.'" target="_blank" style="text-decoration:none; color:red;"><b>'.esc_html__('Pro', 'cookieadmin').'</b></a></sup>';
+		$msg = ' <a href="'.esc_url(COOKIEADMIN_PRO_URL).'" target="_blank" class="cookieadmin-pro-badge">'.esc_html__('Pro', 'cookieadmin').'</a>';
 		
 		if(!empty($return)){
 			return $msg;

@@ -219,6 +219,7 @@ $content = array(
 					</div>
 				</div>
 				<div class="cookieadmin_modal_footer">
+					[[override_gpc]]
 					<button type="button" class="cookieadmin_btn cookieadmin_reject_btn" id="cookieadmin_reject_modal_button">Reject All</button>
 					<button type="button" class="cookieadmin_btn cookieadmin_save_btn" id="cookieadmin_prf_modal_button">Save My Preferences</button>
 					<button type="button" class="cookieadmin_btn cookieadmin_accept_btn" id="cookieadmin_accept_modal_button">Accept All</button>
@@ -310,6 +311,7 @@ $content = array(
 					</div>
 				</div>
 				<div class="cookieadmin_modal_footer">
+					[[override_gpc]]
 					<button type="button" class="cookieadmin_btn cookieadmin_reject_btn" id="cookieadmin_reject_modal_button">Reject All</button>
 					<button type="button" class="cookieadmin_btn cookieadmin_save_btn" id="cookieadmin_prf_modal_button">Save My Preferences</button>
 					<button type="button" class="cookieadmin_btn cookieadmin_accept_btn" id="cookieadmin_accept_modal_button">Accept All</button>

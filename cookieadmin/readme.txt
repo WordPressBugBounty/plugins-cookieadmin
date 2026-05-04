@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -32,6 +32,9 @@ Pro Features :
 
 * Advanced Cookie Scanning
 * Google Consent Mode v2
+* Microsoft Clarity Consent Mode v2
+* Content Blocking
+* Sub Domain Consent sharing support
 * User Country Detection
 * Multilingual - 17 Languages supported
 * Consent Logs
@@ -75,6 +78,13 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.9 =
+* [Pro Feature] Content Blocking: Admins can prevent content services like, Youtube, Vimeo, Google Maps and few other services from loading until, user accepts the required cookies.
+* [Pro Feature] Subdomain Support: If enabled, user consent preferences are shared and respected across all subdomains.
+* [Bug Fix] GPC override option was not visible, if the form of Preference was changed, this has been fixed.
+* [Improvement] Improved and User Interface.
+
 
 = 1.1.8 =
 * [Pro Feature] Support for Microsoft Clarity consent mode.

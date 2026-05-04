@@ -75,60 +75,56 @@ class Scan{
 		
 		echo '
 		<div class="cookieadmin_consent-wrap">
-			<form action="" method="post">
-			<div class="cookieadmin_consent-contents">
-				<div class="cookieadmin_consent_settings">
-					<div class="cookieadmin-setting cookieadmin-manager-cookie-scan">
-						<div class="cookieadmin-scan-cookie-info">
-							<label class="cookieadmin-title">'.esc_html__('Scanned Cookies', 'cookieadmin').'</label>
-							<p class="cookieadmin-desc">'.esc_html__('Scanned cookies will be automatically categorised and displayed here. You can add, edit and delete cookies as per your needs.', 'cookieadmin').'</p>
-						</div>
-						<div class="cookieadmin-setting-contents cookieadmin-buttons-div">
-							<div class="cookieadmin-setting-contents cookieadmin-add-cookie-div">
-								<input type="button" class="cookieadmin-btn cookieadmin-btn-primary cookieadmin-add-cookie" value="'.esc_html__('Add Cookie', 'cookieadmin').'" cookieadmin-pro-only="1"></input>
-								'.wp_kses_post($cookieadmin_requires_pro).'
-							</div>
-							<div class="cookieadmin-setting-contents cookieadmin-cookie-scan'.( !empty($cookieadmin_requires_pro) ? ' cookieadmin-tooltip-box' : '').'" data-tip="'.esc_html__('Basic scan might miss some cookies.', 'cookieadmin').'">'.
-								( !empty($cookieadmin_requires_pro) ? '
-								<input type="button" class="cookieadmin-btn cookieadmin-btn-primary cookieadmin-scan" value="'.esc_html__('Scan', 'cookieadmin').'"></input> ' : '').'
-								<input type="button" class="cookieadmin-btn cookieadmin-btn-primary cookieadmin-scan" value="'.esc_html__('Full Scan', 'cookieadmin').'" cookieadmin-pro-only="1">
-								'.wp_kses_post($cookieadmin_requires_pro).'
-							</div>
-						</div>
-						';
-						do_action('cookieadmin_before_scan_results');
-						echo '<div class="cookieadmin-manager-result">
-							<table class="cookieadmin-table cookieadmin-cookie-categorized">
-								<thead>
-									<tr>
-										<th width="30%">'.esc_html__('Name', 'cookieadmin').'</th>
-										<th width="50%">'.esc_html__('Description', 'cookieadmin').'</th>
-										<th width="10%">'.esc_html__('Expiry', 'cookieadmin').'</th>
-										<th width="10%">'.esc_html__('Action', 'cookieadmin').'</th>
-									</tr>
-								</thead>
-								<tbody id="necessary_tbody">
-									<tr><td colspan=4>'.esc_html__('Necessary Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Necessary']) ? $no_cookies_hidden . wp_kses_post($categorized['Necessary']) : $no_cookies ).'
-								</tbody>
-								<tbody id="functional_tbody">
-									<tr><td colspan=4>'.esc_html__('Functional Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Functional']) ? $no_cookies_hidden . wp_kses_post($categorized['Functional']) : $no_cookies ).'
-								</tbody>
-								<tbody id="analytics_tbody">
-									<tr><td colspan=4>'.esc_html__('Analytical Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Analytics']) ? $no_cookies_hidden . wp_kses_post($categorized['Analytics']) :$no_cookies ).'
-								</tbody>
-								<tbody id="marketing_tbody">
-									<tr><td colspan=4>'.esc_html__('Marketing Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Marketing']) ? $no_cookies_hidden . wp_kses_post($categorized['Marketing']) : $no_cookies ).'
-								</tbody>
-								<tbody id="unknown_tbody">
-									<tr><td colspan=4>'.esc_html__('Unknown Cookies', 'cookieadmin').'</td></tr>
-									'.( !empty($categorized['Unknown']) ? $no_cookies_hidden . wp_kses_post($categorized['Unknown']) : $no_cookies ).'
-								</tbody>
-							</table>
-						</div>
+			<form action="" method="post">';
+			do_action('cookieadmin_before_scan_results');
+			
+			echo '<div class="cookieadmin-card">
+				<div class="cookieadmin-card-header">
+					<div>
+					<span class="cookieadmin-card-title"><span class="dashicons dashicons-list-view"></span> '.esc_html__('Scanned Cookies', 'cookieadmin').'</span>
+					<p class="cookieadmin-desc">'.esc_html__('Scanned cookies will be automatically categorised and displayed here. You can add, edit and delete cookies as per your needs.', 'cookieadmin').'</p>
+					</div>
+					<div class="cookieadmin-toolbar-actions">
+							<input type="button" class="cookieadmin-btn cookieadmin-btn-secondary cookieadmin-add-cookie" value="'.esc_html__('Add Cookie', 'cookieadmin').'" cookieadmin-pro-only="1"></input>
+							'.wp_kses_post($cookieadmin_requires_pro).
+							( !empty($cookieadmin_requires_pro) ? '
+							<input type="button" class="cookieadmin-btn cookieadmin-btn-primary cookieadmin-scan" value="'.esc_html__('Scan', 'cookieadmin').'"></input> ' : '').'
+							<input type="button" class="cookieadmin-btn cookieadmin-btn-primary cookieadmin-scan" value="'.esc_html__('Full Scan', 'cookieadmin').'" cookieadmin-pro-only="1">
+							'.wp_kses_post($cookieadmin_requires_pro).'
+					</div>
+				</div>
+				<div class="cookieadmin-card-body">
+					<div class="cookieadmin-manager-result">
+						<table class="cookieadmin-table cookieadmin-cookie-categorized">
+							<thead>
+								<tr>
+									<th width="30%">'.esc_html__('Name', 'cookieadmin').'</th>
+									<th width="50%">'.esc_html__('Description', 'cookieadmin').'</th>
+									<th width="10%">'.esc_html__('Expiry', 'cookieadmin').'</th>
+									<th width="10%">'.esc_html__('Action', 'cookieadmin').'</th>
+								</tr>
+							</thead>
+							<tbody id="necessary_tbody">
+								<tr><td colspan=4>'.esc_html__('Necessary Cookies', 'cookieadmin').'</td></tr>
+								'.( !empty($categorized['Necessary']) ? $no_cookies_hidden . wp_kses_post($categorized['Necessary']) : $no_cookies ).'
+							</tbody>
+							<tbody id="functional_tbody">
+								<tr><td colspan=4>'.esc_html__('Functional Cookies', 'cookieadmin').'</td></tr>
+								'.( !empty($categorized['Functional']) ? $no_cookies_hidden . wp_kses_post($categorized['Functional']) : $no_cookies ).'
+							</tbody>
+							<tbody id="analytics_tbody">
+								<tr><td colspan=4>'.esc_html__('Analytical Cookies', 'cookieadmin').'</td></tr>
+								'.( !empty($categorized['Analytics']) ? $no_cookies_hidden . wp_kses_post($categorized['Analytics']) :$no_cookies ).'
+							</tbody>
+							<tbody id="marketing_tbody">
+								<tr><td colspan=4>'.esc_html__('Marketing Cookies', 'cookieadmin').'</td></tr>
+								'.( !empty($categorized['Marketing']) ? $no_cookies_hidden . wp_kses_post($categorized['Marketing']) : $no_cookies ).'
+							</tbody>
+							<tbody id="unknown_tbody">
+								<tr><td colspan=4>'.esc_html__('Unknown Cookies', 'cookieadmin').'</td></tr>
+								'.( !empty($categorized['Unknown']) ? $no_cookies_hidden . wp_kses_post($categorized['Unknown']) : $no_cookies ).'
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>';

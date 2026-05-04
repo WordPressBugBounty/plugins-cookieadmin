@@ -22,160 +22,241 @@ class Settings{
 		<div class="cookieadmin_consent-wrap">
 			<form action="" method="post" id="setting_submenu">
 
-			<div class="cookieadmin_consent-contents">
-				<div class="cookieadmin_consent_settings">
-					<div class="cookieadmin-contents cookieadmin-settings">
-						<div class="cookieadmin-setting setting-prior">
-							<label class="cookieadmin-title">'.esc_html__('Load Cookies prior to consent', 'cookieadmin').'
-								<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Selected category of cookies will be loaded before user consent.', 'cookieadmin').'"></span>
+			<div class="cookieadmin-card">
+				<div class="cookieadmin-card-header">
+					<span class="cookieadmin-card-title"><span class="dashicons dashicons-download"></span> '.esc_html__('Cookie Loading', 'cookieadmin').'</span>
+				</div>
+				<div class="cookieadmin-card-body">
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title">'.esc_html__('Load cookies prior to consent', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Selected category of cookies will be loaded before user consent.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-horizontal" style="cursor:pointer; font-weight:400;">
+								<input name="cookieadmin_preload[]" type="checkbox" value="necessary" checked disabled>
+								'.esc_html__('Necessary', 'cookieadmin').'
 							</label>
-							<div class="cookieadmin-setting-contents">
-							
-								<input name="cookieadmin_preload[]" type="checkbox" id="necessary_preload" value="necessary" checked disabled>
-								<label class="cookieadmin-input" for="necessary_preload">'.esc_html__('Necessary', 'cookieadmin').'</label>
-								
+							<label class="cookieadmin-horizontal" style="cursor:pointer; font-weight:400;">
 								<input name="cookieadmin_preload[]" type="checkbox" id="functional_preload" value="functional" '.(!empty($policy[$view]['preload']) && in_array("functional", $policy[$view]['preload']) ? 'checked' : '').'>
-								<label class="cookieadmin-input" for="functional_preload">'.esc_html__('Functional', 'cookieadmin').'</label>
-								
-								<input name="cookieadmin_preload[]" type="checkbox" id="analytics_preload" value="analytics" '.(!empty($policy[$view]['preload']) && in_array("analytics", $policy[$view]['preload']) ? 'checked' : '').'>
-								<label class="cookieadmin-input" for="analytics_preload">'.esc_html__('Analytical', 'cookieadmin').'</label>
-								
-								<input name="cookieadmin_preload[]" type="checkbox" id="marketing_preload" value="marketing" '.(!empty($policy[$view]['preload']) && in_array("marketing", $policy[$view]['preload']) ? 'checked' : '').'>
-								<label for="marketing_preload">'.esc_html__('Advertisement', 'cookieadmin').'</label>
-							</div>
-						</div>'.(!empty($policy[$view]['preload']) ? '<p class="cookieadmin-collapsible-notice">'.esc_html__('Loading cookies prior to receiving user consent will make your website non-compliant with GDPR.', 'cookieadmin').'</p>' : '').'
-						
-						<div class="cookieadmin-setting setting-reload">
-							<label class="cookieadmin-title" for="cookieadmin_reload_on_consent">'.esc_html__('Reload page on consent', 'cookieadmin').'
-								<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Page will be loaded on user consent.', 'cookieadmin').'"></span>
+								'.esc_html__('Functional', 'cookieadmin').'
 							</label>
-							<div class="cookieadmin-setting-contents">
-								<label class="cookieadmin_toggle">
-									<input name="cookieadmin_reload_on_consent" type="checkbox" id="cookieadmin_reload_on_consent" '.(!empty($policy[$view]['reload_on_consent']) ? 'checked' : '').'>
-									<span class="cookieadmin_slider"></span>
-								</label>
-							</div>
-						</div>
-
-						<div class="coookieadmin-contents" cookieadmin-pro-only="1">
-							<div class="cookieadmin-setting">
-								<label class="cookieadmin-title" for="cookieadmin_google_consent_mode_v2">'.esc_html__('Google Consent Mode v2', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
-									<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Enable Google consent mode v2.', 'cookieadmin').'"></span>
-								</label>
-								<div class="cookieadmin-setting-contents">
-									<label class="cookieadmin_toggle">
-										<input name="cookieadmin_google_consent_mode_v2" type="checkbox" id="cookieadmin_google_consent_mode_v2" '.(!empty($cookieadmin_settings['google_consent_mode_v2']) && cookieadmin_is_pro() ? 'checked' : '').'>
-										<span class="cookieadmin_slider"></span>
-									</label>
-								</div>
-							</div>
-
-							<div class="cookieadmin-setting">
-								<label class="cookieadmin-title" for="cookieadmin_clarity_consent">'.esc_html__('Clarity Consent Mode V2', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
-									<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Enable Microsoft Clarity consent mode v2.', 'cookieadmin').'"></span>
-								</label>
-								<div class="cookieadmin-setting-contents">
-									<label class="cookieadmin_toggle">
-										<input name="cookieadmin_clarity_consent" type="checkbox" id="cookieadmin_clarity_consent" '.(!empty($cookieadmin_settings['clarity_consent']) && cookieadmin_is_pro() ? 'checked' : '').'>
-										<span class="cookieadmin_slider"></span>
-									</label>
-								</div>
-							</div>
-
-							<div class="cookieadmin-setting">
-								<label class="cookieadmin-title" for="cookieadmin_hide_powered_by">'.esc_html__('Hide Powered by Link', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
-									<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Hide powered by CookieAdmin on banner.', 'cookieadmin').'"></span>
-								</label>
-								<div class="cookieadmin-setting-contents">
-									<label class="cookieadmin_toggle">
-										<input name="cookieadmin_hide_powered_by" type="checkbox" id="cookieadmin_hide_powered_by" '.(!empty($cookieadmin_settings['hide_powered_by']) && cookieadmin_is_pro() ? 'checked' : '').'>
-										<span class="cookieadmin_slider"></span>
-									</label>
-								</div>
-							</div>
-
-							<div class="cookieadmin-setting">
-								<label class="cookieadmin-title" for="cookieadmin_hide_reconsent">'.esc_html__('Hide Re-consent Icon', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
-									<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Hide reconsent icon after user consent.', 'cookieadmin').'"></span>
-								</label>
-								<div class="cookieadmin-setting-contents">
-									<label class="cookieadmin_toggle">
-										<input name="cookieadmin_hide_reconsent" type="checkbox" id="cookieadmin_hide_reconsent" '.(!empty($cookieadmin_settings['hide_reconsent']) && cookieadmin_is_pro() ? 'checked' : '').'>
-										<span class="cookieadmin_slider"></span>
-									</label>
-								</div>
-							</div>
-
-							<div class="cookieadmin-setting">
-								<label class="cookieadmin-title" for="cookieadmin_auto_scan">'.esc_html__('Auto Cookies Scan', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
-									<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Monthly auto scan will detect cookies.', 'cookieadmin').'"></span>
-								</label>
-								<div class="cookieadmin-setting-contents">
-									<label class="cookieadmin_toggle">
-										<input name="cookieadmin_auto_scan" type="checkbox" id="cookieadmin_auto_scan" '.(!empty($cookieadmin_settings['cookieadmin_auto_scan']) && cookieadmin_is_pro() ? 'checked' : '').'>
-										<span class="cookieadmin_slider"></span>
-									</label>
-								</div>
-							</div>
-
-							<div class="cookieadmin-setting">
-								<label class="cookieadmin-title" for="cookieadmin_consent_logs_expiry">'.esc_html__('Consent Log Cleanup', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
-									<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Daily auto delete consent logs older than the set limit.', 'cookieadmin').'"></span>
-								</label>
-								<div class="cookieadmin-setting-contents cookieadmin-setting cookieadmin-setting-logs">
-									<label class="cookieadmin_toggle">
-										<input name="cookieadmin_consent_logs_expiry" type="checkbox" id="cookieadmin_consent_logs_expiry" '.(!empty($cookieadmin_settings['consent_logs_expiry']) && cookieadmin_is_pro() ? 'checked' : '').'>
-										<span class="cookieadmin_slider"></span>
-									</label>
-									<input name="cookieadmin_consent_logs_expiry_days" class="cookieadmin-tooltip-box" id="cookieadmin_consent_logs_expiry_days" value="'.((!empty($cookieadmin_settings['consent_logs_expiry_days']) && cookieadmin_is_pro()) ? esc_attr($cookieadmin_settings['consent_logs_expiry_days']) : '365').'" data-tip="'.esc_html__('Keep consent logs for these many days', 'cookieadmin').'">
-									<input type="button" class="button '.(cookieadmin_is_pro() ? ' cookieadmin-purge-consent-btn cookieadmin-tooltip-box' : '').'" data-tip="'.esc_html__('Delete consent logs older than the set limit (runs once)', 'cookieadmin').'" value="'.esc_html__('Delete Now', 'cookieadmin').'"/>
-								</div>
-							</div>
-
-							<div class="cookieadmin-setting">
-								<label class="cookieadmin-title" for="cookieadmin_respect_gpc">'.esc_html__('Respect Global Privacy Control', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
-									<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Automatically honor GPC signals from browsers. When enabled, users with GPC enabled will automatically have non-essential cookies rejected.', 'cookieadmin').'"></span>
-								</label>
-								<div class="cookieadmin-setting-contents">
-									<label class="cookieadmin_toggle">
-										<input name="cookieadmin_respect_gpc" type="checkbox" id="cookieadmin_respect_gpc" '.(!empty($cookieadmin_settings['respect_gpc']) && cookieadmin_is_pro() ? 'checked' : '').'>
-										<span class="cookieadmin_slider"></span>
-									</label>
-								</div>
-							</div>
-
-							<div class="cookieadmin-setting">
-								<label class="cookieadmin-title" for="cookieadmin_gpc_message">'.esc_html__('GPC Message', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
-									<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Custom message shown when GPC preference is honored.', 'cookieadmin').'"></span>
-								</label>
-								<div class="cookieadmin-setting-contents">
-									<textarea name="cookieadmin_gpc_message" id="cookieadmin_gpc_message" rows="5" cols="50" '.(!cookieadmin_is_pro() ? 'disabled' : '').'>'.esc_textarea(!empty($cookieadmin_settings['gpc_message']) ? $cookieadmin_settings['gpc_message'] : (!empty($cookieadmin['gpc_message_default']) ? $cookieadmin['gpc_message_default'] : '')).'</textarea>
-								</div>
-							</div>
-
-							<div class="cookieadmin-setting">
-								<label class="cookieadmin-title" for="cookieadmin_gpc_override_warning">'.esc_html__('GPC Override Warning', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'
-									<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Warning shown when user tries to enable cookies while GPC signal is active.', 'cookieadmin').'"></span>
-								</label>
-								<div class="cookieadmin-setting-contents">
-									<textarea name="cookieadmin_gpc_override_warning" id="cookieadmin_gpc_override_warning" rows="5" cols="50" '.(!cookieadmin_is_pro() ? 'disabled' : '').'>'.esc_textarea(!empty($cookieadmin_settings['gpc_override_warning']) ? $cookieadmin_settings['gpc_override_warning'] : (!empty($cookieadmin['gpc_override_warning_default']) ? $cookieadmin['gpc_override_warning_default'] : '')).'</textarea>
-								</div>
-							</div>
-						</div>
-
-						<div class="cookieadmin-setting cookieadmin-save-settings">
-							<div class="cookieadmin-setting-contents">
-								<span><input type="submit" name="cookieadmin_save_settings" class="cookieadmin-btn cookieadmin-btn-primary" value="'.esc_html__('Save Settings', 'cookieadmin').'"></span>
-							</div>
+							<label class="cookieadmin-horizontal" style="cursor:pointer; font-weight:400;">
+								<input name="cookieadmin_preload[]" type="checkbox" id="analytics_preload" value="analytics" '.(!empty($policy[$view]['preload']) && in_array("analytics", $policy[$view]['preload']) ? 'checked' : '').'>
+								'.esc_html__('Analytical', 'cookieadmin').'
+							</label>
+							<label class="cookieadmin-horizontal" style="cursor:pointer; font-weight:400;">
+								<input name="cookieadmin_preload[]" type="checkbox" id="marketing_preload" value="marketing" '.(!empty($policy[$view]['preload']) && in_array("marketing", $policy[$view]['preload']) ? 'checked' : '').'>
+								'.esc_html__('Advertisement', 'cookieadmin').'
+							</label>
+							
+							<div class="cookieadmin-collapsible-notice" style="display:'.(!empty($policy[$view]['preload'])? 'block':'none').'">'.esc_html__('Loading cookies prior to receiving user consent will make your website non-compliant with GDPR.', 'cookieadmin').'</div>
 						</div>
 					</div>
-				</div>';
 
-				wp_nonce_field('cookieadmin_admin_nonce', 'cookieadmin_security');
-				echo '
-				<br/>
-				<br/>
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_reload_on_consent">'.esc_html__('Reload page on consent', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Page will be loaded on user consent.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_reload_on_consent" type="checkbox" id="cookieadmin_reload_on_consent" '.(!empty($policy[$view]['reload_on_consent']) ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>';
+
+		// Card: Advanced Features (PRO)
+		echo '
+			<div class="cookieadmin-card cookieadmin-mt-16" cookieadmin-pro-only="1">
+				<div class="cookieadmin-card-header">
+					<span class="cookieadmin-card-title"><span class="dashicons dashicons-star-filled"></span> '.esc_html__('Advanced Features', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</span>
+				</div>
+				<div class="cookieadmin-card-body">
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_google_consent_mode_v2">'.esc_html__('Google Consent Mode v2', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Enable Google consent mode v2.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_google_consent_mode_v2" type="checkbox" id="cookieadmin_google_consent_mode_v2" '.(!empty($cookieadmin_settings['google_consent_mode_v2']) && cookieadmin_is_pro() ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_clarity_consent">'.esc_html__('Clarity Consent Mode V2', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Enable Microsoft Clarity consent mode v2.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_clarity_consent" type="checkbox" id="cookieadmin_clarity_consent" '.(!empty($cookieadmin_settings['clarity_consent']) && cookieadmin_is_pro() ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_hide_powered_by">'.esc_html__('Hide Powered by Link', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Hide powered by CookieAdmin on banner.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_hide_powered_by" type="checkbox" id="cookieadmin_hide_powered_by" '.(!empty($cookieadmin_settings['hide_powered_by']) && cookieadmin_is_pro() ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_hide_reconsent">'.esc_html__('Hide Re-consent Icon', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Hide reconsent icon after user consent.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_hide_reconsent" type="checkbox" id="cookieadmin_hide_reconsent" '.(!empty($cookieadmin_settings['hide_reconsent']) && cookieadmin_is_pro() ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_auto_scan">'.esc_html__('Auto Cookies Scan', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Monthly auto scan will detect cookies.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_auto_scan" type="checkbox" id="cookieadmin_auto_scan" '.(!empty($cookieadmin_settings['cookieadmin_auto_scan']) && cookieadmin_is_pro() ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_shared_subdomain_consent">'.esc_html__('Shared Subdomain Consent', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Enable shared consent across subdomains.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_shared_subdomain_consent" type="checkbox" id="cookieadmin_shared_subdomain_consent" '.(!empty($cookieadmin_settings['shared_subdomain_consent']) && cookieadmin_is_pro() ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+
+					<div class="cookieadmin-setting setting-blocking">
+						<label class="cookieadmin-title" for="cookieadmin_content_blocking">'.esc_html__('Content Blocking', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Block third-party content which uses iframes to load cookies until user consent is given.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_content_blocking" type="checkbox" id="cookieadmin_content_blocking" '.(!empty($cookieadmin_settings['content_blocking']) && cookieadmin_is_pro() ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+
+					<div class="cookieadmin-content-blocking-options" style="display: '.(!empty($cookieadmin_settings['content_blocking']) ? 'block' : 'none').';">
+						<div class="cookieadmin-cb-services">
+							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="youtube" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('youtube', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('YouTube', 'cookieadmin').'</label>
+							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="vimeo" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('vimeo', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('Vimeo', 'cookieadmin').'</label>
+							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="soundcloud" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('soundcloud', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('SoundCloud', 'cookieadmin').'</label>
+							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="dailymotion" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('dailymotion', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('Dailymotion', 'cookieadmin').'</label>
+							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="maps" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('maps', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('Google Maps', 'cookieadmin').'</label>
+						</div>
+					</div>
+				</div>
+			</div>';
+
+		// Card: Data Management (PRO)
+		echo '
+			<div class="cookieadmin-card cookieadmin-mt-16" cookieadmin-pro-only="1">
+				<div class="cookieadmin-card-header">
+					<span class="cookieadmin-card-title"><span class="dashicons dashicons-database"></span> '.esc_html__('Data Management', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</span>
+				</div>
+				<div class="cookieadmin-card-body">
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_consent_logs_expiry">'.esc_html__('Consent Log Cleanup', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Daily auto delete consent logs older than the set limit.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_consent_logs_expiry" type="checkbox" id="cookieadmin_consent_logs_expiry" '.(!empty($cookieadmin_settings['consent_logs_expiry']) && cookieadmin_is_pro() ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+							<input name="cookieadmin_consent_logs_expiry_days" id="cookieadmin_consent_logs_expiry_days" class="cookieadmin-tooltip-box" value="'.((!empty($cookieadmin_settings['consent_logs_expiry_days']) && cookieadmin_is_pro()) ? esc_attr($cookieadmin_settings['consent_logs_expiry_days']) : '365').'" data-tip="'.esc_html__('Keep consent logs for these many days', 'cookieadmin').'" style="width:60px; text-align:center; margin:0 10px;">
+							<input type="button" class="cookieadmin-btn cookieadmin-btn-sm '.((cookieadmin_is_pro()) ? ' cookieadmin-btn-danger cookieadmin-tooltip-box cookieadmin-purge-consent-btn' : '').'" data-tip="'.esc_html__('Delete consent logs older than the set limit (runs once)', 'cookieadmin').'" value="'.esc_html__('Delete Now', 'cookieadmin').'"/>
+						</div>
+					</div>
+				</div>
+			</div>';
+
+		// Card: Global Privacy Control (PRO)
+		echo '
+			<div class="cookieadmin-card cookieadmin-mt-16" cookieadmin-pro-only="1">
+				<div class="cookieadmin-card-header">
+					<span class="cookieadmin-card-title"><span class="dashicons dashicons-privacy"></span> '.esc_html__('Global Privacy Control', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</span>
+				</div>
+				<div class="cookieadmin-card-body">
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_respect_gpc">'.esc_html__('Respect GPC', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Automatically honor GPC signals from browsers. When enabled, users with GPC enabled will automatically have non-essential cookies rejected.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_respect_gpc" type="checkbox" id="cookieadmin_respect_gpc" '.(!empty($cookieadmin_settings['respect_gpc']) && cookieadmin_is_pro() ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_gpc_message">'.esc_html__('GPC Message', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Custom message shown when GPC preference is honored.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<textarea name="cookieadmin_gpc_message" id="cookieadmin_gpc_message" rows="4" style="width:100%; max-width:500px;" '.(!cookieadmin_is_pro() ? 'disabled' : '').'>'.esc_textarea(!empty($cookieadmin_settings['gpc_message']) ? $cookieadmin_settings['gpc_message'] : (!empty($cookieadmin['gpc_message_default']) ? $cookieadmin['gpc_message_default'] : '')).'</textarea>
+						</div>
+					</div>
+
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_gpc_override_warning">'.esc_html__('GPC Override Warning', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Warning shown when user tries to enable cookies while GPC signal is active.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<textarea name="cookieadmin_gpc_override_warning" id="cookieadmin_gpc_override_warning" rows="4" style="width:100%; max-width:500px;" '.(!cookieadmin_is_pro() ? 'disabled' : '').'>'.esc_textarea(!empty($cookieadmin_settings['gpc_override_warning']) ? $cookieadmin_settings['gpc_override_warning'] : (!empty($cookieadmin['gpc_override_warning_default']) ? $cookieadmin['gpc_override_warning_default'] : '')).'</textarea>
+						</div>
+					</div>
+				</div>
+			</div>';
+			wp_nonce_field('cookieadmin_admin_nonce', 'cookieadmin_security');
+
+			echo '
+			<div class="cookieadmin-save-bar">
+				<input type="submit" name="cookieadmin_save_settings" class="cookieadmin-btn cookieadmin-btn-primary" value="'.esc_html__('Save Settings', 'cookieadmin').'">
 			</div>
+
 			</form>
 		</div>';
 
@@ -204,6 +285,12 @@ class Settings{
 		$cookieadmin_settings['consent_logs_expiry_days'] = (isset( $_REQUEST['cookieadmin_consent_logs_expiry_days'] ) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_consent_logs_expiry_days'])) : 365);
 		
 		$cookieadmin_settings['clarity_consent'] = !empty($_REQUEST['cookieadmin_clarity_consent']);
+		$cookieadmin_settings['shared_subdomain_consent'] = !empty($_REQUEST['cookieadmin_shared_subdomain_consent']);
+		$cookieadmin_settings['content_blocking'] = !empty($_REQUEST['cookieadmin_content_blocking']);
+		$cookieadmin_settings['content_blocking_services'] = [];
+		if(!empty($_REQUEST['cookieadmin_content_blocking_services'])){
+			$cookieadmin_settings['content_blocking_services'] = array_map('sanitize_text_field', wp_unslash($_REQUEST['cookieadmin_content_blocking_services']));
+		}
 		
 		if(empty($cookieadmin_error)){
 			update_option('cookieadmin_settings', $cookieadmin_settings);
