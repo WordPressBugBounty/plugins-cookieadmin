@@ -90,52 +90,112 @@ class Enduser{
 		self::$http_cookies = $http_cookies;
 	} */
 	
-	static function check_if_cookies_allowed($tag, $handle, $src){
+	static function block_scripts(){
+
+		if(wp_doing_ajax() || is_admin() || defined('REST_REQUEST') || defined('COOKIEADMIN_SCANNER') || cookieadmin_is_editor_mode()){
+			return;
+		}
+		
+		$settings = get_option('cookieadmin_settings');
+		
+		// If block scripts is disabled, we don't need to make any changes
+		if(empty($settings) || empty($settings['block_scripts'])){
+			return;
+		}
+
+		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');
+		$policy = cookieadmin_load_policy();
+		if(empty($policy) || empty($view)){
+			return;
+		}
+
+		ob_start([__CLASS__, 'update_tracking_scripts']);
+	}
+
+	static function update_tracking_scripts($html){
+
+		if(stripos($html, '<script') === false){
+			return $html;
+		}
+
+		if(empty(self::$categorized_cookies)){
+			return $html;
+		}
 
 		$cookieadmin_consent = isset($_COOKIE['cookieadmin_consent'])
 							? json_decode(wp_unslash($_COOKIE['cookieadmin_consent']), true)
 							: [];
 
+		// Sanitizing cookies
 		array_walk( $cookieadmin_consent, function( $value, $key ) use ( &$cookieadmin_consent ) {
 			$sanitized_key = sanitize_key( $key );
 			$cookieadmin_consent[ $sanitized_key ] = sanitize_text_field($value);
 		} );
-		
-		foreach (self::$categorized_cookies as $item) {
-			$category = !empty($item->category) ? strtolower($item->category) : '';
-			$patterns = !empty($item->patterns) ? json_decode($item->patterns, true) : '';
-			
-			if (!empty($patterns) && !empty($category)) {
-				foreach ($patterns as $pattern) {
-					if (strpos($src, $pattern) !== false) {
-						
-						if ( $category !== 'necessary' && 
+
+		$html = preg_replace_callback(
+			'/<script\b([^>]*)>([\s\S]*?)<\/script>/i',
+			function($match) use ($cookieadmin_consent){
+				$attrs = $match[1];
+				$content = $match[2];
+				$full_tag = $match[0];
+
+				if(preg_match('/\btype\s*=\s*["\']text\/plain["\']/i', $attrs)){
+					return $full_tag;
+				}
+
+				if(preg_match('/\b(id|src)\s*=\s*["\'][^"\']*cookieadmin[^"\']*["\']/i', $attrs)){
+					return $full_tag;
+				}
+
+				if(preg_match('/\btype\s*=\s*["\']([^"\']+)["\']/i', $attrs, $type_match)){
+					$type = strtolower(trim($type_match[1]));
+					if($type !== 'text/javascript' && $type !== 'module'){
+						return $full_tag;
+					}
+				}
+
+				$src = '';
+				if(preg_match('/\bsrc\s*=\s*["\']([^"\']*)["\']/i', $attrs, $src_match)){
+					$src = $src_match[1];
+				}
+
+				$match_against = !empty($src) ? $src : trim($attrs . ' ' . $content);
+
+				if(empty($match_against)){
+					return $full_tag;
+				}
+
+				foreach (self::$categorized_cookies as $item) {
+					$category = !empty($item->category) ? strtolower($item->category) : '';
+					$patterns = !empty($item->patterns) ? json_decode($item->patterns, true) : '';
+
+					if(empty($patterns) || empty($category)){
+						continue;
+					}
+
+					foreach ($patterns as $pattern) {
+						if(strpos($match_against, $pattern) !== false){
+							if($category !== 'necessary' && 
 								(empty($cookieadmin_consent) || 
 									(!empty($cookieadmin_consent[$category]) && $cookieadmin_consent[$category] == 'false') || 
 									(!empty($cookieadmin_consent['reject']) && $cookieadmin_consent['reject'] == 'true')
 								)
-							) {
-							
-							// User has NOT consented -> block the script
-
-							// Option 1 - completely remove script:
-							// return '';
-
-							// Option 2 - transform to type="text/plain"
-							$tag = str_replace(
-								'<script ',
-								'<script type="text/plain" data-cookieadmin-category="' . esc_attr($category) . '" ',
-								$tag
-							);
-							
-							return $tag;
+							){
+								if($attrs === ''){
+									return '<script type="text/plain" data-cookieadmin-category="' . esc_attr($category) . '">' . $content . '</script>';
+								}
+								return '<script type="text/plain" data-cookieadmin-category="' . esc_attr($category) . '"' . $attrs . '>' . $content . '</script>';
+							}
 						}
 					}
 				}
-			}
-		}
 
-		return $tag;
+				return $full_tag;
+			},
+			$html
+		);
+
+		return $html;
 	}
 	
 	static function cookieadmin_show_banner(){

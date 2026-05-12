@@ -3,7 +3,7 @@
 Plugin Name: CookieAdmin - Cookie Consent Banner
 Plugin URI: https://cookieadmin.net
 Description: CookieAdmin provides easy to configure cookie consent banner with GDPR and CCPA law support.
-Version: 1.1.9
+Version: 1.2.0
 Author: Softaculous
 Author URI: https://www.softaculous.com
 License: LGPL v2.1
@@ -37,7 +37,7 @@ if(defined('COOKIEADMIN_VERSION')) {
 define('COOKIEADMIN_FILE', __FILE__);
 define('COOKIEADMIN_BASE', plugin_basename(COOKIEADMIN_FILE));
 define('COOKIEADMIN_DIR', plugin_dir_path(__FILE__));
-define('COOKIEADMIN_VERSION', '1.1.9');
+define('COOKIEADMIN_VERSION', '1.2.0');
 define('COOKIEADMIN_URL', plugins_url('', COOKIEADMIN_FILE));
 define('COOKIEADMIN_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('COOKIEADMIN_PRO_URL', 'https://cookieadmin.net/pricing?from=plugin');
@@ -82,6 +82,13 @@ register_deactivation_hook(__FILE__, 'cookieadmin_deactivate');
 
 function cookieadmin_activate() {
 	
+	// Setting Defaults
+	$settings = get_option('cookieadmin_settings', []);
+	if(!isset($settings['block_scripts'])){
+		$settings['block_scripts'] = true;
+		update_option('cookieadmin_settings', $settings);
+	}
+
 	add_option('cookieadmin_version', COOKIEADMIN_VERSION);
 	
 	include_once(COOKIEADMIN_DIR . 'includes/database.php');

@@ -688,6 +688,41 @@ jQuery(document).ready(function($){
 		cookieadminToolTip.css('opacity', 0);
 	});
 	
+	// Recommended plugins install/activate handler
+	$(document).on('click', '.cookieadmin-plugin-install-btn, .cookieadmin-plugin-activate-btn', function(e){
+		e.preventDefault();
+		var $btn = $(this);
+		var slug = $btn.data('slug');
+		var is_install = $btn.hasClass('cookieadmin-plugin-install-btn');
+		var originalText = $btn.text();
+		
+		$btn.text(cookieadmin_policy.lang.processing).prop('disabled', true);
+		
+		$.ajax({
+			url: ajaxurl,
+			method: 'POST',
+			data: {
+				action: 'cookieadmin_ajax_handler',
+				cookieadmin_act: is_install ? 'install_recommended_plugin' : 'activate_recommended_plugin',
+				cookieadmin_security: cookieadmin_policy.cookieadmin_nonce,
+				plugin: slug,
+			},
+			dataType: 'json',
+			success: function(data){
+				if(data.success){
+					$btn.replaceWith('<span class="cookieadmin-badge cookieadmin-success">' + cookieadmin_policy.lang.active + '</span>');
+				}else{
+					$btn.text(originalText).prop('disabled', false);
+					alert(data.data && data.data.message ? data.data.message : cookieadmin_policy.lang.install_failed);
+				}
+			},
+			error: function(){
+				$btn.text(originalText).prop('disabled', false);
+				alert(cookieadmin_policy.lang.error_occurred);
+			},
+		});
+	});
+	
 	
 });
 

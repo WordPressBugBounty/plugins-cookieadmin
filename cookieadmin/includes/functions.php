@@ -20,6 +20,14 @@ function cookieadmin_update_check(){
 	if($current_version == COOKIEADMIN_VERSION){
 		return true;
 	}
+	
+	// We added a option to disable Script Delaying
+	if($version < 120){
+		$settings = get_option('cookieadmin_settings', []);
+		$settings['block_scripts'] = true;
+		
+		update_option('cookieadmin_settings', $settings);
+	}
 
 	// Save the new Version
 	update_option('cookieadmin_version', COOKIEADMIN_VERSION);
@@ -70,7 +78,7 @@ function cookieadmin_load_plugin(){
 		add_action('wp_footer', '\CookieAdmin\Enduser::cookieadmin_show_banner');
 	}
 	
-	add_filter('script_loader_tag', '\CookieAdmin\Enduser::check_if_cookies_allowed', 10, 3);
+	add_action('template_redirect', '\CookieAdmin\Enduser::block_scripts', 1);
 	
 }
 
@@ -139,7 +147,9 @@ function cookieadmin_ajax_handler(){
 		'cookieadmin-edit-cookie' => '\CookieAdmin\Admin\Scan::edit_cookies',
 		'cookieadmin-delete-cookie' => '\CookieAdmin\Admin\Scan::delete_cookies',
 		'close-update-notice' => '\CookieAdmin\Admin::close_plugin_update_notice',
-		'close-notice' => '\CookieAdmin\Admin::close_notices'
+		'close-notice' => '\CookieAdmin\Admin::close_notices',
+		'install_recommended_plugin' => '\CookieAdmin\Admin\Dashboard::install_recommended_plugin',
+		'activate_recommended_plugin' => '\CookieAdmin\Admin\Dashboard::activate_recommended_plugin',
 	);
 	
 	$general_actions = array(

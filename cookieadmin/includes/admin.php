@@ -57,11 +57,15 @@ class Admin{
 			$policy['cookieadmin_nonce'] = wp_create_nonce('cookieadmin_admin_js_nonce');
 			//cookieadmin_r_print($policy);die();
 			
-			$policy['lang']['show_more'] = __('Show more', 'cookieadmin');
-			$policy['lang']['show_less'] = __('Show less', 'cookieadmin');
-			$policy['lang']['days'] = __('Day(s)', 'cookieadmin');
-			$policy['lang']['session'] = __('Session', 'cookieadmin');
-			$policy['lang']['scan_completed'] = __('Scan completed', 'cookieadmin');
+		$policy['lang']['show_more'] = __('Show more', 'cookieadmin');
+		$policy['lang']['show_less'] = __('Show less', 'cookieadmin');
+		$policy['lang']['days'] = __('Day(s)', 'cookieadmin');
+		$policy['lang']['session'] = __('Session', 'cookieadmin');
+		$policy['lang']['scan_completed'] = __('Scan completed', 'cookieadmin');
+		$policy['lang']['processing'] = __('Processing...', 'cookieadmin');
+		$policy['lang']['active'] = __('Active', 'cookieadmin');
+		$policy['lang']['install_failed'] = __('Installation failed. Please try again.', 'cookieadmin');
+		$policy['lang']['error_occurred'] = __('An error occurred. Please try again.', 'cookieadmin');
 			
 			wp_localize_script('cookieadmin_js', 'cookieadmin_policy', $policy);
 		}
@@ -117,6 +121,8 @@ class Admin{
 	static function header_theme($title = 'Dashboard'){
 		
 		global $cookieadmin_lang, $cookieadmin_error, $cookieadmin_msg;
+
+		self::conflict_notice();
 
 		echo '
 		<div class="cookieadmin-metabox-holder">
@@ -300,6 +306,41 @@ class Admin{
 		
 	}
 	
+	static function conflict_notice(){
+
+		$conflicting = [
+			'complianz-gdpr/complianz-gdpr.php' => 'Complianz',
+			'cookie-law-info/cookie-law-info.php' => 'CookieYes',
+			'cookiebot/cookiebot.php' => 'Cookiebot',
+			'cookie-notice/cookie-notice.php' => 'Cookie Notice',
+			'gdpr-cookie-compliance/gdpr-cookie-compliance.php' => 'GDPR Cookie Compliance',
+			'borlabs-cookie/borlabs-cookie.php' => 'Borlabs Cookie',
+			'wp-gdpr-compliance/wp-gdpr-compliance.php' => 'Cookie Information',
+		];
+
+		if(!function_exists('is_plugin_active')){
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$active = [];
+		foreach($conflicting as $slug => $name){
+			if(is_plugin_active($slug)){
+				$active[] = $name;
+			}
+		}
+
+		if(empty($active)){
+			return;
+		}
+
+		$names = implode(', ', $active);
+
+		echo '<div class="cookieadmin-conflict-notice">
+			<span class="dashicons dashicons-warning"></span>
+			<span>'.sprintf(__('Conflicting plugin(s) detected: <b>%s</b>. Please deactivate them to avoid issues with CookieAdmin.', 'cookieadmin'), esc_html($names)).'</span>
+		</div>';
+	}
+
 	static function close_notices(){
 		
 		if(empty($_REQUEST['notice'])){

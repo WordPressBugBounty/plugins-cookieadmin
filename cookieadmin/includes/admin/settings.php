@@ -18,6 +18,10 @@ class Settings{
 		
 		\CookieAdmin\Admin::header_theme(__('Settings', 'cookieadmin'));
 		
+		if(empty($cookieadmin_settings)){
+			$cookieadmin_settings = get_option('cookieadmin_settings', []);
+		}
+		
 		echo '
 		<div class="cookieadmin_consent-wrap">
 			<form action="" method="post" id="setting_submenu">
@@ -68,12 +72,64 @@ class Settings{
 					</div>
 				</div>
 			</div>';
+			
+		// Card: Resource blocking
+		echo '
+			<div class="cookieadmin-card cookieadmin-mt-16">
+				<div class="cookieadmin-card-header">
+					<span class="cookieadmin-card-title"><span class="dashicons dashicons-media-document"></span> '.esc_html__('Resource Blocking', 'cookieadmin').'</span>
+				</div>
+				<div class="cookieadmin-card-body">
+					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_block_scripts">'.esc_html__('Block scripts', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('It blocks the scripts related to the scanned Cookies.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_block_scripts" type="checkbox" id="cookieadmin_block_scripts" '.(!empty($cookieadmin_settings['block_scripts']) ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+					<div class="cookieadmin-setting setting-blocking" cookieadmin-pro-only="1">
+						<label class="cookieadmin-title" for="cookieadmin_content_blocking">'.esc_html__('Content Blocking', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Block third-party content which uses iframes to load cookies until user consent is given.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">';
+								if(defined('COOKIEADMIN_PRO_VERSION')){
+									echo '<input name="cookieadmin_content_blocking" type="checkbox" id="cookieadmin_content_blocking" '.(!empty($cookieadmin_settings['content_blocking']) && cookieadmin_is_pro() ? 'checked' : '').' />';
+								} else {
+									echo '<input type="checkbox" id="cookieadmin_content_blocking" />';
+								}
+								
+								echo '<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+								'.wp_kses_post($cookieadmin_requires_pro).'
+							</label>
+						</div>
+					</div>
+
+					<div class="cookieadmin-content-blocking-options" style="display: '.(!empty($cookieadmin_settings['content_blocking']) ? 'block' : 'none').';">
+						<div class="cookieadmin-cb-services">
+							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="youtube" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('youtube', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('YouTube', 'cookieadmin').'</label>
+							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="vimeo" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('vimeo', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('Vimeo', 'cookieadmin').'</label>
+							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="soundcloud" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('soundcloud', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('SoundCloud', 'cookieadmin').'</label>
+							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="dailymotion" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('dailymotion', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('Dailymotion', 'cookieadmin').'</label>
+							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="maps" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('maps', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('Google Maps', 'cookieadmin').'</label>
+						</div>
+					</div>
+				</div>
+			</div>';
 
 		// Card: Advanced Features (PRO)
 		echo '
 			<div class="cookieadmin-card cookieadmin-mt-16" cookieadmin-pro-only="1">
 				<div class="cookieadmin-card-header">
-					<span class="cookieadmin-card-title"><span class="dashicons dashicons-star-filled"></span> '.esc_html__('Advanced Features', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</span>
+					<span class="cookieadmin-card-title"><span class="dashicons dashicons-admin-generic"></span> '.esc_html__('Advanced Features', 'cookieadmin').wp_kses_post($cookieadmin_requires_pro).'</span>
 				</div>
 				<div class="cookieadmin-card-body">
 					<div class="cookieadmin-setting">
@@ -156,30 +212,6 @@ class Settings{
 									<div class="cookieadmin-toggle-thumb"></div>
 								</div>
 							</label>
-						</div>
-					</div>
-
-					<div class="cookieadmin-setting setting-blocking">
-						<label class="cookieadmin-title" for="cookieadmin_content_blocking">'.esc_html__('Content Blocking', 'cookieadmin').'
-							<span class="dashicons dashicons-info cookieadmin-tooltip-box"  data-tip="'.esc_html__('Block third-party content which uses iframes to load cookies until user consent is given.', 'cookieadmin').'"></span>
-						</label>
-						<div class="cookieadmin-setting-contents">
-							<label class="cookieadmin-toggle-wrap">
-								<input name="cookieadmin_content_blocking" type="checkbox" id="cookieadmin_content_blocking" '.(!empty($cookieadmin_settings['content_blocking']) && cookieadmin_is_pro() ? 'checked' : '').'>
-								<div class="cookieadmin-toggle-track">
-									<div class="cookieadmin-toggle-thumb"></div>
-								</div>
-							</label>
-						</div>
-					</div>
-
-					<div class="cookieadmin-content-blocking-options" style="display: '.(!empty($cookieadmin_settings['content_blocking']) ? 'block' : 'none').';">
-						<div class="cookieadmin-cb-services">
-							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="youtube" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('youtube', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('YouTube', 'cookieadmin').'</label>
-							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="vimeo" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('vimeo', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('Vimeo', 'cookieadmin').'</label>
-							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="soundcloud" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('soundcloud', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('SoundCloud', 'cookieadmin').'</label>
-							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="dailymotion" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('dailymotion', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('Dailymotion', 'cookieadmin').'</label>
-							<label class="cookieadmin-title"><input type="checkbox" name="cookieadmin_content_blocking_services[]" value="maps" '.(!empty($cookieadmin_settings['content_blocking_services']) && in_array('maps', $cookieadmin_settings['content_blocking_services']) ? 'checked' : '').'> '.esc_html__('Google Maps', 'cookieadmin').'</label>
 						</div>
 					</div>
 				</div>
@@ -277,6 +309,7 @@ class Settings{
 		$cookieadmin_settings = get_option('cookieadmin_settings', []);
 		
 		// Save cookieadmin_settings only on settings page
+		$cookieadmin_settings['block_scripts'] = !empty($_REQUEST['cookieadmin_block_scripts']);
 		$cookieadmin_settings['google_consent_mode_v2'] = (isset( $_REQUEST['cookieadmin_google_consent_mode_v2'] ) ? 1 : 0);
 		$cookieadmin_settings['hide_powered_by'] = (isset( $_REQUEST['cookieadmin_hide_powered_by'] ) ? 1 : 0);
 		$cookieadmin_settings['hide_reconsent'] = (isset( $_REQUEST['cookieadmin_hide_reconsent'] ) ? 1 : 0);

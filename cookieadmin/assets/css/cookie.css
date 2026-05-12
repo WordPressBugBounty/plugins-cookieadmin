@@ -157,6 +157,28 @@
 	margin: 0 24px 0 24px;
 }
 
+/* ======== CONFLICT NOTICE ======== */
+.cookieadmin-conflict-notice {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	margin-left: -20px;
+	padding: 6px 24px;
+	background: var(--cookieadmin-warning-bg);
+	border-bottom: 1px solid var(--cookieadmin-warning-border);
+	color: var(--cookieadmin-text);
+	font-size: 13px;
+	text-align: center;
+}
+.cookieadmin-conflict-notice .dashicons {
+	color: var(--cookieadmin-warning);
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+}
+
 /* ======== CARD ======== */
 .cookieadmin-card {
 	background: var(--cookieadmin-surface);
@@ -1250,4 +1272,279 @@ table.cookieadmin-table td{
 	width: fit-content;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
+}
+
+/* ====================== DASHBOARD WIDGETS ======================*/
+
+/* Grid */
+.cookieadmin-dashboard-grid {
+	display: flex;
+	gap: 20px;
+	margin-top: 16px;
+}
+
+.cookieadmin-dashboard-main {
+	flex: 0 0 70%;
+	max-width: 70%;
+	min-width: 0;
+}
+
+.cookieadmin-dashboard-sidebar {
+	width:100%;
+}
+
+@media (max-width: 860px) {
+	.cookieadmin-dashboard-grid {
+		flex-direction: column;
+	}
+	.cookieadmin-dashboard-main,
+	.cookieadmin-dashboard-sidebar {
+		flex: 0 0 100%;
+		max-width: 100%;
+	}
+}
+
+/* Checklist */
+.cookieadmin-checklist {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	counter-reset: checklist;
+}
+
+.cookieadmin-checklist li {
+	margin-bottom: 0;
+}
+
+.cookieadmin-checklist li a {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 11px 12px;
+	border-radius: var(--cookieadmin-radius-sm);
+	color: var(--cookieadmin-text);
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: 500;
+	transition: background .12s ease;
+}
+
+.cookieadmin-checklist li a:hover {
+	background: var(--cookieadmin-surface-secondary);
+}
+
+.cookieadmin-checklist li a .dashicons {
+	width: 22px;
+	height: 22px;
+	font-size: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+.cookieadmin-checklist-item--done .dashicons {
+	background: var(--cookieadmin-success-bg);
+	color: var(--cookieadmin-success);
+}
+
+.cookieadmin-checklist-item--pending .dashicons {
+	background: var(--cookieadmin-surface-secondary);
+	color: var(--cookieadmin-text-soft);
+}
+
+/* Cookie Inventory */
+.cookieadmin-inventory-total {
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
+	margin-bottom: 14px;
+}
+
+.cookieadmin-inventory-number {
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--cookieadmin-text);
+	line-height: 1;
+}
+
+.cookieadmin-inventory-label {
+	font-size: 14px;
+	color: var(--cookieadmin-text-muted);
+}
+
+.cookieadmin-segment-bar {
+	display: flex;
+	width: 100%;
+	height: 10px;
+	border-radius: 99px;
+	overflow: hidden;
+	margin-bottom: 14px;
+	background: var(--cookieadmin-border-light);
+}
+
+.cookieadmin-segment {
+	height: 100%;
+	min-width: 2px;
+}
+
+.cookieadmin-segment-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px 16px;
+	margin-bottom: 14px;
+	font-size: 12px;
+	color: var(--cookieadmin-text-muted);
+}
+
+.cookieadmin-legend-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.cookieadmin-legend-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	display: inline-block;
+	flex-shrink: 0;
+}
+
+.cookieadmin-inventory-warning {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	background: var(--cookieadmin-warning-bg);
+	border: 1px solid var(--cookieadmin-warning-border);
+	color: var(--cookieadmin-warning);
+	padding: 10px 12px;
+	border-radius: var(--cookieadmin-radius-sm);
+	font-size: 13px;
+	margin-bottom: 14px;
+}
+
+.cookieadmin-inventory-actions {
+	text-align: right;
+}
+
+/* Recommended Plugins */
+.cookieadmin-recommended-plugins .cookieadmin-card-body {
+	padding: 12px;
+}
+
+.cookieadmin-recommended-plugin {
+	padding: 10px;
+	border-radius: var(--cookieadmin-radius-sm);
+	background: #fff;
+	border: 1px solid var(--cookieadmin-border);
+	margin-bottom: 10px;
+}
+
+.cookieadmin-recommended-plugin:last-child {
+	margin-bottom: 0;
+}
+
+.cookieadmin-recommended-plugin-info {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	margin-bottom: 8px;
+}
+
+.cookieadmin-recommended-plugin-icon {
+	width: 32px;
+	height: 32px;
+	border-radius: var(--cookieadmin-radius-sm);
+	background: var(--cookieadmin-primary-light);
+	color: var(--cookieadmin-primary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.cookieadmin-recommended-plugin-icon .dashicons {
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+}
+
+.cookieadmin-recommended-plugin-name {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--cookieadmin-text);
+	line-height: 1.3;
+}
+
+.cookieadmin-recommended-plugin-desc {
+	font-size: 12px;
+	color: var(--cookieadmin-text-muted);
+	line-height: 1.4;
+}
+
+.cookieadmin-recommended-plugin-link {
+	font-size: 11px;
+	color: var(--cookieadmin-primary);
+	text-decoration: none;
+	font-weight: 500;
+	margin-top: 4px;
+	display: inline-block;
+}
+
+.cookieadmin-recommended-plugin-link:hover {
+	text-decoration: underline;
+}
+
+.cookieadmin-recommended-plugin-action {
+	display:flex;
+	margin-top:5px;
+	justify-content:space-between;
+	
+}
+
+/* Pro mini table on dashboard */
+.cookieadmin-consent-log-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.cookieadmin-consent-log-table thead th {
+	font-weight: 600;
+	color: var(--cookieadmin-text-muted);
+	text-align: left;
+	padding: 8px 10px;
+	border-bottom: 1px solid var(--cookieadmin-border);
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: .3px;
+}
+
+.cookieadmin-consent-log-table tbody td {
+	padding: 8px 10px;
+	border-bottom: 1px solid var(--cookieadmin-border-light);
+	color: var(--cookieadmin-text);
+}
+
+.cookieadmin-consent-log-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+/* Widget link row */
+.cookieadmin-widget-link-row {
+	text-align: right;
+	margin-top: 10px;
+}
+
+.cookieadmin-widget-link-row a {
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--cookieadmin-primary);
+	text-decoration: none;
+}
+
+.cookieadmin-widget-link-row a:hover {
+	text-decoration: underline;
 }

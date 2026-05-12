@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 1.1.9
+Stable tag: 1.2.0
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -78,6 +78,11 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.2.0 =
+* [Improvement] Block Scripts can now be disabled using an option in the settings, and now also handles the blocking of inline scripts.
+* [Improvement] More insightful widgets has been added to CookieAdmin dashboard.
+* [Bug Fix Pro] There was an issue with Content blocking with a few page builders, this has been fixed.
 
 = 1.1.9 =
 * [Pro Feature] Content Blocking: Admins can prevent content services like, Youtube, Vimeo, Google Maps and few other services from loading until, user accepts the required cookies.
