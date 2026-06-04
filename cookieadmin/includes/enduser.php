@@ -48,6 +48,7 @@ class Enduser{
 			// Used for setting cookie
 			$policy[$view]['base_path'] = $base_path;
 			
+			// NOTE: Check the polylang string registration if changing these
 			$policy[$view]['lang']['show_less'] = __('Show less', 'cookieadmin');
 			$policy[$view]['lang']['duration'] = __('Duration', 'cookieadmin');
 			$policy[$view]['lang']['session'] = __('Session', 'cookieadmin');
@@ -63,6 +64,8 @@ class Enduser{
 			}
 			
 			$policy[$view]['categorized_cookies'] = self::$categorized_cookies = $cookie_data;
+			
+			$policy[$view] = apply_filters('cookieadmin_before_localize', $policy[$view]);
 			
 			wp_localize_script('cookieadmin_js', 'cookieadmin_policy', $policy[$view]);
 			

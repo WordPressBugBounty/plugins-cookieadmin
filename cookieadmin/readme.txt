@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -37,6 +37,8 @@ Pro Features :
 * Sub Domain Consent sharing support
 * User Country Detection
 * Multilingual - 17 Languages supported
+* Do not sell my Information
+* Polylang support
 * Consent Logs
 * Export Consent Logs
 * Global Privacy Control(GPC)
@@ -79,6 +81,12 @@ That's it. You're done!
 
 == Changelog ==
 
+= 1.2.1 =
+* [Pro Feature] Do no sell form support has been added, websites under US Privacy laws can use it to be compliant with the law.
+* [Pro Improvement] Support for Polylang has been added.
+* [Bug Fix Pro] Reconsent Icon was adding double slashes in its URL, which was being flagged by some SEO checkers, this has been fixed.
+* [Bug Fix] There was an issue where if Block scripts was enabled, it was breaking some Page builders, this has been fixed.
+
 = 1.2.0 =
 * [Improvement] Block Scripts can now be disabled using an option in the settings, and now also handles the blocking of inline scripts.
 * [Improvement] More insightful widgets has been added to CookieAdmin dashboard.
@@ -88,7 +96,7 @@ That's it. You're done!
 * [Pro Feature] Content Blocking: Admins can prevent content services like, Youtube, Vimeo, Google Maps and few other services from loading until, user accepts the required cookies.
 * [Pro Feature] Subdomain Support: If enabled, user consent preferences are shared and respected across all subdomains.
 * [Bug Fix] GPC override option was not visible, if the form of Preference was changed, this has been fixed.
-* [Improvement] Improved and User Interface.
+* [Improvement] Improved User Interface.
 
 
 = 1.1.8 =

@@ -22,5 +22,12 @@
                 <key name="cookieadmin_save_btn" />
             </key>
         </key>
+	<key name="cookieadmin_settings">
+		<key name="gpc_message" />
+		<key name="gpc_override_warning" />
+	</key>
+	<key name="cookieadmin_do_not_sell">
+		<key name="exp_content" />
+	</key>
     </admin-texts>
 </wpml-config>

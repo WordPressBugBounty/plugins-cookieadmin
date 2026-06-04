@@ -206,6 +206,9 @@ function cookieadmin_set_cookie(name, value, days = 365, domain = "") {
 
 	if((cookieadmin_policy.is_pro != 0) && (cookieadmin_pro_vars !== 'undefined')){
 		if(cookieadmin_pro_vars.shared_subdomain_consent && cookieadmin_pro_vars.base_domain){
+			// Delete the cookie if exist with the subdomin
+			// Previously, cookie was set without specifying domain name, we'll not specify domain while deleting. 
+			document.cookie = `cookieadmin_consent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookieadmin_policy.base_path};`;
 			domain = cookieadmin_pro_vars.base_domain;
 		}
 	}
@@ -282,7 +285,8 @@ function cookieadmin_populate_preference(){
 			if(!card_container){
 				continue;
 			}
-			card_container.innerHTML = (card_container.innerHTML == 'None') ?  '' : card_container.innerHTML;
+
+			card_container.querySelector(".cookieadmin-nocookie-cat").style.display = 'none';
 			
 			var cookieadmin_exp = cookieadmin_policy.lang.session;
 				

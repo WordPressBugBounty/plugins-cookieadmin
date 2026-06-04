@@ -345,6 +345,17 @@ class Settings{
 		//set preload and consent field for "cookieadmin-settings" page
 		$policy[$law]['preload'] = !empty($_REQUEST['cookieadmin_preload']) ? array_map('sanitize_text_field', wp_unslash($_REQUEST['cookieadmin_preload'])) : [];
 		$policy[$law]['reload_on_consent'] = !empty($_REQUEST['cookieadmin_reload_on_consent']) ? sanitize_text_field(wp_unslash($_REQUEST['cookieadmin_reload_on_consent'])) : '';
+
+		// Check for certain fields to be saved only if their values is not the same as default
+		$cookieadmin_check_changes = array('cookieadmin_notice_title', 'cookieadmin_notice', 'cookieadmin_preference_title', 'cookieadmin_preference', 'reConsent_title', 'cookieadmin_customize_btn', 'cookieadmin_reject_btn', 'cookieadmin_accept_btn', 'cookieadmin_save_btn');
+		
+		foreach($cookieadmin_check_changes as $c_field){
+			foreach($policy as $c_law => $c_val){
+				if(!empty($c_val[$c_field]) && $c_val[$c_field] == $cookieadmin_policies[$c_law][$c_field]){
+					unset($policy[$c_law][$c_field]);
+				}
+			}
+		}
 		
 		update_option('cookieadmin_consent_settings', $policy);
 		

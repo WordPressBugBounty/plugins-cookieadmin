@@ -66,7 +66,7 @@ $content = array(
 								<label class="cookieadmin_remark cookieadmin_act">[[remark_standard]]</label>								
 							</div>
 							<div class="cookieadmin_desc"> [[necessary_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-functional-heading">
 							<div class="cookieadmin_header">
@@ -81,7 +81,7 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[functional_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-functional">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-functional"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-analytics-heading">
 							<div class="cookieadmin_header">
@@ -96,7 +96,7 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[analytical_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-marketing-heading">
 							<div class="cookieadmin_header">
@@ -111,7 +111,7 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[advertisement_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-unclassified-heading" hidden>
 							<div class="cookieadmin_header">
@@ -122,7 +122,7 @@ $content = array(
 								</span>
 							</div>
 							<div class="cookieadmin_desc"> [[unclassified_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list un_c">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list un_c"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 					</div>
 				</div>
@@ -158,7 +158,7 @@ $content = array(
 								<label class="cookieadmin_remark cookieadmin_act">[[remark_standard]]</label>
 							</div>
 							<div class="cookieadmin_desc"> [[necessary_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-functional-heading">
 							<div class="cookieadmin_header">
@@ -173,7 +173,7 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[functional_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-functional">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-functional"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-analytics-heading">
 							<div class="cookieadmin_header">
@@ -188,7 +188,7 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[analytical_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-marketing-heading">
 							<div class="cookieadmin_header">
@@ -203,7 +203,7 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[advertisement_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-unclassified-heading" hidden>
 							<div class="cookieadmin_header">
@@ -214,7 +214,7 @@ $content = array(
 								</span>
 							</div>
 							<div class="cookieadmin_desc"> [[unclassified_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list un_c">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list un_c"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 					</div>
 				</div>
@@ -250,7 +250,7 @@ $content = array(
 								<label class="cookieadmin_remark cookieadmin_act">[[remark_standard]]</label>
 							</div>
 							<div class="cookieadmin_desc"> [[necessary_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-functional-heading">
 							<div class="cookieadmin_header">
@@ -265,7 +265,7 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[functional_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-functional">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-functional"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-analytics-heading">
 							<div class="cookieadmin_header">
@@ -280,7 +280,7 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[analytical_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-marketing-heading">
 							<div class="cookieadmin_header">
@@ -295,7 +295,7 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[advertisement_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-unclassified-heading" hidden>
 							<div class="cookieadmin_header">
@@ -306,7 +306,7 @@ $content = array(
 								</span>
 							</div>
 							<div class="cookieadmin_desc"> [[unclassified_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list un_c">[[none]]</div>
+							<div class="cookieadmin-modal-cookies-list un_c"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 					</div>
 				</div>

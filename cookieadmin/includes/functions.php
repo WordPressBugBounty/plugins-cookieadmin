@@ -119,6 +119,16 @@ function cookieadmin_is_editor_mode(){
 		return true;
 	}
 	
+	// Avada builder
+	if(isset($_GET['fb-edit']) || isset($_GET['builder']) || isset($_GET['builder_id'])){
+		return true;
+	}
+	
+	// Bricks Builder
+	if(isset($_GET['bricks']) || isset($_GET['brickspreview'])){
+		return true;
+	}
+	
 	if(isset($_GET['vc_action']) && $_GET['vc_action'] == 'vc_inline'){
 		return true;
 	}
@@ -218,31 +228,33 @@ function cookieadmin_load_strings($policy){
 	$privacy_policy_links = apply_filters('cookieadmin_privacy_policy_links', array(), $policy);
 	$reconsent_icon_url = apply_filters('cookieadmin_reconsent_icon_url', '', $policy);
 	
-	return [
-			'override_gpc' => apply_filters('cookieadmin_override_gpc_html', ''),
-			'powered_by_html' => $cookieadmin_powered_by_html,
-			'banner_policy_links' => !empty($privacy_policy_links['banner']) ? $privacy_policy_links['banner'] : '',
-			'modal_policy_links' => !empty($privacy_policy_links['modal']) ? $privacy_policy_links['modal'] : '',
-			'reconsent_icon_url' => esc_url($reconsent_icon_url),
-			'logo_svg' => cookieadmin_logo_svg(),
-			'plugin_url' => esc_url(COOKIEADMIN_PLUGIN_URL),
-			'powered_by' => __('Powered by', 'cookieadmin'),
-			'reconsent' => __('Re-consent', 'cookieadmin'),
-			'cookie_preferences' => __('Cookie Preferences', 'cookieadmin'),
-			'remark_standard' => __('Always Active', 'cookieadmin'),
-			'remark' => __('Remark', 'cookieadmin'),
-			'none' => __('None', 'cookieadmin'),
-			'necessary_cookies' => __('Necessary Cookies', 'cookieadmin'),
-			'necessary_cookies_desc' => __('Necessary cookies enable essential site features like secure log-ins and consent preference adjustments. They do not store personal data.', 'cookieadmin'),
-			'functional_cookies' => __('Functional Cookies', 'cookieadmin'),
-			'functional_cookies_desc' => __('Functional cookies support features like content sharing on social media, collecting feedback, and enabling third-party tools.', 'cookieadmin'),
-			'analytical_cookies' => __('Analytical Cookies', 'cookieadmin'),
-			'analytical_cookies_desc' => __('Analytical cookies track visitor interactions, providing insights on metrics like visitor count, bounce rate, and traffic sources.', 'cookieadmin'),
-			'advertisement_cookies' => __('Advertisement Cookies', 'cookieadmin'),
-			'advertisement_cookies_desc' => __('Advertisement cookies deliver personalized ads based on your previous visits and analyze the effectiveness of ad campaigns.', 'cookieadmin'),
-			'unclassified_cookies' => __('Unclassified Cookies', 'cookieadmin'),
-			'unclassified_cookies_desc' => __('Unclassified cookies are cookies that we are in the process of classifying, together with the providers of individual cookies.', 'cookieadmin'),
-		];
+	$strings = [
+		'override_gpc' => apply_filters('cookieadmin_override_gpc_html', ''),
+		'powered_by_html' => $cookieadmin_powered_by_html,
+		'banner_policy_links' => !empty($privacy_policy_links['banner']) ? $privacy_policy_links['banner'] : '',
+		'modal_policy_links' => !empty($privacy_policy_links['modal']) ? $privacy_policy_links['modal'] : '',
+		'reconsent_icon_url' => esc_url($reconsent_icon_url),
+		'logo_svg' => cookieadmin_logo_svg(),
+		'plugin_url' => esc_url(COOKIEADMIN_PLUGIN_URL),
+		'powered_by' => __('Powered by', 'cookieadmin'),
+		'reconsent' => __('Re-consent', 'cookieadmin'),
+		'cookie_preferences' => __('Cookie Preferences', 'cookieadmin'),
+		'remark_standard' => __('Always Active', 'cookieadmin'),
+		'remark' => __('Remark', 'cookieadmin'),
+		'none' => __('None', 'cookieadmin'),
+		'necessary_cookies' => __('Necessary Cookies', 'cookieadmin'),
+		'necessary_cookies_desc' => __('Necessary cookies enable essential site features like secure log-ins and consent preference adjustments. They do not store personal data.', 'cookieadmin'),
+		'functional_cookies' => __('Functional Cookies', 'cookieadmin'),
+		'functional_cookies_desc' => __('Functional cookies support features like content sharing on social media, collecting feedback, and enabling third-party tools.', 'cookieadmin'),
+		'analytical_cookies' => __('Analytical Cookies', 'cookieadmin'),
+		'analytical_cookies_desc' => __('Analytical cookies track visitor interactions, providing insights on metrics like visitor count, bounce rate, and traffic sources.', 'cookieadmin'),
+		'advertisement_cookies' => __('Advertisement Cookies', 'cookieadmin'),
+		'advertisement_cookies_desc' => __('Advertisement cookies deliver personalized ads based on your previous visits and analyze the effectiveness of ad campaigns.', 'cookieadmin'),
+		'unclassified_cookies' => __('Unclassified Cookies', 'cookieadmin'),
+		'unclassified_cookies_desc' => __('Unclassified cookies are cookies that we are in the process of classifying, together with the providers of individual cookies.', 'cookieadmin'),
+	];
+	
+	return apply_filters('cookieadmin_default_strings', $strings);
 }
 
 //Loads consent data from file
@@ -283,7 +295,7 @@ function cookieadmin_load_consent_template($policy, $view){
 	}
 	
 	$template[$view] = apply_filters('cookieadmin_consent_banner_template', $template[$view]);
-	
+
 	return $template;
 	
 }

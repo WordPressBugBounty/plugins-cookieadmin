@@ -31,6 +31,7 @@ class Admin{
 			'cookieadmin-consent',
 			'cookieadmin-consent-logs',
 			'cookieadmin-license',
+			'cookieadmin-do-not-sell'
 		];
 		
 		if(empty($current_page) || !in_array($current_page, $plugin_pages)){
@@ -57,15 +58,15 @@ class Admin{
 			$policy['cookieadmin_nonce'] = wp_create_nonce('cookieadmin_admin_js_nonce');
 			//cookieadmin_r_print($policy);die();
 			
-		$policy['lang']['show_more'] = __('Show more', 'cookieadmin');
-		$policy['lang']['show_less'] = __('Show less', 'cookieadmin');
-		$policy['lang']['days'] = __('Day(s)', 'cookieadmin');
-		$policy['lang']['session'] = __('Session', 'cookieadmin');
-		$policy['lang']['scan_completed'] = __('Scan completed', 'cookieadmin');
-		$policy['lang']['processing'] = __('Processing...', 'cookieadmin');
-		$policy['lang']['active'] = __('Active', 'cookieadmin');
-		$policy['lang']['install_failed'] = __('Installation failed. Please try again.', 'cookieadmin');
-		$policy['lang']['error_occurred'] = __('An error occurred. Please try again.', 'cookieadmin');
+			$policy['lang']['show_more'] = __('Show more', 'cookieadmin');
+			$policy['lang']['show_less'] = __('Show less', 'cookieadmin');
+			$policy['lang']['days'] = __('Day(s)', 'cookieadmin');
+			$policy['lang']['session'] = __('Session', 'cookieadmin');
+			$policy['lang']['scan_completed'] = __('Scan completed', 'cookieadmin');
+			$policy['lang']['processing'] = __('Processing...', 'cookieadmin');
+			$policy['lang']['active'] = __('Active', 'cookieadmin');
+			$policy['lang']['install_failed'] = __('Installation failed. Please try again.', 'cookieadmin');
+			$policy['lang']['error_occurred'] = __('An error occurred. Please try again.', 'cookieadmin');
 			
 			wp_localize_script('cookieadmin_js', 'cookieadmin_policy', $policy);
 		}
@@ -107,7 +108,10 @@ class Admin{
 		
 		if(defined('COOKIEADMIN_PREMIUM')){
 			add_submenu_page('cookieadmin', __('Consent Logs', 'cookieadmin'), __('Consent Logs', 'cookieadmin'), $capability, 'cookieadmin-consent-logs', '\CookieAdminPro\Admin::show_consent_logs');
-
+			
+			// Do Not Sell menu
+			add_submenu_page('cookieadmin', __('Do Not Sell Requests', 'cookieadmin'), __('Do Not Sell', 'cookieadmin'), $capability, 'cookieadmin-do-not-sell', '\CookieAdminPro\Admin\DoNotSell::do_not_sell_requests');
+			
 			if(!defined('SITEPAD')){
 				add_submenu_page('cookieadmin', __('License', 'cookieadmin'), __('License', 'cookieadmin'), $capability, 'cookieadmin-license', '\CookieAdminPro\License::cookieadmin_show_license');
 			}

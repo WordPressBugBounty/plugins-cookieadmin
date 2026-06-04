@@ -925,13 +925,13 @@ text-decoration:none;
 	width: 100%;
 }
 
-.cookieadmin-consent-logs-pagination{
+.cookieadmin-consent-logs-pagination, .cookieadmin-dns-requests-pagination{
 	padding: 15px;
 	margin: 5px;
 	width: 100%;
 }
 
-.cookieadmin-logs-paginate{
+.cookieadmin-logs-paginate, .cookieadmin-dns-paginate{
 	font-size: 2em;
 	text-decoration:none;
 }
