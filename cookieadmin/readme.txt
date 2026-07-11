@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -34,11 +34,13 @@ Pro Features :
 * Google Consent Mode v2
 * Microsoft Clarity Consent Mode v2
 * Content Blocking
+* Geo Taregeting
 * Sub Domain Consent sharing support
 * User Country Detection
 * Multilingual - 17 Languages supported
 * Do not sell my Information
 * Polylang support
+* WPML support
 * Consent Logs
 * Export Consent Logs
 * Global Privacy Control(GPC)
@@ -80,6 +82,12 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.2.2 =
+* [Pro Feature] Geo Targeting, apply rules based on the visitors geo location.
+* [Pro Feature] Now supports string translation via WPML.
+* [Bug Fix Pro] There was an issue while adding the cookies manually from Scan Cookies page, that has been solved.
+* [Bug Fix] There was an issue in the block script, that has been solved.
 
 = 1.2.1 =
 * [Pro Feature] Do no sell form support has been added, websites under US Privacy laws can use it to be compliant with the law.

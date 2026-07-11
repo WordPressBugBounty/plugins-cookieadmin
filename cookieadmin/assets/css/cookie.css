@@ -1037,6 +1037,10 @@ text-decoration:none;
 	background: var(--cookieadmin-surface-secondary);
 }
 
+.cookieadmin_modal-footer .spinner.is-active{
+	margin:0;
+}
+
 .cookieadmin_form-group {
 	margin-bottom: 16px;
 }

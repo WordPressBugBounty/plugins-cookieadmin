@@ -13,8 +13,8 @@ class Enduser{
 	
 	static function enqueue_scripts(){
 		global $wpdb;
-		
-		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');	
+
+		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');
 		$policy = cookieadmin_load_policy();
 		$table_name = esc_sql($wpdb->prefix . 'cookieadmin_cookies');
 		//cookieadmin_r_print($view);
@@ -100,10 +100,9 @@ class Enduser{
 		}
 		
 		$settings = get_option('cookieadmin_settings');
-		
-		// If block scripts is disabled, we don't need to make any changes
+
 		if(empty($settings) || empty($settings['block_scripts'])){
-			return;
+				return;
 		}
 
 		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');
@@ -202,9 +201,14 @@ class Enduser{
 	}
 	
 	static function cookieadmin_show_banner(){
-		
-		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');	
+
+		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');
 		$policy = cookieadmin_load_policy();
+
+		// Do not show banner if banner is off via Geo rule
+		if(empty($view)){
+			return;
+		}
 		
 		$raw_template = cookieadmin_load_consent_template($policy[$view], $view);
 		

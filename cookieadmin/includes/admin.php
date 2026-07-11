@@ -108,6 +108,9 @@ class Admin{
 		
 		if(defined('COOKIEADMIN_PREMIUM')){
 			add_submenu_page('cookieadmin', __('Consent Logs', 'cookieadmin'), __('Consent Logs', 'cookieadmin'), $capability, 'cookieadmin-consent-logs', '\CookieAdminPro\Admin::show_consent_logs');
+
+			// GEO Targeting
+			add_submenu_page('cookieadmin', __('Geo Targeting', 'cookieadmin'), __('Geo Targeting', 'cookieadmin'), $capability, 'cookieadmin-geo-targeting', '\CookieAdminPro\Admin\Geo::geo_admin_page');
 			
 			// Do Not Sell menu
 			add_submenu_page('cookieadmin', __('Do Not Sell Requests', 'cookieadmin'), __('Do Not Sell', 'cookieadmin'), $capability, 'cookieadmin-do-not-sell', '\CookieAdminPro\Admin\DoNotSell::do_not_sell_requests');
