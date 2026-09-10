@@ -147,6 +147,20 @@ class Settings{
 					</div>
 
 					<div class="cookieadmin-setting">
+						<label class="cookieadmin-title" for="cookieadmin_google_advance_consent_mode">'.esc_html__('Load Google tags before consent', 'cookieadmin').'
+							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Google tags will fire immediately on the page load before consent.', 'cookieadmin').'"></span>
+						</label>
+						<div class="cookieadmin-setting-contents">
+							<label class="cookieadmin-toggle-wrap">
+								<input name="cookieadmin_google_advance_consent_mode" type="checkbox" id="cookieadmin_google_advance_consent_mode" '.(!empty($cookieadmin_settings['cookieadmin_google_advance_consent_mode']) && cookieadmin_is_pro() ? 'checked' : '').'>
+								<div class="cookieadmin-toggle-track">
+									<div class="cookieadmin-toggle-thumb"></div>
+								</div>
+							</label>
+						</div>
+					</div>
+
+					<div class="cookieadmin-setting">
 						<label class="cookieadmin-title" for="cookieadmin_clarity_consent">'.esc_html__('Clarity Consent Mode V2', 'cookieadmin').'
 							<span class="dashicons dashicons-info cookieadmin-tooltip-box" data-tip="'.esc_html__('Enable Microsoft Clarity consent mode v2.', 'cookieadmin').'"></span>
 						</label>
@@ -325,6 +339,9 @@ class Settings{
 			$cookieadmin_settings['content_blocking_services'] = array_map('sanitize_text_field', wp_unslash($_REQUEST['cookieadmin_content_blocking_services']));
 		}
 		
+		// Google's advance consent mode (Google tags will be loaded on page load is enabled)
+		$cookieadmin_settings['cookieadmin_google_advance_consent_mode'] = (isset( $_REQUEST['cookieadmin_google_advance_consent_mode'] ) ? 1 : 0);
+			
 		if(empty($cookieadmin_error)){
 			update_option('cookieadmin_settings', $cookieadmin_settings);
 		}

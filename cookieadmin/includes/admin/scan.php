@@ -55,6 +55,11 @@ class Scan{
 			if(empty($data->description)){
 				$data->description = 'Not Available';
 			}
+
+			$patterns = !empty($data->patterns) ? $data->patterns : '';
+			if(!empty($patterns)){
+				$patterns = strtr($patterns, ['[' => '', ']' => '', '"' => '']);
+			}
 			
 			$categorized[$data->category] .= '<tr><td>'.esc_html($data->cookie_name).'</td><td>'.esc_html($data->description).'</td><td>'.esc_html($exp).'</td><td> <span class="dashicons dashicons-edit cookieadmin_edit_icon" id="edit_'.esc_attr($data->id).'"></span> <span class="dashicons dashicons-trash cookieadmin_delete_icon" id="delete_'.esc_attr($data->id).'"></span> </td></tr>';
 
@@ -63,6 +68,7 @@ class Scan{
 			$categorized_cookies[$data->id]['description'] = $data->description;
 			$categorized_cookies[$data->id]['category'] = $data->category;
 			$categorized_cookies[$data->id]['expires'] = $expires;
+			$categorized_cookies[$data->id]['patterns'] = $patterns;
 
 		}
 		
@@ -173,8 +179,17 @@ class Scan{
 					<div class="cookieadmin_form-group">
 						<label for="duration">'.esc_html__('Duration', 'cookieadmin').'</label>
 						<input type="number" min=0 id="cookieadmin-dialog-cookie-duration" Placeholder="'.esc_html__('Set 0 for Session or expiry in days', 'cookieadmin').'">
-					</div>
-				</div>
+					</div>';
+
+					if(empty($cookieadmin_requires_pro)){
+						echo '<div class="cookieadmin_form-group">
+							<label for="patterns">'.esc_html__('Scripts patterns', 'cookieadmin').'</label>
+							<span>'.__('If scripts has "src" attribute then paste the src or add comma separated patterns to match the scripts. Try choosing log patterns to block only targeted script', 'cookieadmin').'</span>
+							<br /><span><strong>'.__('Note: ', 'cookieadmin').'</strong>'.__('Wildcards (*, ?, ^, % etc) are not allowed', 'cookieadmin').'</span>
+							<textarea id="cookieadmin-dialog-cookie-patterns" Placeholder="'.esc_attr__('https://connect.facebook.net/en_US/fbevents.js OR fbq.push, window.facebookSignals', 'cookieadmin').'"></textarea>
+						</div>';
+					}
+				echo '</div>
 				<div class="cookieadmin_modal-footer">					
 					<span id="cookieadmin-message"></span>
 					<button class="cookieadmin-btn cookieadmin-btn-primary" id="cookieadmin_dialog_save_btn" form="edit-cookie-form">'.esc_html__('Save', 'cookieadmin').'</button>					
@@ -450,9 +465,11 @@ class Scan{
 		}
 			
 		$cookie_info = map_deep(wp_unslash($_REQUEST['cookie_info']), 'sanitize_text_field');
+		// $scan_timestamp = $wpdb->get_col($wpdb->prepare("SELECT scan_timestamp FROM {$table_name} WHERE id = %d", $cookie_info['id']));
 		
-		$scan_timestamp = $wpdb->get_col($wpdb->prepare("SELECT scan_timestamp FROM {$table_name} WHERE id = %d", $cookie_info['id']));
-		
+		$scanned_cookies = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$table_name} WHERE id = %d", $cookie_info['id']));
+		$scan_timestamp = !empty($scanned_cookies->scan_timestamp) ? $scanned_cookies->scan_timestamp : 0;
+
 		if(empty($scan_timestamp)){
 			wp_send_json(['success' => false,
 				'data'    => null,
@@ -460,14 +477,32 @@ class Scan{
 			);
 		}
 		
-		$calculated_expiry_seconds = ($cookie_info['duration'] * 86400) + $scan_timestamp[0];
+		$calculated_expiry_seconds = ($cookie_info['duration'] * 86400) + $scan_timestamp;
 		$calculated_expiry = date('Y-m-d H:i:s', $calculated_expiry_seconds);
+
+		// Update the additional patterns into the saved patterns
+		$patterns = '[]';
+		if(!empty($cookie_info['patterns'])){
+			$script_patterns = explode(',', $cookie_info['patterns']);
+			if(!empty($script_patterns) && is_array($script_patterns)){
+				foreach($script_patterns as $pat){
+					if(strlen(str_replace(['*', '?', '^', '%'], '', $pat)) < strlen($pat)){
+						continue;
+					}
+					// do not ad  comma if the saved pattern is empty
+					$comma = ($patterns === '[]') ? '' : ', ';
+					$patterns = str_replace(']', $comma . '"' .(string) trim($pat).'"]', $patterns);
+				}
+			}
+		}else{
+			$patterns = !empty($scanned_cookies->patterns) ? $scanned_cookies->patterns : '[]';
+		}
 		
 		$resp = $wpdb->update(
 			$table_name,
-			[ 'cookie_name' => $cookie_info['name'], 'description' =>  $cookie_info['description'], 'expires' =>  $calculated_expiry, 'category' =>  $cookie_info['type'], 'edited' => 1], // Data to update
+			[ 'cookie_name' => $cookie_info['name'], 'description' =>  $cookie_info['description'], 'expires' =>  $calculated_expiry, 'category' =>  $cookie_info['type'], 'patterns' => $patterns, 'edited' => 1], // Data to update
 			[ 'id' => $cookie_info['id'] ], // WHERE 
-			[ '%s', '%s', '%s', '%s', '%d' ], // Format for the data
+			[ '%s', '%s', '%s', '%s', '%s', '%d' ], // Format for the data
 			[ '%d' ]  // Format for the WHERE clause
 		);
 		

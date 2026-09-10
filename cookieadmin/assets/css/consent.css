@@ -85,6 +85,10 @@
 	display: none;
 }
 
+.cookieadmin_law_container:focus{
+	outline: none;
+}
+
 .cookieadmin_consent_btns{
 	align-content: center;
 	display: flex;
@@ -164,6 +168,10 @@
 	max-height: 55vh;
 	bottom: 0px;
 	animation: 0.5s ease-out forwards cookieadmin_slideUp;
+}
+
+.cookieadmin_cookie_modal:focus{
+	outline: none;
 }
 
 .cookieadmin_modal_overlay{
@@ -295,6 +303,10 @@ button.cookieadmin_btn{
 	cursor: pointer;
 	font-size: 18px;
 	font-family: initial;
+	background: none;
+	border: none;
+	padding: 0;
+	color: inherit;
 }
 
 button.cookieadmin_re_consent{
@@ -381,8 +393,20 @@ button.cookieadmin_re_consent{
 
 /* Hide the checkbox input */
 .cookieadmin_toggle input{
-	display: none;
+	/* display: none; */
+	opacity: 0;
+	width: 0;
+	height: 0;
 }
+
+/* Keyboard accessibility: When the checkbox is focused, add a visible outline to indicate focus. */
+.cookieadmin_show_pref_cookies:focus-visible{
+	outline: 1px solid #000;
+}
+.cookieadmin_toggle input:focus + .cookieadmin_slider {
+    outline: 1px solid #000;
+}
+/* end keyboard accessibility */
 
 /* Describe slider's look and position. */
 .cookieadmin_slider {

@@ -9,7 +9,7 @@ if(!defined('COOKIEADMIN_VERSION') || !defined('ABSPATH')){
 $content = array(
 	'cookieadmin_layout' => array(
 		'box' => 
-			'<div class="cookieadmin_law_container">
+			'<div class="cookieadmin_law_container" role="region" aria-label="[[cookie_consent]]" tabindex="-1" autofocus>
 				<div class="cookieadmin_consent_inside">
 					<p id="cookieadmin_notice_title"></p>
 					<div class="cookieadmin_notice_con">
@@ -26,7 +26,7 @@ $content = array(
 			</div>',
 		
 		'footer' => 
-			'<div class="cookieadmin_law_container">
+			'<div class="cookieadmin_law_container" role="region" aria-label="[[cookie_consent]]" tabindex="-1">
 				<div class="cookieadmin_consent_inside">
 					<p id="cookieadmin_notice_title"></p>
 					<div class="cookieadmin_notice_group">
@@ -47,31 +47,31 @@ $content = array(
 	),
 	'cookieadmin_modal' => array(
 		'center' => 
-			'<div class="cookieadmin_cookie_modal">
+			'<div class="cookieadmin_cookie_modal" role="dialog" aria-modal="true" aria-labelledby="cookieadmin_preference_title" tabindex="-1" autofocus>
 				<div class="cookieadmin_mod_head">
 					<span class="cookieadmin_preference_title" id="cookieadmin_preference_title"></span>
-					<button type="button" class="cookieadmin_close_pref">&#10006;</button>
+					<button type="button" class="cookieadmin_close_pref" aria-label="[[close]]">&#10006;</button>
 				</div>
 				<div class="cookieadmin_details_wrapper">
-					<div class="cookieadmin_preference_details" role="dialog" aria-modal="true" aria-label="[[cookie_preferences]]">
+					<div class="cookieadmin_preference_details">
 						<div id="cookieadmin_preference" class="cookieadmin_preference"></div>
 					</div>
 					<div id="cookieadmin_wrapper">
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-necessary-heading">
 							<div class="cookieadmin_header"> 
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-necessary-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-necessary-container" aria-expanded="false" aria-controls="cookieadmin-necessary-list" aria-label="[[necessary_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-necessary-heading" for="cookieadmin-necessary">[[necessary_cookies]]</label> 
 								</span>
 								<label class="cookieadmin_remark cookieadmin_act">[[remark_standard]]</label>								
 							</div>
 							<div class="cookieadmin_desc"> [[necessary_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary" id="cookieadmin-necessary-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-functional-heading">
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-functional-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-functional-container" aria-expanded="false" aria-controls="cookieadmin-functional-list" aria-label="[[functional_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-functional-heading" for="cookieadmin-functional">[[functional_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
@@ -81,12 +81,12 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[functional_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-functional"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-functional" id="cookieadmin-functional-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-analytics-heading">
 							<div class="cookieadmin_header">
 								<span> 
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-analytics-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-analytics-container" aria-expanded="false" aria-controls="cookieadmin-analytics-list" aria-label="[[analytical_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-analytics-heading" for="cookieadmin-analytics">[[analytical_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
@@ -96,12 +96,12 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[analytical_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics" id="cookieadmin-analytics-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-marketing-heading">
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-marketing-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-marketing-container" aria-expanded="false" aria-controls="cookieadmin-marketing-list" aria-label="[[advertisement_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-marketing-heading" for="cookieadmin-marketing">[[advertisement_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
@@ -111,18 +111,18 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[advertisement_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing" id="cookieadmin-marketing-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-unclassified-heading" hidden>
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="un_c-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="un_c-container" aria-expanded="false" aria-controls="un_c-list" aria-label="[[unclassified_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-unclassified-heading" for="cookieadmin-unclassified">[[unclassified_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
 							</div>
 							<div class="cookieadmin_desc"> [[unclassified_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list un_c"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list un_c" id="un_c-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 					</div>
 				</div>
@@ -139,31 +139,31 @@ $content = array(
 			</div>',
 		
 		'side' => '
-			<div class="cookieadmin_cookie_modal">
+			<div class="cookieadmin_cookie_modal" role="dialog" aria-modal="true" aria-labelledby="cookieadmin_preference_title" tabindex="-1" autofocus>
 				<div class="cookieadmin_mod_head">
 					<span class="cookieadmin_preference_title" id="cookieadmin_preference_title"></span> 
-					<button type="button" class="cookieadmin_close_pref">&#10006;</button> 
+					<button type="button" class="cookieadmin_close_pref" aria-label="[[close]]">&#10006;</button> 
 				</div>
 				<div class="cookieadmin_details_wrapper">
-					<div class="cookieadmin_preference_details" role="dialog" aria-modal="true" aria-label="[[cookie_preferences]]">
+					<div class="cookieadmin_preference_details">
 						<div id="cookieadmin_preference" class="cookieadmin_preference"> </div>
 					</div>
 					<div id="cookieadmin_wrapper">
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-necessary-heading">
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-necessary-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-necessary-container" aria-expanded="false" aria-controls="cookieadmin-necessary-list" aria-label="[[necessary_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-necessary-heading" for="cookieadmin-necessary">[[necessary_cookies]]</label>
 								</span>
 								<label class="cookieadmin_remark cookieadmin_act">[[remark_standard]]</label>
 							</div>
 							<div class="cookieadmin_desc"> [[necessary_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary" id="cookieadmin-necessary-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-functional-heading">
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-functional-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-functional-container" aria-expanded="false" aria-controls="cookieadmin-functional-list" aria-label="[[functional_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-functional-heading" for="cookieadmin-functional">[[functional_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
@@ -173,12 +173,12 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[functional_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-functional"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-functional" id="cookieadmin-functional-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-analytics-heading">
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-analytics-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-analytics-container" aria-expanded="false" aria-controls="cookieadmin-analytics-list" aria-label="[[analytical_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-analytics-heading" for="cookieadmin-analytics">[[analytical_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
@@ -188,12 +188,12 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[analytical_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics" id="cookieadmin-analytics-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-marketing-heading">
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-marketing-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-marketing-container" aria-expanded="false" aria-controls="cookieadmin-marketing-list" aria-label="[[advertisement_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-marketing-heading" for="cookieadmin-marketing">[[advertisement_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
@@ -203,18 +203,18 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[advertisement_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing" id="cookieadmin-marketing-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-unclassified-heading" hidden>
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="un_c-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="un_c-container" aria-expanded="false" aria-controls="un_c-list" aria-label="[[unclassified_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-unclassified-heading" for="cookieadmin-unclassified">[[unclassified_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
 							</div>
 							<div class="cookieadmin_desc"> [[unclassified_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list un_c"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list un_c" id="un_c-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 					</div>
 				</div>
@@ -231,31 +231,31 @@ $content = array(
 			</div>',
 		
 		'down' => 
-			'<div class="cookieadmin_cookie_modal">
+			'<div class="cookieadmin_cookie_modal" role="dialog" aria-modal="true" aria-labelledby="cookieadmin_preference_title" tabindex="-1" autofocus>
 				<div class="cookieadmin_mod_head">
 					<span class="cookieadmin_preference_title" id="cookieadmin_preference_title"></span>
-					<button type="button" class="cookieadmin_close_pref">&#10006;</button>
+					<button type="button" class="cookieadmin_close_pref" aria-label="[[close]]">&#10006;</button>
 				</div>
 				<div class="cookieadmin_details_wrapper">
-					<div class="cookieadmin_preference_details" role="dialog" aria-modal="true" aria-label="[[cookie_preferences]]">
+					<div class="cookieadmin_preference_details">
 						<div id="cookieadmin_preference" class="cookieadmin_preference"></div>
 					</div>
 					<div id="cookieadmin_wrapper">
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-necessary-heading">
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-necessary-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-necessary-container" aria-expanded="false" aria-controls="cookieadmin-necessary-list" aria-label="[[necessary_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-necessary-heading" for="cookieadmin-necessary">[[necessary_cookies]]</label>
 								</span>
 								<label class="cookieadmin_remark cookieadmin_act">[[remark_standard]]</label>
 							</div>
 							<div class="cookieadmin_desc"> [[necessary_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-necessary" id="cookieadmin-necessary-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-functional-heading">
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-functional-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-functional-container" aria-expanded="false" aria-controls="cookieadmin-functional-list" aria-label="[[functional_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-functional-heading" for="cookieadmin-functional">[[functional_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
@@ -265,12 +265,12 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[functional_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-functional"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-functional" id="cookieadmin-functional-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-analytics-heading">
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-analytics-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-analytics-container" aria-expanded="false" aria-controls="cookieadmin-analytics-list" aria-label="[[analytical_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-analytics-heading" for="cookieadmin-analytics">[[analytical_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
@@ -280,12 +280,12 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[analytical_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-analytics" id="cookieadmin-analytics-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-marketing-heading">
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="cookieadmin-marketing-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="cookieadmin-marketing-container" aria-expanded="false" aria-controls="cookieadmin-marketing-list" aria-label="[[advertisement_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-marketing-heading" for="cookieadmin-marketing">[[advertisement_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
@@ -295,18 +295,18 @@ $content = array(
 								</label>
 							</div>
 							<div class="cookieadmin_desc"> [[advertisement_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list cookieadmin-marketing" id="cookieadmin-marketing-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 						<div class="cookieadmin_types" role="region" aria-labelledby="cookieadmin-unclassified-heading" hidden>
 							<div class="cookieadmin_header">
 								<span>
-									<span class="cookieadmin_show_pref_cookies" id="un_c-container">&#9658;</span>
+									<button type="button" class="cookieadmin_show_pref_cookies" id="un_c-container" aria-expanded="false" aria-controls="un_c-list" aria-label="[[unclassified_cookies]]">&#9658;</button>
 									<label class="stitle" id="cookieadmin-unclassified-heading" for="cookieadmin-unclassified">[[unclassified_cookies]]</label>
 									<label class="cookieadmin_remark">[[remark]]</label>
 								</span>
 							</div>
 							<div class="cookieadmin_desc"> [[unclassified_cookies_desc]] </div>
-							<div class="cookieadmin-modal-cookies-list un_c"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
+							<div class="cookieadmin-modal-cookies-list un_c" id="un_c-list"><span class="cookieadmin-nocookie-cat">[[none]]</span></div>
 						</div>
 					</div>
 				</div>
@@ -324,7 +324,7 @@ $content = array(
 	),
 	'cookieadmin_reconsent' => 
 		'<div>
-			<button type="button" class="cookieadmin_re_consent">
+			<button type="button" class="cookieadmin_re_consent" aria-label="Reconsent button">
 				<img class="cookieadmin_reconsent_img" height="40" width="40" src="[[reconsent_icon_url]]" alt="[[reconsent]]">
 			</button>
 		</div>'

@@ -70,7 +70,11 @@ function cookieadmin_load_plugin(){
 	add_action('wp_enqueue_scripts', '\CookieAdmin\Enduser::enqueue_scripts');
 	
 	// Insert Cookie blocker in the head.
-	//add_action('send_headers', '\CookieAdmin\Enduser::cookieadmin_block_cookie_init_php', 100);
+	add_action('send_headers', '\CookieAdmin\Enduser::cookieadmin_block_cookie_init_php', 100);
+	add_filter( 'rest_pre_serve_request', function ( $served ) {
+		\CookieAdmin\Enduser::cookieadmin_block_cookie_init_php();
+		return $served;
+	}, 999 );
 	// add_action('init', '\CookieAdmin\Enduser::cookieadmin_block_cookie_head_js', 0);
 	
 	//add Cookie Banner to user page
@@ -134,6 +138,10 @@ function cookieadmin_is_editor_mode(){
 	}
 	
 	if(isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] == 'elementor')){
+		return true;
+	}
+
+	if(isset($_GET['et_fb']) && ($_GET['et_fb'] == 1)){
 		return true;
 	}
 
@@ -238,6 +246,8 @@ function cookieadmin_load_strings($policy){
 		'plugin_url' => esc_url(COOKIEADMIN_PLUGIN_URL),
 		'powered_by' => __('Powered by', 'cookieadmin'),
 		'reconsent' => __('Re-consent', 'cookieadmin'),
+		'close' => __('Close', 'cookieadmin'),
+		'cookie_consent' => __('Cookie Consent', 'cookieadmin'),
 		'cookie_preferences' => __('Cookie Preferences', 'cookieadmin'),
 		'remark_standard' => __('Always Active', 'cookieadmin'),
 		'remark' => __('Remark', 'cookieadmin'),
@@ -484,6 +494,9 @@ function cookieadmin_kses_allowed_html(){
 	);
 
 	$allowed_tags['defs'] = array();
+
+	// aria-modal is not part of the wp_kses post-context globals
+	$allowed_tags['div']['aria-modal'] = true;
 	
 	$allowed_tags['a'] = array(
 		'href' => true,

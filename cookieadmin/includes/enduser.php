@@ -21,6 +21,8 @@ class Enduser{
 		//cookieadmin_r_print($policy);
 		
 		if(!empty($policy) && !empty($view) && !cookieadmin_is_editor_mode()){
+			
+			add_filter('mepr_design_style_handle_prefixes', '\CookieAdmin\Enduser::memberpress_allow_style_prefix');
 		
 			wp_enqueue_style('cookieadmin-style', COOKIEADMIN_PLUGIN_URL . 'assets/css/consent.css', [], COOKIEADMIN_VERSION);
 			
@@ -72,26 +74,208 @@ class Enduser{
 		}
 	}
 
-	/* static function cookieadmin_block_cookie_init_php(){
+	static function cookieadmin_block_cookie_init_php(){
 		
-		//New - To catch, remove and send cookies in WP enqueue
-		$http_cookies = array();
-		$headers = headers_list();
+		if(headers_sent() || (is_admin() && !wp_doing_ajax()) || defined('COOKIEADMIN_SCANNER') || cookieadmin_is_editor_mode()){
+			return;
+		}
 
-		foreach($headers as $header) {
-			
-			if (stripos(trim($header), 'Set-Cookie:') === 0) {
+		$view = get_option('cookieadmin_law', 'cookieadmin_gdpr');
+
+		if(empty($view)){
+			return;
+		}
+
+		$http_cookies = array();
+		$set_cookie_headers = array();
+
+		foreach(headers_list() as $header) {
+			if(stripos(trim($header), 'Set-Cookie:') === 0){
 				$header = trim(substr($header, strlen('Set-Cookie:')));
-				$name = trim(explode('=', $header)[0]);
-				$http_cookies[$name]['string'] = trim($header);
-				setcookie($name, '', time() - 999999, '/');
+				$set_cookie_headers[] = $header;
 			}
+		}
+
+		if(empty($set_cookie_headers)){
+			return;
+		}
+
+		$policy = cookieadmin_load_policy();
+
+		if(empty($policy) || empty($policy[$view])){
+			return;
+		}
+
+		$categories = self::get_cookie_categories();
+		$consent = self::get_consent();
+		$preload = self::get_preload_categories($policy, $view);
+		$allowed_headers = array();
+
+		foreach($set_cookie_headers as $set_cookie){
+			$name = self::get_cookie_name_from_header($set_cookie);
+
+			if(empty($name)){
+				continue;
+			}
+
+			if(self::is_response_cookie_allowed($set_cookie, $categories, $consent, $preload)){
+				$allowed_headers[] = $set_cookie;
+				continue;
+			}
+
+			$http_cookies[$name]['string'] = trim($set_cookie);
+		}
+
+		header_remove('Set-Cookie');
+
+		foreach($allowed_headers as $set_cookie){
+			header('Set-Cookie: ' . $set_cookie, false);
 		}
 
 		$http_cookies['cookieadmin_consent'] = ["string" => "cookieadmin_consent=CookieAdmin Cookie Initialization"];
 		
 		self::$http_cookies = $http_cookies;
-	} */
+	}
+
+	static function get_cookie_categories(){
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'cookieadmin_cookies';
+		if(!self::cookieadmin_table_exists($table_name)){
+			return array();
+		}
+
+		$categories = array(
+			'exact' => array(),
+			'prefix' => array(),
+		);
+		$rows = $wpdb->get_results("SELECT cookie_name, raw_name, category FROM {$table_name}");
+
+		foreach($rows as $row){
+			if(!empty($row->cookie_name) && !empty($row->category)){
+				$category = strtolower($row->category);
+				$categories['exact'][$row->cookie_name] = $category;
+
+				if(!empty($row->raw_name)){
+					$categories['exact'][$row->raw_name] = $category;
+
+					if($row->raw_name !== $row->cookie_name && strpos($row->raw_name, $row->cookie_name) === 0){
+						$categories['prefix'][$row->cookie_name] = $category;
+					}
+				}
+			}
+		}
+
+		uksort($categories['prefix'], function($a, $b){
+			return strlen($b) - strlen($a);
+		});
+
+		return $categories;
+	}
+
+	static function get_consent(){
+		if(empty($_COOKIE['cookieadmin_consent'])){
+			return array();
+		}
+
+		$consent = json_decode(wp_unslash($_COOKIE['cookieadmin_consent']), true);
+		if(!is_array($consent)){
+			return array();
+		}
+
+		$sanitized = array();
+		foreach($consent as $key => $value){
+			$sanitized[sanitize_key($key)] = sanitize_text_field($value);
+		}
+
+		return $sanitized;
+	}
+
+	static function get_preload_categories($policy, $view){
+		if(empty($policy) || empty($policy[$view]['preload']) || !is_array($policy[$view]['preload'])){
+			return array();
+		}
+
+		$preload = array();
+		foreach($policy[$view]['preload'] as $category){
+			$preload[] = strtolower(sanitize_key($category));
+		}
+
+		return $preload;
+	}
+
+	static function get_cookie_name_from_header($set_cookie){
+		$parts = explode('=', $set_cookie, 2);
+		$name = trim($parts[0]);
+
+		if(empty($name)){
+			return '';
+		}
+
+		return $name;
+	}
+
+	static function is_response_cookie_allowed($set_cookie, $categories, $consent, $preload = array()){
+		$name = self::get_cookie_name_from_header($set_cookie);
+
+		if(empty($name)){
+			return false;
+		}
+
+		// A deletion never adds a cookie and must not be prevented.
+		if(preg_match('/(?:^|;)\s*max-age\s*=\s*(-?\d+)/i', $set_cookie, $age) && (int) $age[1] <= 0){
+			return true;
+		}
+
+		if(preg_match('/(?:^|;)\s*expires\s*=\s*([^;]+)/i', $set_cookie, $expires)){
+			$expires_at = strtotime($expires[1]);
+			if($expires_at !== false && $expires_at < time()){
+				return true;
+			}
+		}
+
+		if($name === 'cookieadmin_consent'){
+			return true;
+		}
+
+		$category = self::get_cookie_category($name, $categories);
+
+		if(empty($category)){
+			return !empty($consent['accept']) && $consent['accept'] === 'true';
+		}
+
+		if($category === 'necessary' || in_array($category, $preload, true)){
+			return true;
+		}
+
+		if(!empty($consent['reject']) && $consent['reject'] === 'true'){
+			return false;
+		}
+
+		if(!empty($consent['accept']) && $consent['accept'] === 'true'){
+			return true;
+		}
+
+		return !empty($consent[$category]) && $consent[$category] === 'true';
+	}
+
+	static function get_cookie_category($name, $categories){
+		if(!empty($categories['exact'][$name])){
+			return $categories['exact'][$name];
+		}
+
+		if(empty($categories['prefix'])){
+			return '';
+		}
+
+		foreach($categories['prefix'] as $prefix => $category){
+			if(strpos($name, $prefix) === 0){
+				return $category;
+			}
+		}
+
+		return '';
+	}
 	
 	static function block_scripts(){
 
@@ -115,6 +299,7 @@ class Enduser{
 	}
 
 	static function update_tracking_scripts($html){
+		global $cookieadmin_settings;
 
 		if(stripos($html, '<script') === false){
 			return $html;
@@ -136,7 +321,7 @@ class Enduser{
 
 		$html = preg_replace_callback(
 			'/<script\b([^>]*)>([\s\S]*?)<\/script>/i',
-			function($match) use ($cookieadmin_consent){
+			function($match) use ($cookieadmin_consent, $cookieadmin_settings){
 				$attrs = $match[1];
 				$content = $match[2];
 				$full_tag = $match[0];
@@ -165,6 +350,17 @@ class Enduser{
 
 				if(empty($match_against)){
 					return $full_tag;
+				}
+				
+				if(!empty($cookieadmin_settings['cookieadmin_google_advance_consent_mode'])){
+					// External Google tag loader
+					if(!empty($src) && stripos($src, 'googletagmanager.com/gtag/js') !== false){
+						return $full_tag;
+					}
+					// Inline gtag() snippet
+					if(empty($src) && stripos($content, 'gtag(') !== false){
+						return $full_tag;
+					}
 				}
 
 				foreach (self::$categorized_cookies as $item) {
@@ -233,5 +429,9 @@ class Enduser{
 		
 		return $wpdb->get_var($query) === $table_name;
 	}
+	
+	static function memberpress_allow_style_prefix($prefix_arr){
+		$prefix_arr[] = 'cookieadmin';
+		return $prefix_arr;
+	}
 }
-

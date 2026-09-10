@@ -393,7 +393,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	if(!cookieadmin_is_obj(cookieadmin_is_consent) && !cookieadmin_policy.hide_banner){
 		
 		if(cookieadmin_policy.cookieadmin_layout !== "popup"){
-				document.getElementsByClassName("cookieadmin_law_container")[0].style.display = "block";
+				var cookieadmin_banner_el = document.getElementsByClassName("cookieadmin_law_container")[0];
+				if(cookieadmin_banner_el){
+					cookieadmin_banner_el.style.display = "block";
+					cookieadmin_banner_el.focus();
+				}
 		}else{
 			cookieadmin_toggle_overlay();
 			document.getElementsByClassName("cookieadmin_cookie_modal")[0].style.display = "flex";
@@ -495,6 +499,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		document.getElementsByClassName("cookieadmin_close_pref")[0].style.display = "none";
 	}
 
+	var cookieadmin_modal_el = document.getElementsByClassName("cookieadmin_cookie_modal")[0];
+
 	//show preference modal
 	cookieadmin_show_modal_elemnts = document.querySelectorAll(".cookieadmin_re_consent, .cookieadmin_customize_btn");
 	cookieadmin_show_modal_elemnts.forEach(function(e){
@@ -529,6 +535,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			}else{
 				document.getElementsByClassName("cookieadmin_close_pref")[0].id = "cookieadmin_law_container";
 			}
+
+			cookieadmin_modal_el.focus();
 		});
 	});
 	
@@ -609,22 +617,34 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	});
 	
-	document.querySelectorAll(".cookieadmin_show_pref_cookies").forEach(function(e){
-		e.addEventListener("click", function(el){
-			
-			var tgt = el.target.id;
-			tgt = tgt.replace(/-container$/, "");
-			
-			if(el.target.classList.contains("dwn")){
-				el.target.innerHTML = "&#9658;";
-				el.target.classList.remove("dwn");
-				document.querySelector("."+tgt).style.display = "none";
+	document.querySelectorAll(".cookieadmin_show_pref_cookies").forEach(function(btn){
+
+		// Shared toggle function
+		function toggleAccordion(event){
+			// Use currentTarget to target the element with the listener, even if child nodes are clicked
+			var trigger = event.currentTarget;
+			var tgt = trigger.id.replace(/-container$/, "");
+			var targetEl = document.querySelector("." + tgt);
+
+			if (!targetEl){
+				return;
+			};
+
+			if(trigger.classList.contains("dwn")){
+				trigger.innerHTML = "&#9658;"; // Right arrow
+				trigger.classList.remove("dwn");
+				trigger.setAttribute("aria-expanded", "false");
+				targetEl.style.display = "none";
 			}else{
-				el.target.innerHTML = "&#9660;";
-				el.target.classList.add("dwn");
-				document.querySelector("."+tgt).style.display = "block";
+				trigger.innerHTML = "&#9660;"; // Down arrow
+				trigger.classList.add("dwn");
+				trigger.setAttribute("aria-expanded", "true");
+				targetEl.style.display = "block";
 			}
-		});
+		}
+
+		// 2. Native buttons fire click on mouse, Enter and Space
+		btn.addEventListener("click", toggleAccordion);
 	});
 
 	document.getElementsByClassName("cookieadmin_close_pref")[0].addEventListener("click", function(e){

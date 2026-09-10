@@ -2,9 +2,9 @@
 Contributors: softaculous
 Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -82,6 +82,12 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.2.3 =
+* [Improvement] We have improved the accessibility of the Cookie Modals.
+* [Bug fix] Banner loading excluded from the Divi editor mode.
+* [Improvement] Now patterns can be added to identify scripts while manually adding/editing cookies.
+* [Pro Feature] Google advance consent mode (google tags can be excluded for script blocking).
 
 = 1.2.2 =
 * [Pro Feature] Geo Targeting, apply rules based on the visitors geo location.

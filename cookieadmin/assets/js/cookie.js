@@ -443,6 +443,8 @@ jQuery(document).ready(function($){
 		
 		//set 0 to add real id to delete
 		cookie_id = $(this).attr("cookieadmin_cookie_id");
+		// Get the patterns
+		const patterns = $("#cookieadmin-dialog-cookie-patterns").val();
 		
 		let cookie_info = {
 			name: $("#cookieadmin-dialog-cookie-name").val(),
@@ -451,6 +453,10 @@ jQuery(document).ready(function($){
 			duration: $("#cookieadmin-dialog-cookie-duration").val(),
 			type: $("#cookieadmin-dialog-cookie-category").val()
 		};
+
+		if(patterns){
+			cookie_info.patterns = patterns;
+		}
 		
 		$.each(cookie_info, function (i, val){
 			if(!val){
@@ -566,6 +572,7 @@ jQuery(document).ready(function($){
 				$("#cookieadmin-dialog-cookie-name").val(categorized_cookies[cookie_id]['cookie_name']);
 				$("#cookieadmin-dialog-cookie-desc").val(categorized_cookies[cookie_id]['description']);
 				$("#cookieadmin-dialog-cookie-duration").val(categorized_cookies[cookie_id]['expires']);
+				$("#cookieadmin-dialog-cookie-patterns").val(categorized_cookies[cookie_id]['patterns']);
 				if(!!categorized_cookies[cookie_id]['category']){
 					$("#cookieadmin-dialog-cookie-category").val(categorized_cookies[cookie_id]['category']);
 				}else{
@@ -737,6 +744,7 @@ function cookieadminAddCookieToTable(cookie_info){
 	categorized_cookies[cookie_info.id]['description'] = cookie_info.description;
 	categorized_cookies[cookie_info.id]['expires'] = cookie_info.duration;
 	categorized_cookies[cookie_info.id]['category'] = cookie_info.type;
+	categorized_cookies[cookie_info.id]['patterns'] = cookie_info.patterns;
 	
 	if(cookie_info.duration > 0){
 		cookie_info.duration += ' ' + cookieadmin_policy.lang.days;
