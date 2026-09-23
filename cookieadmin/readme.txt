@@ -4,7 +4,7 @@ Tags: cookie, notice, banner, consent, gdpr
 Requires at least: 4.4
 Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: LGPLv2.1
 License URI: http://www.gnu.org/licenses/lgpl-2.1.html
 
@@ -82,6 +82,9 @@ That's it. You're done!
 == Screenshots ==
 
 == Changelog ==
+
+= 1.2.4 =
+* [Improvement Pro] Added Code Signing: Every update now verifies the code signature to ensure secure updates.
 
 = 1.2.3 =
 * [Improvement] We have improved the accessibility of the Cookie Modals.
